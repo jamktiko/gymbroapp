@@ -1,0 +1,17 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "author": "team-gymbro",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "^4.22.1",
+    "hbs": "^4.2.1",
+    "http-errors": "~1.6.3",
+    "morgan": "^1.10.1"
+  }
+}

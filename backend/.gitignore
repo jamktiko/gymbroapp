@@ -1,0 +1,12 @@
+# Ignore dotenv file
+.env
+
+# Ignore node modules
+node_modules/
+
+# Ignore todo.txt
+todo.txt
+
+# Ignore temporary sketch files
+temp.js
+temp.json
