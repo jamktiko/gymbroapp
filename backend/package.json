@@ -4,14 +4,21 @@
   "author": "team-gymbro",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www -e js,json,css,mjs,hbs",
+    "build": "echo \"No build step required\""
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.6",
     "debug": "~2.6.9",
     "express": "^4.22.1",
     "hbs": "^4.2.1",
     "http-errors": "~1.6.3",
+    "mongoose": "^9.4.1",
     "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
