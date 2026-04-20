@@ -1,0 +1,12 @@
+# Ignore the actual database files
+data/
+
+# Ignore todo textfile
+todo.txt
+
+# Ignore temporary files
+temp.js
+temp.json
+
+# Ignore MacOS files
+.DS_Store
