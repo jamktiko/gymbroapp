@@ -6,15 +6,15 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonMenuButton,
   IonButtons,
+  IonMenuButton,
   IonFooter,
 } from '@ionic/angular/standalone';
 
 @Component({
-  selector: 'app-levels',
-  templateUrl: './levels.page.html',
-  styleUrls: ['./levels.page.scss'],
+  selector: 'app-page3',
+  templateUrl: './page3.page.html',
+  styleUrls: ['./page3.page.scss'],
   standalone: true,
   imports: [
     IonContent,
@@ -23,12 +23,12 @@ import {
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonMenuButton,
     IonButtons,
+    IonMenuButton,
     IonFooter,
   ],
 })
-export class LevelsPage implements OnInit {
+export class Page3Page implements OnInit {
   constructor() {}
 
   ngOnInit() {}

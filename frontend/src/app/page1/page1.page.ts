@@ -12,9 +12,9 @@ import {
 } from '@ionic/angular/standalone';
 
 @Component({
-  selector: 'app-game-screen',
-  templateUrl: './game-screen.page.html',
-  styleUrls: ['./game-screen.page.scss'],
+  selector: 'app-page1',
+  templateUrl: './page1.page.html',
+  styleUrls: ['./page1.page.scss'],
   standalone: true,
   imports: [
     IonContent,
@@ -28,7 +28,7 @@ import {
     IonFooter,
   ],
 })
-export class GameScreenPage implements OnInit {
+export class Page1Page implements OnInit {
   ngOnInit() {}
 
   constructor() {}

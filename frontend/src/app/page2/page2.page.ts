@@ -6,15 +6,15 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonButtons,
   IonMenuButton,
+  IonButtons,
   IonFooter,
 } from '@ionic/angular/standalone';
 
 @Component({
-  selector: 'app-stats',
-  templateUrl: './stats.page.html',
-  styleUrls: ['./stats.page.scss'],
+  selector: 'app-page2',
+  templateUrl: './page2.page.html',
+  styleUrls: ['./page2.page.scss'],
   standalone: true,
   imports: [
     IonContent,
@@ -23,12 +23,12 @@ import {
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonButtons,
     IonMenuButton,
+    IonButtons,
     IonFooter,
   ],
 })
-export class StatsPage implements OnInit {
+export class Page2Page implements OnInit {
   constructor() {}
 
   ngOnInit() {}

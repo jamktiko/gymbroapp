@@ -3,21 +3,21 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'game-screen',
+    redirectTo: 'page1',
     pathMatch: 'full',
   },
   {
-    path: 'game-screen',
+    path: 'page1',
     loadComponent: () =>
-      import('./game-screen/game-screen.page').then((m) => m.GameScreenPage),
+      import('./page1/page1.page').then((m) => m.Page1Page),
   },
   {
-    path: 'levels',
+    path: 'page2',
     loadComponent: () =>
-      import('./levels/levels.page').then((m) => m.LevelsPage),
+      import('./page2/page2.page').then((m) => m.Page2Page),
   },
   {
-    path: 'stats',
-    loadComponent: () => import('./stats/stats.page').then((m) => m.StatsPage),
+    path: 'page3',
+    loadComponent: () => import('./page3/page3.page').then((m) => m.Page3Page),
   },
 ];

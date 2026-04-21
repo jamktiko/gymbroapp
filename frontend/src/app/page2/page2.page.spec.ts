@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LevelsPage } from './levels.page';
+import { Page2Page } from './page2.page';
 
-describe('LevelsPage', () => {
-  let component: LevelsPage;
-  let fixture: ComponentFixture<LevelsPage>;
+describe('Page2Page', () => {
+  let component: Page2Page;
+  let fixture: ComponentFixture<Page2Page>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LevelsPage);
+    fixture = TestBed.createComponent(Page2Page);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -55,11 +55,11 @@ export class AppComponent {
   public appPages = [
     {
       title: 'Page 1',
-      url: '/game-screen',
+      url: '/page1',
       icon: 'game-controller',
     },
-    { title: 'Page 2', url: '/levels', icon: 'golf' },
-    { title: 'Page 3', url: '/stats', icon: 'trophy' },
+    { title: 'Page 2', url: '/page2', icon: 'golf' },
+    { title: 'Page 3', url: '/page3', icon: 'trophy' },
   ];
 
   constructor() {
