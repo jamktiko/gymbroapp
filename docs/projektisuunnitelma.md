@@ -18,72 +18,94 @@
 
 ## Projektin tiedot
 
-\<Projektin nimi>
+GymBro App
 
-Tekijät:
+Tekijät: Lauri, Joona, Matias, Jarius ja Netta
 
 ## Projektin sisältö
 
 ### Kuvaus
 
-_Lyhyt kuvaus projektista. Minkälaista ohjelmistoa ollaan tekemässä?_
+- Ideana pelillistämis-tyylinen sovellus mikä keskittyy salilla käymiseen
+- Toimii motivaattoriappina, kannustaa ihmisiä lähtemään salille ja tekemään siitä kivempaa
 
 ### Projektiryhmä
 
-_Ketä projektiin kuuluu ja mitkä ovat henkilöiden päävastuut._
-
-| Nimi           | Vastuurooli          |
-| -------------- | -------------------- |
-| Teppo Virtanen | Git-päällikkö        |
-| Satu Jokinen   | Dokumentti-päällikkö |
+| Nimi              | Vastuurooli   |
+| ----------------- | ------------- |
+| Lauri Makkonen    | kehittäjä     |
+| Joona Järvi       | Product Owner |
+| Matias Vairama    | kehittäjä     |
+| Jarius Korpisaari | kehittäjä     |
+| Netta Tavi        | Scrum Master  |
 
 ### Tavoite
 
-_Mikä on ohjelmistoprojektin tavoiteltu lopputulos?_
+Minimi:
+
+- Käyttäjä pystyy kirjautumaan/rekisteröimään
+- Käyttäjän pystyy aloittamaan/lopettamaan sali suorituksen
+- Käyttäjä pystyy seurata sali suorituksiaan
+- Käyttäjä pystyy seurata kehitystään
+- Valmis sovellus
+
+Mahdollisesti:
+
+- Exp, levelit
+- Äänitehosteet
+- offline tila
+- Kalenteri
 
 ## Aikataulu
 
-_Kirjaa tähän lukuun aikataulu. Millä tavoin projekti viedään läpi. Voitte itse päättää mikä taso on teidän projektillenne paras._
-
-| Tapahtuma        | Päivämäärä | Muut tiedot/osanottajat                  |
-| ---------------- | ---------- | ---------------------------------------- |
-| Projekti alkaa   | 22.04.2025 | Ohjelmistoprojekti 1 alkaa               |
-| Idean valinta    | 24.04.2025 | Valitaan tuotantoon menevä projekti-idea |
-| ............     | pvm        | Kaikki muut tapahtumat listattuna        |
-| Projekti päättyy | 16.05.2025 | Ohjelmistoprojekti 1 päättyy             |
+| Tapahtuma                    | Päivämäärä | Muut tiedot/osanottajat                        |
+| ---------------------------- | ---------- | ---------------------------------------------- |
+| Projekti alkaa               | 20.04.2026 | Ohjelmistoprojekti 2 alkaa                     |
+| Projektin suunnittelua       | 21.04.2026 | Projektin dokumentin tekoa + lisä suunnitelmat |
+| Projektin suunnittelua       | 24.04.2026 | Projektin suunnitelma esitettävä               |
+| Projektin tuotanto           | 22.04.2026 | Projektin työstöä                              |
+| Projektin viimeistely        | 11.05.2026 | Projektin lopputestaus, viimeistely            |
+| Loppumateriaalin tuottaminen | 13.05.2026 | Tuotettava loppu materiaali                    |
+| Projektin viimeistely        | 14.05.2026 | Viimeistely, lopputestaus                      |
+| Projekti päättyy             | 19.05.2026 | Ohjelmistoprojekti 2 päättyy                   |
+| Projektin esitys             | 20.05.2026 | Ohjelmistoprojekti 2 esitetään                 |
 
 ## Raportointi, kommunikointi ja dokumentointi
 
 ### Raportointi
 
-_Kuinka projekti raportoi toiminnastaan? Kuka raportoi, kenelle, ja milloin?_
+Viikkoraporttien avulla. Tehdään yhdessä ja julkaistaan moodleen.
 
 ### Tuntikirjaukset
 
-_Kuinka projekti tekee tuntikirjausta? Missä se tehdään, ja miten se jaetaan?_
+Tuntikirjaus tapahtuu teams tiimissä "Ohjelmistoprojekti 2 k26" yksilöllisesti. Jokainen palauttaa omat tuntikirjauksensa.
 
 ### Palaverikäytänteet
 
-_Projektin viikkopalaveri pidetään xxx paikassa xxx. Kuka kirjoittaa palaveripöytäkirjan, ja missä ne elävät?_
+Ensisijaisesti viikottainen palaveri yhdessä perjantaina. Palaverit kirjataan viikkoraporttiin ja Scrum Master palauttaa ne. Lisäksi päivittäiset daily scrum palaverit.
 
 ### Kommunikointitavat
 
-_Mitkä ovat projektin kommunikointikanavat? Viralliset, epäviralliset? Sisäiset, ulkoiset?_
+- Teams (oma keskustelualue + "Ohjelmistoprojekti 2 k26" tiimi)
+- Github projects
 
 ### Dokumentointi
 
-_Kirjaa tähän miten projekti on ajatellut työnsä dokumentoida. Mitä dokumentteja projekti tuottaa?_
+- Viikkoraportit
+- Tuntikirjaukset
+- Github projects
+- Figma
+- Mahdolliset muut
 
 ### Dokumenttien hallinta
 
-_Kuvaa dokumenttien säilytys; kenellä on oikeudet dokumenttien hallintaan, miten backupit on hoidettu, kuinka dokumentteja versioidaan (esim. 1.0, 1.1, 1.2 jne.) ja nimetään (onko esim. dokumentin nimessä versionumero)._
+- Viikkoraportit säilytetään koneella
+- Github projects:lla seurataan tehtäviä
 
 ## Riskien hallinta
 
-_Kuvaa tässä kuinka projekti aikoo hallinnoida ja seurata projektiriskejä._
-
-Esimerkiksi näin.
-
-| Riskit                                                       | Todennäköisyys |  Impakti | Minimointi                             |
-| ------------------------------------------------------------ | -------------- | -------- | -------------------------------------- |
-| Työntekijät eivät ole motivoituneita ja eivät saavu paikalle | Pieni          |  Suuri   | Pidetään työpaikalla kahvia ja pullaa. |
+| Riskit        | Todennäköisyys | Impakti    | Minimointi             |
+| ------------- | -------------- | ---------- | ---------------------- |
+| Aikataulu     | Keskiverto     | Suuri      | Tehtävien priorisointi |
+| Sairastuminen | Pieni          | Keskisuuri | Toivotaan parasta      |
+| Motivaatio    | Pieni          | Keskisuuri | Tauotus, kommunikaatio |
