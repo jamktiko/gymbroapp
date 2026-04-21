@@ -1,0 +1,11 @@
+.sudoku-button {
+  width: 10vw;
+  max-width: 2.7rem;
+  height: 10vw;
+  max-height: 2.7rem;
+  margin: 0rem;
+  --border-radius: 0;
+  --border-width: 1px;
+  overflow: hidden;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+}
