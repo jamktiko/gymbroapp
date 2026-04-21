@@ -47,7 +47,7 @@
 
 ### 1. Miksi kestävä kehitys on tärkeää minulle tai tiimillemme?
 
-Vastaus
+Kestävän kehityksen ansiosta maapallon resurssit riittävät pidempään. 
 
 ## Aihe
 
@@ -59,7 +59,9 @@ Vastaus
 <!-- Vieraslajien torjunta (SDG15: Maanpäällinen elämä) -->
 <!-- Kulttuuriperinnön suojeleminen (SDG11: Kestävät kaupungit ja yhteisöt) -->
 
-Vastaus
+Kestävän kehityksen goal 3. "good health and well being" toteutuu sovelluksessa.
+Se kannustaa ihmisiä pitämään huolta kunnostaan. 
+
 
 ## Toteutus
 
@@ -73,7 +75,8 @@ Vastaus
 <!-- Miten sovelluksen vaatima palvelinkapasiteetti on mitoitettu? -->
 <!-- Käytetäänkö sovelluksessa tai sen kehitysprosessissa tekoälyä? -->
 
-Vastaus
+Sovelluksen virrankulutus on optimoitu.
+Sovelluksen kehityksessä käytetään mahdollisimman vähän tekoälyä.
 
 ### 4. Millä tavoin sovellus saattaa välillisesti lisätä tai vähentää luonnonvarojen kulutusta?
 
@@ -84,7 +87,8 @@ Vastaus
 <!-- Kannustaako sovellus muuhun kulutukseen? (esim. sovellus on verkkokauppa) -->
 <!-- Millä tavoin sovellus saattaa muuttaa käyttäjän toimintaa? (esim. lisätä tai vähentää yksityisautoilua) -->
 
-Vastaus
+Sovellus toimii myös vanhemmilla laitteilla, eli ei tarvitse hankkia laitteita sovelllusta varten. 
+Sovellusta varten ei välttämättä hankkia lisätarvikkeita
 
 ### 5. Kuinka sovelluksen pitkäikäisyys on varmistettu?
 
@@ -95,7 +99,10 @@ Vastaus
 <!-- Onko sovellus mukautettavissa muuttuviin tarpeisiin ja vaatimuksiin? -->
 <!-- Onko sovelluksen lähdekoodi ja kehitysprosessi dokumentoitu? -->
 
-Vastaus
+Kehityksen prosessi on dokumentoitu ja lähdekoodi köytyy githubista.
+Sovellus on todella riippuvainen ulkoisista kirjastoista ja järjestelmistä.
+Sovellus toimii myös offline-tilassa
+
 
 ### 6. Kuinka sovelluksessa on huomioitu saavutettavuus ja yhdenvertaisuus?
 
@@ -107,7 +114,9 @@ Vastaus
 <!-- Millaista osaamista ja varallisuutta sovelluksen käyttö vaatii? -->
 <!-- Millä kielillä sovellus on saatavilla? -->
 
-Vastaus
+Sovellus ei oleta käyttäjiltä mitään. Käyttäjä syöttää itse omat tietonsa.
+Sovellus on saatavilla englanniksi ja suomeksi.
+Sovellus on helppokäyttöinen joten ei vaadi paljoa osaamista
 
 ### 7. Millaisia vaikutuksia sovelluksella voi olla käyttäjälle tai hänen lähipiirilleen?
 
@@ -118,7 +127,9 @@ Vastaus
 <!-- Millaisia vaikutuksia sovelluksella voi olla sosiaalisiin suhteisiin, terveyteen tai mielialaan? -->
 <!-- Millaisia vaikutuksia sovelluksella voi olla elämänhallintaan tai taloudelliseen tilanteeseen? -->
 
-Vastaus
+Käyttäjän mieliala, terveys ja elämänhallinta paranee. Se voi auttaa löytämään uusia ihmissuhteita.
+Mahdollisuus löytää uuden harrastuksen/rutiinin. 
+Ei vaadi kummoista taloudellista tilannetta. 
 
 ### 8. Millaisia vaikutuksia sovelluksella voi olla yhteiskunnallisella tasolla?
 
@@ -131,7 +142,9 @@ Vastaus
 <!-- Kuinka sovellusta moderoidaan? (esim. disinformaation ja vihapuheen torjunta) -->
 <!-- Kuinka sovelluksessa on huomioitu tietoturvallisuus ja tietosuoja?  -->
 
-Vastaus
+Ihmisten kunto paranee, jaksetaan paremmin arjessa.
+sovelluksessa ei ole mahdollisuutta "postata" mitään joten disinformaatio ja vihapuhe on mahdotonta. 
+Tietoturva on varmistettu. Mitään ylimääräistä tietoa ei kerätä käyttäjistä. 
 
 ### 9. Kuinka sovellusprojektissa on huomioitu inhimilliset ja aineelliset resurssit?
 
@@ -144,4 +157,6 @@ Vastaus
 <!-- Pystytäänkö työntekijöille ja alihankkijoille maksamaan asianmukaisesti? -->
 <!-- Mahdollistaako rahoitus turvallisen ylläpidon sekä pitkäjänteisen jatkokehittelyn? -->
 
-Vastaus
+Tiimi kommunukoi keskenään päivittäin. Pidetään huolta hyvinvvoinnista.
+Menemme ketterän kehityksen mukaan.
+Tavoitteet ovat selkät ja realistiset.
