@@ -1,8 +1,7 @@
 {
-  "name": "supaku",
-  "version": "0.1.1",
-  "author": "Lauri Makkonen",
-  "homepage": "https://github.com/laanhema",
+  "name": "gymbroapp",
+  "version": "0.1.0",
+  "author": "Team GymBro",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -65,5 +64,5 @@
     "typescript": "~5.9.0",
     "typescript-eslint": "^8.58.2"
   },
-  "description": "Simple sudoku game made with Angular, Ionic and Capacitor"
+  "description": ""
 }

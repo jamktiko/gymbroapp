@@ -4,46 +4,22 @@
       <ion-content>
         <ion-list id="inbox-list">
           <!-- side-menu name -->
-          <ion-list-header>Supaku</ion-list-header>
+          <ion-list-header>GymBro App</ion-list-header>
           <!-- email -->
           <ion-note>hi&#64;ionicframework.com</ion-note>
 
           <ion-menu-toggle auto-hide="false">
             @for (p of appPages; track p; let i = $index) {
-              <ion-item
-                routerDirection="root"
-                [routerLink]="[p.url]"
-                lines="none"
-                detail="false"
-                routerLinkActive="selected"
-              >
-                <ion-icon
-                  aria-hidden="true"
-                  slot="start"
-                  [ios]="p.icon + '-outline'"
-                  [md]="p.icon + ''"
-                ></ion-icon>
-                <ion-label>{{ p.title }}</ion-label>
-              </ion-item>
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + ''"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
             }
           </ion-menu-toggle>
-          <ion-item lines="none" detail="false" id="presentLogoutAlertButton">
-            <ion-icon
-              aria-hidden="true"
-              slot="start"
-              [ios]="'exit - outline'"
-              [md]="'exit'"
-            ></ion-icon>
-            <ion-label>Logout</ion-label>
-          </ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>
     <!-- router outlet -->
-    <ion-router-outlet id="main-content"></ion-router-outlet></ion-split-pane
-  ><ion-alert
-    trigger="presentLogoutAlertButton"
-    header="Log out?"
-    [buttons]="alertButtons"
-  ></ion-alert>
+    <ion-router-outlet id="main-content"></ion-router-outlet></ion-split-pane>
 </ion-app>

@@ -12,10 +12,6 @@ export const routes: Routes = [
       import('./game-screen/game-screen.page').then((m) => m.GameScreenPage),
   },
   {
-    path: 'login',
-    loadComponent: () => import('./login/login.page').then((m) => m.LoginPage),
-  },
-  {
     path: 'levels',
     loadComponent: () =>
       import('./levels/levels.page').then((m) => m.LevelsPage),

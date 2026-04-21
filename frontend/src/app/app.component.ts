@@ -14,7 +14,6 @@ import {
   IonLabel,
   IonRouterOutlet,
   IonRouterLink,
-  IonAlert,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -50,19 +49,17 @@ import {
     IonLabel,
     IonRouterLink,
     IonRouterOutlet,
-    IonAlert,
   ],
 })
 export class AppComponent {
-  // logout in here is just looks, it will be a logout() when actual implemeneted
   public appPages = [
     {
-      title: 'Game Screen',
+      title: 'Page 1',
       url: '/game-screen',
       icon: 'game-controller',
     },
-    { title: 'Levels', url: '/levels', icon: 'golf' },
-    { title: 'Stats', url: '/stats', icon: 'trophy' },
+    { title: 'Page 2', url: '/levels', icon: 'golf' },
+    { title: 'Page 3', url: '/stats', icon: 'trophy' },
   ];
 
   constructor() {
@@ -79,24 +76,4 @@ export class AppComponent {
       backspace,
     });
   }
-  public alertButtons = [
-    {
-      text: 'Cancel',
-      role: 'cancel',
-      handler: () => {
-        console.log('Alert canceled');
-      },
-    },
-    {
-      text: 'OK',
-      role: 'confirm',
-      handler: () => {
-        console.log('Alert confirmed');
-      },
-    },
-  ];
-
-  // setResult(event: CustomEvent<OverlayEventDetail>) {
-  //   console.log(`Dismissed with role: ${event.detail.role}`);
-  // }
 }
