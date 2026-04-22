@@ -32,7 +32,7 @@ exports.updateUser = async (req, res) => {
     // Suojataan level ja exp suoralta muokkaukselta (lisätään logiikka myöhemmin)
     const { level, exp, ...safeFields } = req.body;
     const user = await User.findByIdAndUpdate(req.params.id, safeFields, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true,
     });
     if (!user) {

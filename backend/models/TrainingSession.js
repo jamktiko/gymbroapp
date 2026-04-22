@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { MoveSchema } = require('./Move');
+const { EmbeddedMoveSchema } = require('./Move');
 
 // Yksittäinen setti: toistot + paino
 const SetSchema = new mongoose.Schema(
@@ -22,7 +22,7 @@ const SetSchema = new mongoose.Schema(
 const ExerciseSchema = new mongoose.Schema(
   {
     move: {
-      type: MoveSchema,
+      type: EmbeddedMoveSchema,
       required: [true, 'Liike on pakollinen'],
     },
     sets: {

@@ -3,9 +3,16 @@ const { Move } = require('../models/Move');
 // GET /api/moves — kaikki liikkeet (default + käyttäjän omat)
 exports.getMoves = async (req, res) => {
   try {
-    const moves = await Move.find({
-      $or: [{ isDefault: true }, { createdBy: req.user?.id }],
-    }).sort({ name: 1 });
+    let filter = { createdBy: null };
+
+    // Jos käyttäjä on tunnistettu headerista, palautetaan myös hänen omat liikkeensä
+    if (req.user && req.user.id) {
+      filter = {
+        $or: [{ createdBy: null }, { createdBy: req.user.id }],
+      };
+    }
+
+    const moves = await Move.find(filter).sort({ name: 1 });
     res.json(moves);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -55,7 +62,7 @@ exports.updateMove = async (req, res) => {
       return res.status(403).json({ error: 'Default-liikettä ei voi muokata' });
     }
     const updated = await Move.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true,
     });
     res.json(updated);

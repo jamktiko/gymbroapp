@@ -10,8 +10,8 @@ const {
 
 router.get('/', getMoves);
 router.get('/:id', getMoveById);
-router.patch('/', createMove);
-router.put('/:id', updateMove);
+router.post('/', createMove);
+router.patch('/:id', updateMove);
 router.delete('/:id', deleteMove);
 
 module.exports = router;

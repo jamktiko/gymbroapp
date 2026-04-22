@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { MoveSchema } = require('./Move');
+const { EmbeddedMoveSchema } = require('./Move');
 
 // Schema for TrainingProgram data
 const TrainingProgramSchema = new mongoose.Schema({
@@ -12,9 +12,9 @@ const TrainingProgramSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  // moves as embedded documents:
+  // moves duplicated fully inside the program:
   moves: {
-    type: [MoveSchema],
+    type: [EmbeddedMoveSchema],
   },
   // true = adminin luoma -> käyttäjä ei voi poistaa
   isDefault: {

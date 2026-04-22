@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 
-// Schema for Move data
-const MoveSchema = new mongoose.Schema({
+// Base fields mapped without strict indexes spreading
+const moveFields = {
   name: {
     type: String,
     required: [true, 'Liikkeen nimi on pakollinen'],
     trim: true,
-    unique: true,
   },
   type: {
     type: String,
@@ -35,9 +34,17 @@ const MoveSchema = new mongoose.Schema({
     ref: 'User',
     default: null,
   },
-});
+};
+
+// Main collection schema (Move)
+const MoveSchema = new mongoose.Schema(moveFields);
+// Define unique index here instead of the field directly
+MoveSchema.index({ name: 1 }, { unique: true });
+
+// Schema duplicate used for embedding safely
+const EmbeddedMoveSchema = new mongoose.Schema(moveFields);
 
 const Move = mongoose.model('Move', MoveSchema);
 
-// export MoveSchema AND Move-model
-module.exports = { MoveSchema, Move };
+// export models and schemas
+module.exports = { EmbeddedMoveSchema, Move };

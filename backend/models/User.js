@@ -38,12 +38,12 @@ const UserSchema = new mongoose.Schema(
     // trainingPrograms as embedded document:
     trainingPrograms: {
       type: [TrainingProgramSchema],
-      required: true,
+      default: [],
     },
     // trainingSessions as embedded document:
     trainingSessions: {
       type: [TrainingSessionSchema],
-      required: true,
+      default: [],
     },
   },
   { timestamps: true },

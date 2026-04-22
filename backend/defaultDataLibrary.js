@@ -5,23 +5,88 @@ const TrainingProgram = require('./models/TrainingProgram');
 
 const defaultMoves = [
   // Compound
-  { name: 'Penkkipunnerrus', type: 'compound', muscle_group: 'Rinta', isDefault: true },
-  { name: 'Kyykky', type: 'compound', muscle_group: 'Jalat', isDefault: true },
-  { name: 'Maastanosto', type: 'compound', muscle_group: 'Selkä', isDefault: true },
-  { name: 'Ylätalja', type: 'compound', muscle_group: 'Selkä', isDefault: true },
-  { name: 'Pystypunnerrus', type: 'compound', muscle_group: 'Hartiat', isDefault: true },
-  { name: 'Soutu tangolla', type: 'compound', muscle_group: 'Selkä', isDefault: true },
-  { name: 'Leuanveto', type: 'compound', muscle_group: 'Selkä', isDefault: true },
-  { name: 'Dippi', type: 'compound', muscle_group: 'Rinta', isDefault: true },
+  {
+    name: 'Penkkipunnerrus',
+    type: 'compound',
+    muscleGroup: 'Rinta',
+    isDefault: true,
+  },
+  { name: 'Kyykky', type: 'compound', muscleGroup: 'Jalat', isDefault: true },
+  {
+    name: 'Maastanosto',
+    type: 'compound',
+    muscleGroup: 'Selkä',
+    isDefault: true,
+  },
+  { name: 'Ylätalja', type: 'compound', muscleGroup: 'Selkä', isDefault: true },
+  {
+    name: 'Pystypunnerrus',
+    type: 'compound',
+    muscleGroup: 'Hartiat',
+    isDefault: true,
+  },
+  {
+    name: 'Soutu tangolla',
+    type: 'compound',
+    muscleGroup: 'Selkä',
+    isDefault: true,
+  },
+  {
+    name: 'Leuanveto',
+    type: 'compound',
+    muscleGroup: 'Selkä',
+    isDefault: true,
+  },
+  { name: 'Dippi', type: 'compound', muscleGroup: 'Rinta', isDefault: true },
   // Targeted
-  { name: 'Hauiskääntö', type: 'targeted', muscle_group: 'Hauis', isDefault: true },
-  { name: 'Kolmikääntö', type: 'targeted', muscle_group: 'Kolmikärjes', isDefault: true },
-  { name: 'Jalkaprässi', type: 'targeted', muscle_group: 'Jalat', isDefault: true },
-  { name: 'Käsiprässi', type: 'targeted', muscle_group: 'Rinta', isDefault: true },
-  { name: 'Sivunousu', type: 'targeted', muscle_group: 'Hartiat', isDefault: true },
-  { name: 'Pohjepunnerrus', type: 'targeted', muscle_group: 'Pohkeet', isDefault: true },
-  { name: 'Vatsakrullaaja', type: 'targeted', muscle_group: 'Vatsa', isDefault: true },
-  { name: 'Leg curl', type: 'targeted', muscle_group: 'Takareidet', isDefault: true },
+  {
+    name: 'Hauiskääntö',
+    type: 'targeted',
+    muscleGroup: 'Hauis',
+    isDefault: true,
+  },
+  {
+    name: 'Kolmikääntö',
+    type: 'targeted',
+    muscleGroup: 'Kolmikärjes',
+    isDefault: true,
+  },
+  {
+    name: 'Jalkaprässi',
+    type: 'targeted',
+    muscleGroup: 'Jalat',
+    isDefault: true,
+  },
+  {
+    name: 'Käsiprässi',
+    type: 'targeted',
+    muscleGroup: 'Rinta',
+    isDefault: true,
+  },
+  {
+    name: 'Sivunousu',
+    type: 'targeted',
+    muscleGroup: 'Hartiat',
+    isDefault: true,
+  },
+  {
+    name: 'Pohjepunnerrus',
+    type: 'targeted',
+    muscleGroup: 'Pohkeet',
+    isDefault: true,
+  },
+  {
+    name: 'Vatsakrullaaja',
+    type: 'targeted',
+    muscleGroup: 'Vatsa',
+    isDefault: true,
+  },
+  {
+    name: 'Leg curl',
+    type: 'targeted',
+    muscleGroup: 'Takareidet',
+    isDefault: true,
+  },
 ];
 
 const defaultMovesDB = async () => {
@@ -41,7 +106,8 @@ const defaultMovesDB = async () => {
     const defaultPrograms = [
       {
         name: 'PPL — Push Pull Legs',
-        description: 'Klassinen 6-päiväinen ohjelma: push, pull ja jalat vuorotellen.',
+        description:
+          'Klassinen 6-päiväinen ohjelma: push, pull ja jalat vuorotellen.',
         isDefault: true,
         moves: [
           getMoveId('Penkkipunnerrus'),
@@ -62,7 +128,8 @@ const defaultMovesDB = async () => {
       },
       {
         name: 'Full Body — Aloittelijaohjelma',
-        description: '3 kertaa viikossa koko keho. Hyvä lähtökohta aloittelijalle.',
+        description:
+          '3 kertaa viikossa koko keho. Hyvä lähtökohta aloittelijalle.',
         isDefault: true,
         moves: [
           getMoveId('Kyykky'),
