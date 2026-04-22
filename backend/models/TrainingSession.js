@@ -1,12 +1,49 @@
 const mongoose = require('mongoose');
+const MoveSchema = require('./Move');
+
+// Schema for TrainingSession data
+const TrainingSessionSchema = new mongoose.Schema(
+  {
+    datetime: {
+      type: Date,
+      default: Date.now,
+    },
+    exercises: {
+      type: [ExerciseSchema],
+      validate: {
+        validator: (exercises) => exercises.length > 0,
+        message: 'Sessiossa täytyy olla vähintään yksi liike',
+      },
+    },
+  },
+  { timestamps: true },
+);
+
+// Yksittäinen liike sessiossa: liike + setit
+const ExerciseSchema = new mongoose.Schema(
+  {
+    move: {
+      type: MoveSchema,
+      required: [true, 'Liike on pakollinen'],
+    },
+    sets: {
+      type: [SetSchema],
+      validate: {
+        validator: (sets) => sets.length > 0,
+        message: 'Liikkeellä täytyy olla vähintään yksi setti',
+      },
+    },
+  },
+  { _id: false },
+);
 
 // Yksittäinen setti: toistot + paino
-const setSchema = new mongoose.Schema(
+const SetSchema = new mongoose.Schema(
   {
     reps: {
       type: Number,
       required: [true, 'Toistot on pakollinen'],
-      min: 0,
+      min: 1,
     },
     weight: {
       type: Number,
@@ -14,48 +51,8 @@ const setSchema = new mongoose.Schema(
       min: 0,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
-// Yksittäinen liike sessiossa: liike + setit
-const exerciseSchema = new mongoose.Schema(
-  {
-    move: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Move',
-      required: [true, 'Liike on pakollinen'],
-    },
-    sets: {
-      type: [setSchema],
-      validate: {
-        validator: (sets) => sets.length > 0,
-        message: 'Liikkeellä täytyy olla vähintään yksi setti',
-      },
-    },
-  },
-  { _id: false }
-);
-
-const trainingSessionSchema = new mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: [true, 'Käyttäjä on pakollinen'],
-    },
-    datetime: {
-      type: Date,
-      default: Date.now,
-    },
-    exercises: {
-      type: [exerciseSchema],
-      validate: {
-        validator: (exercises) => exercises.length > 0,
-        message: 'Sessiossa täytyy olla vähintään yksi liike',
-      },
-    },
-  },
-  { timestamps: true }
-);
-
-module.exports = mongoose.model('TrainingSession', trainingSessionSchema);
+// export TrainingSessionSchema (only used inside User, so no need to make it into a Model here)
+module.exports = TrainingSessionSchema;

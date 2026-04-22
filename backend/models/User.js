@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
+const TrainingSessionSchema = require('./TrainingSession');
+const TrainingProgramSchema = require('./TrainingProgram');
 
-const userSchema = new mongoose.Schema(
+// Schema for User data
+// name and email come from google auth token
+// login is done through google auth
+const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -24,21 +29,28 @@ const userSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
-    // Yksikkö tallennetaan käyttäjälle — paino sessioissa on aina numero
+    // weight unit to be used in trainingSessions: kg or lbs
     weightUnit: {
       type: String,
       enum: ['kg', 'lbs'],
       default: 'kg',
     },
-    // Moneen-moneen: käyttäjällä monta ohjelmaa
-    trainingPrograms: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'TrainingProgram',
-      },
-    ],
+    // trainingPrograms as embedded document:
+    trainingPrograms: {
+      type: [TrainingProgramSchema],
+      required: true,
+    },
+    // trainingSessions as embedded document:
+    trainingSessions: {
+      type: [TrainingSessionSchema],
+      required: true,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.model('User', userSchema);
+// create a model out of UserSchema
+const User = mongoose.model('User', UserSchema);
+
+// export User-model
+module.exports = User;
