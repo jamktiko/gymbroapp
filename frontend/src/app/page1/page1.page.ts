@@ -9,7 +9,13 @@ import {
   IonButtons,
   IonMenuButton,
   IonFooter,
+  IonButton,
+  IonIcon, 
 } from '@ionic/angular/standalone';
+
+// Tuodaan ikonien rekisteröintiin tarvittavat funktiot ja itse ikonit
+import { addIcons } from 'ionicons'; 
+import { logoGoogle, logInOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-page1',
@@ -26,10 +32,26 @@ import {
     IonButtons,
     IonMenuButton,
     IonFooter,
+    IonButton,
+    IonIcon, // Lisätään ikoni imports-listaan
   ],
 })
 export class Page1Page implements OnInit {
+  
+  constructor() {
+    /** * Jotta ikonit näkyvät Standalone-komponentissa, ne pitää 
+     * "rekisteröidä" tässä constructorissa.
+     */
+    addIcons({ logoGoogle, logInOutline });
+  }
+
   ngOnInit() {}
 
-  constructor() {}
+  /**
+   * Tämä funktio ajetaan, kun käyttäjä painaa Google-nappia.
+   * Tähän lisätään myöhemmin varsinainen kirjautumislogiikka.
+   */
+  _googleLogin() {
+    console.log('sTässä kohtaa tapahtuisi kirjautuminen.');
+  }
 }

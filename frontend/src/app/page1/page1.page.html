@@ -1,20 +1,31 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Page 1</ion-title>
+    <ion-title>Kirjaudu</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="content-container">
-    <p class="placeholder">page 1 content comes here</p>
+  <div class="login-container">
+    
+    <div class="logo-section">
+      <h1>Tervetuloa</h1>
+      <p>Kirjaudu sisään jatkaaksesi</p>
+    </div>
+
+    <div class="action-section">
+      <ion-button class="google-btn" expand="block" (click)="_googleLogin()">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Jatka Google-tunnuksilla
+      </ion-button>
+    </div>
+
+    <div class="footer-text">
+      <p>Ainoa kirjautumisvaihtoehto turvallisuutesi takaamiseksi.</p>
+      <a href="#">Tietosuojaseloste</a>
+    </div>
+
   </div>
 </ion-content>
-
-<ion-footer>
-  <ion-toolbar>
-    <ion-title></ion-title>
-  </ion-toolbar>
-</ion-footer>
