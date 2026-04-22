@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router'; // Lisätty Router
 import {
   IonApp,
   IonSplitPane,
@@ -33,6 +33,7 @@ import {
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
+  standalone: true, // Varmistetaan standalone-tila
   imports: [
     RouterLink,
     RouterLinkActive,
@@ -52,17 +53,16 @@ import {
   ],
 })
 export class AppComponent {
+  public userDisplayName: string = 'User'; 
+  public userEmail: string = 'ei kirjautunut';
+
   public appPages = [
-    {
-      title: 'Page 1',
-      url: '/page1',
-      icon: 'game-controller',
-    },
-    { title: 'Page 2', url: '/page2', icon: 'golf' },
-    { title: 'Page 3', url: '/page3', icon: 'trophy' },
+    { title: 'Treenit', url: '/page2', icon: 'golf' },
+    { title: 'Saavutukset', url: '/page3', icon: 'trophy' },
   ];
 
-  constructor() {
+  // Lisätty Router constructorin argumentiksi (private router: Router)
+  constructor(private router: Router) {
     addIcons({
       trophyOutline,
       trophy,
@@ -74,6 +74,37 @@ export class AppComponent {
       golf,
       backspaceOutline,
       backspace,
+    });
+
+    this.checkUserStatus();
+  }
+
+  checkUserStatus() {
+    const savedName = localStorage.getItem('userName');
+    const savedEmail = localStorage.getItem('userEmail');
+
+    if (savedName) {
+      this.userDisplayName = savedName;
+    }
+    if (savedEmail) {
+      this.userEmail = savedEmail;
+    }
+  }
+
+  // ---  FUNKTIO: Kirjaudu ulos ---
+  logout() {
+    console.log('Kirjaudutaan ulos...');
+    
+    // 1. Tyhjennetään selaimen muisti
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+
+    // 2. Ohjataan takaisin kirjautumissivulle (page1)
+    // replaceUrl: true poistaa historian, jotta ei pääse "takaisin"-napilla sisään
+    this.router.navigateByUrl('/page1', { replaceUrl: true }).then(() => {
+      // 3. Päivitetään sivu, jotta AppComponent nollautuu (nimet ja tilat)
+      window.location.reload();
     });
   }
 }
