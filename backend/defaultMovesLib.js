@@ -24,7 +24,7 @@ const defaultMoves = [
   { name: 'Leg curl', type: 'targeted', muscle_group: 'Takareidet', isDefault: true },
 ];
 
-const seedDB = async () => {
+const defaultMovesDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URL);
     console.log('MongoDB yhdistetty');
@@ -97,12 +97,12 @@ const seedDB = async () => {
     const programs = await TrainingProgram.insertMany(defaultPrograms);
     console.log(`${programs.length} ohjelmaa lisätty`);
 
-    console.log('Seeding valmis!');
+    console.log('Default movien lisääminen valmis!');
     process.exit(0);
   } catch (err) {
-    console.error('Seeding epäonnistui:', err.message);
+    console.error('Default movien lisääminen epäonnistui:', err.message);
     process.exit(1);
   }
 };
 
-seedDB();
+defaultMovesDB();
