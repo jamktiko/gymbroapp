@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonContent,
   IonHeader,
@@ -13,7 +14,6 @@ import {
   IonIcon, 
 } from '@ionic/angular/standalone';
 
-// Tuodaan ikonien rekisteröintiin tarvittavat funktiot ja itse ikonit
 import { addIcons } from 'ionicons'; 
 import { logoGoogle, logInOutline } from 'ionicons/icons';
 
@@ -33,25 +33,33 @@ import { logoGoogle, logInOutline } from 'ionicons/icons';
     IonMenuButton,
     IonFooter,
     IonButton,
-    IonIcon, // Lisätään ikoni imports-listaan
+    IonIcon,
   ],
 })
 export class Page1Page implements OnInit {
   
-  constructor() {
-    /** * Jotta ikonit näkyvät Standalone-komponentissa, ne pitää 
-     * "rekisteröidä" tässä constructorissa.
-     */
+  constructor(private router: Router) {
     addIcons({ logoGoogle, logInOutline });
   }
 
   ngOnInit() {}
 
-  /**
-   * Tämä funktio ajetaan, kun käyttäjä painaa Google-nappia.
-   * Tähän lisätään myöhemmin varsinainen kirjautumislogiikka.
-   */
-  _googleLogin() {
-    console.log('sTässä kohtaa tapahtuisi kirjautuminen.');
+  async _googleLogin() {
+    console.log('Kirjautumispainiketta painettu.');
+  localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
+  this.router.navigateByUrl('/page2', { replaceUrl: true });
+
+
+    // --- TESTIKOODI ALKAA ---
+    // Poista kommentit alta, jos haluat testata nimen vaihtumista:
+    //localStorage.setItem('userName', 'Arnold Gymbro');
+    //localStorage.setItem('userEmail', 'arnold@power.com');
+    //localStorage.setItem('isLoggedIn', 'true');
+    // --- TESTIKOODI PÄÄTTYY ---
+    
+    // Navigoidaan sivulle 2
+    // Jos käytit yllä olevaa testikoodia, voit lisätä navigateByUrl:n perään
+    // .then(() => window.location.reload()); jotta nimi päivittyy heti.
+    this.router.navigateByUrl('/page2', { replaceUrl: true })//.then(() => window.location.reload());
   }
 }
