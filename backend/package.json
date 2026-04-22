@@ -5,6 +5,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www -e js,json,css,mjs,hbs",
+    "dev": "nodemon ./bin/www -e js,json",
+    "seed": "node seed.js",
     "build": "echo \"No build step required\""
   },
   "dependencies": {
