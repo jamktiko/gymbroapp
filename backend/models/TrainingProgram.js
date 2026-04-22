@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const MoveSchema = require('./Move');
+const { MoveSchema } = require('./Move');
 
 // Schema for TrainingProgram data
 const TrainingProgramSchema = new mongoose.Schema({

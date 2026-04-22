@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Schema for Move data
 const MoveSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -28,11 +29,15 @@ const MoveSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  // null = adminin luoma default-liike
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null,
+  },
 });
 
 const Move = mongoose.model('Move', MoveSchema);
 
-// export MoveSchema (to use it inside User)
-module.exports = MoveSchema;
-// export Move-model
-module.exports = Move;
+// export MoveSchema AND Move-model
+module.exports = { MoveSchema, Move };
