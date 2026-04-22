@@ -10,7 +10,7 @@ const {
 
 router.get('/', getMoves);
 router.get('/:id', getMoveById);
-router.post('/', createMove);
+router.patch('/', createMove);
 router.put('/:id', updateMove);
 router.delete('/:id', deleteMove);
 

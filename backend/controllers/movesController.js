@@ -16,7 +16,9 @@ exports.getMoves = async (req, res) => {
 exports.getMoveById = async (req, res) => {
   try {
     const move = await Move.findById(req.params.id);
-    if (!move) return res.status(404).json({ error: 'Liikettä ei löydy' });
+    if (!move) {
+      return res.status(404).json({ error: 'Liikettä ei löytynyt' });
+    }
     res.json(move);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -42,11 +44,13 @@ exports.createMove = async (req, res) => {
   }
 };
 
-// PUT /api/moves/:id
+// PATCH /api/moves/:id
 exports.updateMove = async (req, res) => {
   try {
     const move = await Move.findById(req.params.id);
-    if (!move) return res.status(404).json({ error: 'Liikettä ei löydy' });
+    if (!move) {
+      return res.status(404).json({ error: 'Liikettä ei löytynyt' });
+    }
     if (move.isDefault) {
       return res.status(403).json({ error: 'Default-liikettä ei voi muokata' });
     }
@@ -64,7 +68,9 @@ exports.updateMove = async (req, res) => {
 exports.deleteMove = async (req, res) => {
   try {
     const move = await Move.findById(req.params.id);
-    if (!move) return res.status(404).json({ error: 'Liikettä ei löydy' });
+    if (!move) {
+      return res.status(404).json({ error: 'Liikettä ei löytynyt' });
+    }
     if (move.isDefault) {
       return res.status(403).json({ error: 'Default-liikettä ei voi poistaa' });
     }
