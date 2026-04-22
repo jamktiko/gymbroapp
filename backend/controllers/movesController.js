@@ -1,4 +1,4 @@
-const Move = require('../models/Move');
+const { Move } = require('../models/Move');
 
 // GET /api/moves — kaikki liikkeet (default + käyttäjän omat)
 exports.getMoves = async (req, res) => {
@@ -34,7 +34,9 @@ exports.createMove = async (req, res) => {
     res.status(201).json(move);
   } catch (err) {
     if (err.code === 11000) {
-      return res.status(400).json({ error: 'Samanniminen liike on jo olemassa' });
+      return res
+        .status(400)
+        .json({ error: 'Samanniminen liike on jo olemassa' });
     }
     res.status(400).json({ error: err.message });
   }

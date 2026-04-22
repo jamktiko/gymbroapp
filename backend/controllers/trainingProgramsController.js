@@ -1,4 +1,4 @@
-const TrainingProgram = require('../models/TrainingProgram');
+// const TrainingProgram = require('../models/TrainingProgram');
 const User = require('../models/User');
 
 // GET /api/training-programs — default-ohjelmat + käyttäjän omat
@@ -16,7 +16,9 @@ exports.getPrograms = async (req, res) => {
 // GET /api/training-programs/:id
 exports.getProgramById = async (req, res) => {
   try {
-    const program = await TrainingProgram.findById(req.params.id).populate('moves');
+    const program = await TrainingProgram.findById(req.params.id).populate(
+      'moves',
+    );
     if (!program) return res.status(404).json({ error: 'Ohjelmaa ei löydy' });
     res.json(program);
   } catch (err) {
@@ -55,7 +57,7 @@ exports.updateProgram = async (req, res) => {
     const updated = await TrainingProgram.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).populate('moves');
     res.json(updated);
   } catch (err) {
@@ -75,7 +77,7 @@ exports.deleteProgram = async (req, res) => {
     // Poistetaan viittaus käyttäjältä
     await User.updateMany(
       { trainingPrograms: program._id },
-      { $pull: { trainingPrograms: program._id } }
+      { $pull: { trainingPrograms: program._id } },
     );
     res.json({ message: 'Ohjelma poistettu' });
   } catch (err) {

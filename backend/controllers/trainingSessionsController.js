@@ -1,4 +1,5 @@
-const TrainingSession = require('../models/TrainingSession');
+// const TrainingSession = require('../models/TrainingSession');
+const User = require('../models/User');
 
 // GET /api/training-sessions — käyttäjän kaikki sessiot (kalenterinäkymä + graafi)
 exports.getSessions = async (req, res) => {
@@ -27,7 +28,7 @@ exports.getSessions = async (req, res) => {
 exports.getSessionById = async (req, res) => {
   try {
     const session = await TrainingSession.findById(req.params.id).populate(
-      'exercises.move'
+      'exercises.move',
     );
     if (!session) return res.status(404).json({ error: 'Sessiota ei löydy' });
     res.json(session);
@@ -57,7 +58,7 @@ exports.updateSession = async (req, res) => {
     const session = await TrainingSession.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).populate('exercises.move');
     if (!session) return res.status(404).json({ error: 'Sessiota ei löydy' });
     res.json(session);
