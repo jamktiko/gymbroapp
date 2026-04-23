@@ -50,6 +50,12 @@ const TrainingSessionSchema = new mongoose.Schema(
         message: 'Sessiossa täytyy olla vähintään yksi liike',
       },
     },
+    // break time in seconds, defaults to 2 minutes
+    breakTimeSeconds: {
+      type: Number,
+      default: 120,
+      min: 1,
+    },
   },
   { timestamps: true },
 );
