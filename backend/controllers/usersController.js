@@ -1,4 +1,7 @@
 const User = require('../models/User');
+const {
+  fetchDefaultProgramsForUser,
+} = require('../controllers/trainingProgramsController');
 
 // GET /api/users/:id
 exports.getUserById = async (req, res) => {
@@ -17,7 +20,9 @@ exports.getUserById = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
-    res.status(201).json(user);
+    // fetch default training programs for newly created user:
+    const updatedUser = await fetchDefaultProgramsForUser(user._id);
+    res.status(201).json(updatedUser);
   } catch (err) {
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Sähköposti on jo käytössä' });

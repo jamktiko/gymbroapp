@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const TrainingSessionSchema = require('./TrainingSession');
-const TrainingProgramSchema = require('./TrainingProgram');
+const { TrainingProgramSchema } = require('./TrainingProgram');
 
 // Schema for User data
 // name and email come from google auth token

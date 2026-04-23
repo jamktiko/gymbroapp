@@ -1,3 +1,4 @@
+const { Trainingprogram } = require('../models/TrainingProgram');
 const User = require('../models/User');
 
 // GET /api/training-programs — haetaan kirjautuneen käyttäjän treeniohjelmat
@@ -117,5 +118,60 @@ exports.deleteProgram = async (req, res) => {
     res.json({ message: 'Treeniohjelma poistettu' });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+// method for fetching default training programs for user
+exports.fetchDefaultProgramsForUser = async (userId) => {
+  try {
+    // 1. Etsitään nimenomaan isDefault: true -ohjelmat
+    const defaultPrograms = await Trainingprogram.find({ isDefault: true });
+    const user = await User.findById(userId);
+
+    if (!user) return null;
+
+    let isModified = false;
+
+    // 2. Käydään läpi kaikki globaalit default-ohjelmat
+    for (const defaultProg of defaultPrograms) {
+      // Tarkistetaan onko käyttäjällä jo olemassa samanniminen default-ohjelma
+      const existingProg = user.trainingPrograms.find(
+        (p) => p.name === defaultProg.name && p.isDefault === true,
+      );
+
+      if (existingProg) {
+        // PÄIVITYS: Jos admin on muuttanut default-ohjelman kuvausta tai liikkeitä,
+        // päivitetään ne suoraan käyttäjän olemassa olevaan ohjelmaan.
+        existingProg.description = defaultProg.description;
+
+        // Putsataan liikkeiden vanhat _id:t jotta ohjelma pysyy siistinä
+        existingProg.moves = defaultProg.moves.map((m) => {
+          const moveObj = m.toObject();
+          delete moveObj._id;
+          return moveObj;
+        });
+        isModified = true;
+      } else {
+        // UUSI: Käyttäjällä ei ollut tätä, lisätään se
+        const progObj = defaultProg.toObject();
+        delete progObj._id; // Alkuperäinen root ID pois
+
+        if (progObj.moves) {
+          progObj.moves.forEach((m) => delete m._id); // Liikkeiden ID:t pois
+        }
+
+        user.trainingPrograms.push(progObj);
+        isModified = true;
+      }
+    }
+
+    if (isModified) {
+      await user.save();
+    }
+
+    return user;
+  } catch (err) {
+    console.error('Error fetching default programs for user:', err.message);
+    return null;
   }
 };
