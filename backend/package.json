@@ -1,12 +1,12 @@
 {
   "name": "backend",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "team-gymbro",
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www -e js,json,css,mjs,hbs",
     "dev": "nodemon ./bin/www -e js,json",
-    "defaultMovesLib": "node defaultMovesLib.js",
+    "defaultDataLibrary": "node defaultDataLibrary.js",
     "build": "echo \"No build step required\""
   },
   "dependencies": {

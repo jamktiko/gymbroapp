@@ -11,7 +11,7 @@ const {
 router.get('/', getPrograms);
 router.get('/:id', getProgramById);
 router.post('/', createProgram);
-router.put('/:id', updateProgram);
+router.patch('/:id', updateProgram);
 router.delete('/:id', deleteProgram);
 
 module.exports = router;

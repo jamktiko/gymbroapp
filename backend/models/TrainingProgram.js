@@ -1,35 +1,27 @@
 const mongoose = require('mongoose');
+const { EmbeddedMoveSchema } = require('./Move');
 
-const trainingProgramSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: [true, 'Ohjelman nimi on pakollinen'],
-      trim: true,
-    },
-    description: {
-      type: String,
-      trim: true,
-    },
-    moves: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Move',
-      },
-    ],
-    // true = admin/seed luoma, käyttäjä ei voi poistaa
-    isDefault: {
-      type: Boolean,
-      default: false,
-    },
-    // null = seed/admin luoma default-ohjelma
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      default: null,
-    },
+// Schema for TrainingProgram data
+const TrainingProgramSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Ohjelman nimi on pakollinen'],
+    trim: true,
   },
-  { timestamps: true }
-);
+  description: {
+    type: String,
+    trim: true,
+  },
+  // moves duplicated fully inside the program:
+  moves: {
+    type: [EmbeddedMoveSchema],
+  },
+  // true = adminin luoma -> käyttäjä ei voi poistaa
+  isDefault: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-module.exports = mongoose.model('TrainingProgram', trainingProgramSchema);
+// export TrainingProgramSchema (only used inside User, so no need to make it into a Model here)
+module.exports = TrainingProgramSchema;

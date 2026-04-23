@@ -5,11 +5,13 @@ const cookieParser = require('cookie-parser');
 
 const authMiddleware = require('./middleware/auth');
 
+// import routes to variables
 const movesRouter = require('./routes/moves');
 const usersRouter = require('./routes/users');
 const trainingProgramsRouter = require('./routes/trainingPrograms');
 const trainingSessionsRouter = require('./routes/trainingSessions');
 
+// create express app
 const app = express();
 
 app.use(logger('dev'));
@@ -27,8 +29,8 @@ app.use('/api/users', usersRouter);
 app.use('/api/training-programs', trainingProgramsRouter);
 app.use('/api/training-sessions', trainingSessionsRouter);
 
-// Terveystarkistus
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+// connection health check
+app.get('/', (req, res) => res.json({ status: 'ok' }));
 
 // 404
 app.use((req, res) => {

@@ -1,21 +1,35 @@
-const TrainingSession = require('../models/TrainingSession');
+const User = require('../models/User');
 
-// GET /api/training-sessions — käyttäjän kaikki sessiot (kalenterinäkymä + graafi)
+// GET /api/training-sessions — haetaan kirjautuneen käyttäjän treenisessiot
 exports.getSessions = async (req, res) => {
   try {
-    const { from, to } = req.query;
-    const filter = { user: req.user?.id };
-
-    // Valinnainen aikarajaus: ?from=2024-01-01&to=2024-12-31
-    if (from || to) {
-      filter.datetime = {};
-      if (from) filter.datetime.$gte = new Date(from);
-      if (to) filter.datetime.$lte = new Date(to);
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const sessions = await TrainingSession.find(filter)
-      .populate('exercises.move')
-      .sort({ datetime: -1 });
+    // Etsitään käyttäjä
+    const user = await User.findById(req.user.id).populate(
+      'trainingSessions.exercises.move',
+    );
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    let sessions = user.trainingSessions;
+
+    // Valinnainen aikarajaus: ?from=2024-01-01&to=2024-12-31
+    const { from, to } = req.query;
+    if (from || to) {
+      sessions = sessions.filter((session) => {
+        let isValid = true;
+        if (from) isValid = isValid && session.datetime >= new Date(from);
+        if (to) isValid = isValid && session.datetime <= new Date(to);
+        return isValid;
+      });
+    }
+
+    // Järjestetään uusin ensin
+    sessions.sort((a, b) => b.datetime - a.datetime);
 
     res.json(sessions);
   } catch (err) {
@@ -26,40 +40,80 @@ exports.getSessions = async (req, res) => {
 // GET /api/training-sessions/:id
 exports.getSessionById = async (req, res) => {
   try {
-    const session = await TrainingSession.findById(req.params.id).populate(
-      'exercises.move'
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
+    }
+
+    const user = await User.findById(req.user.id).populate(
+      'trainingSessions.exercises.move',
     );
-    if (!session) return res.status(404).json({ error: 'Sessiota ei löydy' });
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    // Haetaan sessio alidokumenttien joukosta id:llä
+    const session = user.trainingSessions.id(req.params.id);
+
+    if (!session) {
+      return res.status(404).json({ error: 'Treenisessiota ei löytynyt' });
+    }
     res.json(session);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// POST /api/training-sessions — tallenna treenikerta
-// Body: { datetime, exercises: [{ move: id, sets: [{ reps, weight }] }] }
+// POST /api/training-sessions — luo uusi sessio käyttäjälle
 exports.createSession = async (req, res) => {
   try {
-    const session = await TrainingSession.create({
-      ...req.body,
-      user: req.user?.id,
-    });
-    await session.populate('exercises.move');
-    res.status(201).json(session);
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    // Lisätään uusi sessio
+    user.trainingSessions.push(req.body);
+    await user.save();
+
+    // Palautetaan juuri luotu uusi sessio (viimeinen alkio taulukossa)
+    const newSession = user.trainingSessions[user.trainingSessions.length - 1];
+
+    // Populoidaan palautettava sessio
+    await user.populate('trainingSessions.exercises.move');
+
+    res.status(201).json(newSession);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-// PUT /api/training-sessions/:id — muokkaa sessiota
+// PATCH /api/training-sessions/:id
 exports.updateSession = async (req, res) => {
   try {
-    const session = await TrainingSession.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    ).populate('exercises.move');
-    if (!session) return res.status(404).json({ error: 'Sessiota ei löydy' });
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    const session = user.trainingSessions.id(req.params.id);
+    if (!session) {
+      return res.status(404).json({ error: 'Treenisessiota ei löytynyt' });
+    }
+
+    // Päivitetään kentät (toimii kuin PATCH)
+    session.set(req.body);
+    await user.save();
+
+    await user.populate('trainingSessions.exercises.move');
+
     res.json(session);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -69,9 +123,24 @@ exports.updateSession = async (req, res) => {
 // DELETE /api/training-sessions/:id
 exports.deleteSession = async (req, res) => {
   try {
-    const session = await TrainingSession.findByIdAndDelete(req.params.id);
-    if (!session) return res.status(404).json({ error: 'Sessiota ei löydy' });
-    res.json({ message: 'Sessio poistettu' });
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    const session = user.trainingSessions.id(req.params.id);
+    if (!session) {
+      return res.status(404).json({ error: 'Treenisessiota ei löytynyt' });
+    }
+
+    session.deleteOne();
+    await user.save();
+
+    res.json({ message: 'Treenisessio poistettu' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

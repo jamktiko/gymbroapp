@@ -11,7 +11,7 @@ const {
 router.get('/', getMoves);
 router.get('/:id', getMoveById);
 router.post('/', createMove);
-router.put('/:id', updateMove);
+router.patch('/:id', updateMove);
 router.delete('/:id', deleteMove);
 
 module.exports = router;
