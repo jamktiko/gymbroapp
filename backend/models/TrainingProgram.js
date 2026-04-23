@@ -23,5 +23,11 @@ const TrainingProgramSchema = new mongoose.Schema({
   },
 });
 
+const Trainingprogram = mongoose.model(
+  'Trainingprogram',
+  TrainingProgramSchema,
+);
+
 // export TrainingProgramSchema (only used inside User, so no need to make it into a Model here)
-module.exports = TrainingProgramSchema;
+// export Trainingprogram model
+module.exports = { TrainingProgramSchema, Trainingprogram };
