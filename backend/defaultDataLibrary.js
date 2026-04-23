@@ -1,10 +1,10 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Move = require('./models/Move');
-const TrainingProgram = require('./models/TrainingProgram');
+const { Move } = require('./models/Move');
+const TrainingSessionSchema = require('./TrainingSession');
+const TrainingProgramSchema = require('./TrainingProgram');
 
 const defaultMoves = [
-  // Compound
   {
     name: 'Penkkipunnerrus',
     type: 'compound',
