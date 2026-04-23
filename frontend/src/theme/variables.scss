@@ -1,2 +1,19 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+:root {
+  /** * 1. Määritellään keltainen pääväriksi (Primary)
+   * Tämä muuttaa automaattisesti ion-buttonit keltaisiksi, 
+   * kun käytät <ion-button color="primary">.
+   */
+  --ion-color-primary: #ffce00;
+  --ion-color-primary-rgb: 255, 206, 0;
+  --ion-color-primary-contrast: #000000; // Musta teksti keltaisen päälle
+  --ion-color-primary-contrast-rgb: 0, 0, 0;
+  --ion-color-primary-shade: #eceae4;
+  --ion-color-primary-tint: #efeee9;
+
+  
+
+/* Jos haluat, että Toolbar (yläpalkki) on myös musta keltaisella tekstillä */
+ion-toolbar {
+  --background: #000000;
+  --color:yellow;
+}};
