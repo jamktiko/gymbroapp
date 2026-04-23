@@ -1,13 +1,19 @@
-const TrainingProgram = require('../models/TrainingProgram');
 const User = require('../models/User');
 
-// GET /api/training-programs — default-ohjelmat + käyttäjän omat
+// GET /api/training-programs — haetaan kirjautuneen käyttäjän treeniohjelmat
 exports.getPrograms = async (req, res) => {
   try {
-    const programs = await TrainingProgram.find({
-      $or: [{ isDefault: true }, { createdBy: req.user?.id }],
-    }).populate('moves');
-    res.json(programs);
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
+    }
+
+    // Etsitään käyttäjä
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    res.json(user.trainingPrograms);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -16,48 +22,73 @@ exports.getPrograms = async (req, res) => {
 // GET /api/training-programs/:id
 exports.getProgramById = async (req, res) => {
   try {
-    const program = await TrainingProgram.findById(req.params.id).populate('moves');
-    if (!program) return res.status(404).json({ error: 'Ohjelmaa ei löydy' });
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    // Haetaan ohjelma alidokumenttien joukosta id:llä
+    const program = user.trainingPrograms.id(req.params.id);
+
+    if (!program) {
+      return res.status(404).json({ error: 'Treeniohjelmaa ei löytynyt' });
+    }
     res.json(program);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// POST /api/training-programs — luo uusi ohjelma
+// POST /api/training-programs — luo uusi ohjelma käyttäjälle
+// when creating a new program we literally put all moves whole JSON-objects inside moves[]
 exports.createProgram = async (req, res) => {
   try {
-    const program = await TrainingProgram.create({
-      ...req.body,
-      isDefault: false,
-      createdBy: req.user?.id ?? null,
-    });
-    // Liitetään ohjelma käyttäjälle
-    if (req.user?.id) {
-      await User.findByIdAndUpdate(req.user.id, {
-        $push: { trainingPrograms: program._id },
-      });
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
     }
-    res.status(201).json(program);
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    // Lisätään uusi ohjelma
+    user.trainingPrograms.push(req.body);
+    await user.save();
+
+    // Palautetaan juuri luotu uusi ohjelma (viimeinen alkio taulukossa)
+    const newProgram = user.trainingPrograms[user.trainingPrograms.length - 1];
+    res.status(201).json(newProgram);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-// PUT /api/training-programs/:id
+// PATCH /api/training-programs/:id
 exports.updateProgram = async (req, res) => {
   try {
-    const program = await TrainingProgram.findById(req.params.id);
-    if (!program) return res.status(404).json({ error: 'Ohjelmaa ei löydy' });
-    if (program.isDefault) {
-      return res.status(403).json({ error: 'Default-ohjelmaa ei voi muokata' });
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
     }
-    const updated = await TrainingProgram.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    ).populate('moves');
-    res.json(updated);
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    const program = user.trainingPrograms.id(req.params.id);
+    if (!program) {
+      return res.status(404).json({ error: 'Treeniohjelmaa ei löytynyt' });
+    }
+    // Päivitetään kentät (toimii kuin PATCH)
+    program.set(req.body);
+    await user.save();
+
+    res.json(program);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -66,18 +97,24 @@ exports.updateProgram = async (req, res) => {
 // DELETE /api/training-programs/:id
 exports.deleteProgram = async (req, res) => {
   try {
-    const program = await TrainingProgram.findById(req.params.id);
-    if (!program) return res.status(404).json({ error: 'Ohjelmaa ei löydy' });
-    if (program.isDefault) {
-      return res.status(403).json({ error: 'Default-ohjelmaa ei voi poistaa' });
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
     }
-    await program.deleteOne();
-    // Poistetaan viittaus käyttäjältä
-    await User.updateMany(
-      { trainingPrograms: program._id },
-      { $pull: { trainingPrograms: program._id } }
-    );
-    res.json({ message: 'Ohjelma poistettu' });
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    const program = user.trainingPrograms.id(req.params.id);
+    if (!program) {
+      return res.status(404).json({ error: 'Treeniohjelmaa ei löytynyt' });
+    }
+
+    program.deleteOne();
+    await user.save();
+
+    res.json({ message: 'Treeniohjelma poistettu' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

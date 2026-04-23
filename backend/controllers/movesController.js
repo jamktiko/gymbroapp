@@ -1,11 +1,18 @@
-const Move = require('../models/Move');
+const { Move } = require('../models/Move');
 
 // GET /api/moves — kaikki liikkeet (default + käyttäjän omat)
 exports.getMoves = async (req, res) => {
   try {
-    const moves = await Move.find({
-      $or: [{ isDefault: true }, { createdBy: req.user?.id }],
-    }).sort({ name: 1 });
+    let filter = { createdBy: null };
+
+    // Jos käyttäjä on tunnistettu headerista, palautetaan myös hänen omat liikkeensä
+    if (req.user && req.user.id) {
+      filter = {
+        $or: [{ createdBy: null }, { createdBy: req.user.id }],
+      };
+    }
+
+    const moves = await Move.find(filter).sort({ name: 1 });
     res.json(moves);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -16,7 +23,9 @@ exports.getMoves = async (req, res) => {
 exports.getMoveById = async (req, res) => {
   try {
     const move = await Move.findById(req.params.id);
-    if (!move) return res.status(404).json({ error: 'Liikettä ei löydy' });
+    if (!move) {
+      return res.status(404).json({ error: 'Liikettä ei löytynyt' });
+    }
     res.json(move);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -34,22 +43,26 @@ exports.createMove = async (req, res) => {
     res.status(201).json(move);
   } catch (err) {
     if (err.code === 11000) {
-      return res.status(400).json({ error: 'Samanniminen liike on jo olemassa' });
+      return res
+        .status(400)
+        .json({ error: 'Samanniminen liike on jo olemassa' });
     }
     res.status(400).json({ error: err.message });
   }
 };
 
-// PUT /api/moves/:id
+// PATCH /api/moves/:id
 exports.updateMove = async (req, res) => {
   try {
     const move = await Move.findById(req.params.id);
-    if (!move) return res.status(404).json({ error: 'Liikettä ei löydy' });
+    if (!move) {
+      return res.status(404).json({ error: 'Liikettä ei löytynyt' });
+    }
     if (move.isDefault) {
       return res.status(403).json({ error: 'Default-liikettä ei voi muokata' });
     }
     const updated = await Move.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true,
     });
     res.json(updated);
@@ -62,7 +75,9 @@ exports.updateMove = async (req, res) => {
 exports.deleteMove = async (req, res) => {
   try {
     const move = await Move.findById(req.params.id);
-    if (!move) return res.status(404).json({ error: 'Liikettä ei löydy' });
+    if (!move) {
+      return res.status(404).json({ error: 'Liikettä ei löytynyt' });
+    }
     if (move.isDefault) {
       return res.status(403).json({ error: 'Default-liikettä ei voi poistaa' });
     }
