@@ -9,19 +9,13 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-    <h2>Tervetuloa, {{ user.firstName }}!</h2>
+    <h2>Tervetuloa!</h2>
     <p class="placeholder">Täällä näkyvät omat treeniohjelmasi.</p>
-    
-    </div>
+  </div>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="lisaaOhjelma()">
+    <ion-fab-button color="primary" (click)="lisaaOhjelma()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
-
-<ion-footer>
-  <ion-toolbar>
-  </ion-toolbar>
-</ion-footer>

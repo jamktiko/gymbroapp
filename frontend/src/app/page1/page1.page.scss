@@ -14,15 +14,6 @@ ion-content {
   background-color: #000000; /* Varmistetaan musta tausta */
 }
 
-/* Logo-osio (Yläreuna) */
-.logo-section {
-  margin-top: 10vh; /* 10% tilaa yläreunasta */
-
-  .app-logo {
-    font-size: 100px;
-    color: #ffff00; /* Keltainen logo */
-    margin-bottom: 20px;
-  }
 
   h1 {
     font-size: 32px;
@@ -36,7 +27,7 @@ ion-content {
     color: #ffff00;
     opacity: 0.8; /* Hieman himmeämpi keltainen */
   }
-}
+
 
 /* Nappiosio (Keskellä) */
 .action-section {
@@ -50,19 +41,19 @@ ion-content {
 .google-btn {
   width: 100%;
   max-width: 300px;
-  height: 55px;
+  height: 80px;
   --border-radius: 15px; /* Pyöristetyt kulmat */
   --background: #ffff00; /* Keltainen tausta */
   --color: #000000;      /* Musta teksti */
   font-weight: 700;
-  font-size: 16px;
+  font-size: 20px;
   
   /* Keltainen hohde napin ympärille */
   --box-shadow: 0 4px 10px rgba(255, 255, 0, 0.2);
 
   ion-icon {
-    font-size: 24px;
-    margin-right: 12px;
+    font-size: 40px;
+    margin-right: 10px;
     color: #000000; /* Ikonikin mustaksi */
   }
 }

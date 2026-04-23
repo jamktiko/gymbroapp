@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; // Reititin takaisin
+
 import { 
   IonContent, 
   IonHeader, 
@@ -39,24 +41,21 @@ import { add } from 'ionicons/icons';
 })
 export class Page2Page implements OnInit {
   
-  // TÄSSÄ ON "VALE-BACKEND": 
-  // Kun backend on valmis, tämä muuttuja täytetään palvelimelta tulevalla datalla.
-  public user = {
+  /* public user = {
     firstName: 'Päällikkö',
     lastName: 'Gymbro',
     id: '12345'
   };
+  */
 
-  constructor() {
+  constructor(private router: Router) {
     addIcons({ add });
   }
 
-  ngOnInit() {
-    // Tällä hetkellä emme tee tässä mitään, 
-    // koska käytämme yllä olevaa 'user'-objektia.
-  }
+  ngOnInit() {}
 
+  // Tämä funktio ohjaa käyttäjän uudelle sivulle
   lisaaOhjelma() {
-    console.log('Plus-painiketta painettu!');
+    this.router.navigate(['/page4']);
   }
 }

@@ -7,9 +7,6 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  IonFooter,
   IonButton,
   IonIcon, 
 } from '@ionic/angular/standalone';
@@ -29,9 +26,6 @@ import { logoGoogle, logInOutline } from 'ionicons/icons';
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonButtons,
-    IonMenuButton,
-    IonFooter,
     IonButton,
     IonIcon,
   ],
@@ -47,7 +41,7 @@ export class Page1Page implements OnInit {
   async _googleLogin() {
     console.log('Kirjautumispainiketta painettu.');
   localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
-  this.router.navigateByUrl('/page2', { replaceUrl: true });
+  
 
 
     // --- TESTIKOODI ALKAA ---
