@@ -5,7 +5,7 @@ require('dotenv').config();
 // connects to mongodb
 
 const dbconnection = mongoose
-  .connect(process.env.MONGODB_URL)
+  .connect(process.env.MONGODB_ATLAS_URL)
   .then(() => {
     console.log('Database connection successful.');
   })
