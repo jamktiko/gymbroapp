@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('./config/passport');
 const cors = require('cors');
@@ -17,11 +16,6 @@ const trainingSessionsRouter = require('./routes/trainingSessions');
 
 // create express app
 const app = express();
-
-mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => console.log('Yhteys MongoDB:hen onnistui'))
-  .catch((err) => console.error('MongoDB virhe:', err));
 
 app.use(express.json());
 

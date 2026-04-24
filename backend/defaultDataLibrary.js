@@ -309,7 +309,7 @@ const defaultTrainingprograms = [
 
 const addDefaultData = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URL);
+    await mongoose.connect(process.env.MONGODB_ATLAS_URL);
     console.log('MongoDB yhdistetty');
 
     await Move.deleteMany({ isDefault: true });
