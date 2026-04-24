@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const verifyToken = require('../middleware/verifyToken');
 const {
   getPrograms,
   getProgramById,
@@ -8,10 +9,10 @@ const {
   deleteProgram,
 } = require('../controllers/trainingProgramsController');
 
-router.get('/', getPrograms);
-router.get('/:id', getProgramById);
-router.post('/', createProgram);
-router.patch('/:id', updateProgram);
-router.delete('/:id', deleteProgram);
+router.get('/', verifyToken, getPrograms);
+router.get('/:id',verifyToken, getProgramById);
+router.post('/',verifyToken, createProgram);
+router.patch('/:id',verifyToken, updateProgram);
+router.delete('/:id',verifyToken, deleteProgram);
 
 module.exports = router;

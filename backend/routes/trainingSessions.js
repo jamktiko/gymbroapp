@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const verifyToken = require('../middleware/verifyToken');
 const {
   getSessions,
   getSessionById,
@@ -8,10 +9,10 @@ const {
   deleteSession,
 } = require('../controllers/trainingSessionsController');
 
-router.get('/', getSessions);
-router.get('/:id', getSessionById);
-router.post('/', createSession);
-router.patch('/:id', updateSession);
-router.delete('/:id', deleteSession);
+router.get('/',verifyToken, getSessions);
+router.get('/:id',verifyToken, getSessionById);
+router.post('/',verifyToken, createSession);
+router.patch('/:id',verifyToken, updateSession);
+router.delete('/:id',verifyToken, deleteSession);
 
 module.exports = router;
