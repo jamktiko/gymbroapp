@@ -8,7 +8,9 @@
     "dev": "nodemon ./bin/www -e js,json",
     "defaultDataLibrary": "node defaultDataLibrary.js",
     "build": "echo \"No build step required\"",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -19,6 +21,7 @@
     "express": "^4.22.1",
     "hbs": "^4.2.1",
     "http-errors": "~1.6.3",
+    "mongodb": "^7.2.0",
     "mongoose": "^9.4.1",
     "morgan": "^1.10.1"
   },
