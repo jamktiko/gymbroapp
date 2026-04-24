@@ -1,9 +1,5 @@
-/* Koko sivun taustaväri (musta) */
-ion-content {
-  --background: #0f0f0f;
-}
 .headercolor {
-  --background: #0f0f0f;
+  --background: #202020;
 }
 /* Pääsäiliö, joka jakaa tilan pystysuunnassa */
 .login-container {
@@ -13,7 +9,7 @@ ion-content {
   height: 100%;
   padding: 40px 20px;
   text-align: center;
-  background-color: #0f0f0f; /* Varmistetaan musta tausta */
+  background-color: #202020; /* Varmistetaan musta tausta */
 }
 
 h1 {
