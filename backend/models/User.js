@@ -7,6 +7,11 @@ const TrainingProgramSchema = require('./TrainingProgram');
 // login is done through google auth
 const UserSchema = new mongoose.Schema(
   {
+      googleId: {
+      type: String,
+      required: [true, 'Google ID is required'],
+      unique: true,
+    },
     name: {
       type: String,
       required: [true, 'Nimi on pakollinen'],
