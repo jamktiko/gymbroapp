@@ -7,7 +7,8 @@
     "start": "nodemon ./bin/www -e js,json,css,mjs,hbs",
     "dev": "nodemon ./bin/www -e js,json",
     "defaultDataLibrary": "node defaultDataLibrary.js",
-    "build": "echo \"No build step required\""
+    "build": "echo \"No build step required\"",
+    "test": "vitest run"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -22,6 +23,10 @@
     "morgan": "^1.10.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
+    "nodemon": "^3.1.14",
+    "vitest": "^4.1.5"
   }
 }
