@@ -2,16 +2,15 @@
 // Tämä korvataan kun Google OAuth otetaan käyttöön.
 
 const authMiddleware = (req, res, next) => {
-  // Kehitysvaiheessa: lue userId headerista tai querystä
+  // Kehitysvaiheessa: lue userId headerista
   // HUOM: Älä käytä tätä tuotannossa
   const userId = req.headers['x-user-id'] || req.query.userId;
 
-  if (userId) {
-    req.user = { id: userId };
-  } else {
-    req.user = null;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
+  req.user = { id: userId };
   next();
 };
 
