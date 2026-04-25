@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 
 let mongoServer;
 
+// Set up required environment variables for tests
+process.env.JWT_SECRET = 'test_secret_for_jwt_testing';
+process.env.SESSION_SECRET = 'test_secret_for_session_testing';
+
 // 1. Spin up the in-memory database
 exports.connectDB = async () => {
   // Disconnect from any potential existing connections first

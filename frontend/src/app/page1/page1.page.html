@@ -1,14 +1,13 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar class="headercolor">
     <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="login-container">
-    
     <div class="logo-section">
-      <h1>Tervetuloa</h1>
+      <h1>Tervetuloa!</h1>
       <p>Kirjaudu sisään jatkaaksesi</p>
     </div>
 
@@ -17,15 +16,17 @@
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Jatka Google-tunnuksilla
       </ion-button>
-      
     </div>
 
     <div class="footer-text">
       <p>Ainoa kirjautumisvaihtoehto turvallisuutesi takaamiseksi.</p>
-      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
-    Tietosuojaseloste
-  </a>
+      <a
+        href="https://policies.google.com/privacy"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Tietosuojaseloste
+      </a>
     </div>
-
   </div>
 </ion-content>

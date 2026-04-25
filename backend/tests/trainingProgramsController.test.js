@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 /* global describe, it, expect, beforeAll, afterEach, afterAll */
 
 const request = require('supertest');
@@ -15,6 +16,7 @@ const createUser = async (overrides = {}) => {
   const user = await User.create({
     name: 'Test User',
     email: `testuser-${Date.now()}@example.com`,
+    googleId: `google-user-${Date.now()}`,
     ...overrides,
   });
   return { user, userId: user._id.toString() };
@@ -51,7 +53,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get('/api/training-programs')
-        .set('x-user-id', userId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
@@ -64,7 +66,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get('/api/training-programs')
-        .set('x-user-id', userId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(1);
@@ -76,7 +78,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get('/api/training-programs')
-        .set('x-user-id', nonExistentId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
@@ -101,7 +103,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-programs/${programId}`)
-        .set('x-user-id', userId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body._id).toBe(programId);
@@ -114,7 +116,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-programs/${fakeId}`)
-        .set('x-user-id', userId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Treeniohjelmaa ei löytynyt');
@@ -125,7 +127,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-programs/${new mongoose.Types.ObjectId()}`)
-        .set('x-user-id', nonExistentId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
@@ -149,7 +151,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .post('/api/training-programs')
-        .set('x-user-id', userId)
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
         .send(validProgramPayload);
 
       expect(response.status).toBe(201);
@@ -166,7 +168,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .post('/api/training-programs')
-        .set('x-user-id', userId)
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
         .send({ description: 'No name provided' });
 
       expect(response.status).toBe(400);
@@ -178,7 +180,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .post('/api/training-programs')
-        .set('x-user-id', nonExistentId)
+        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`)
         .send(validProgramPayload);
 
       expect(response.status).toBe(404);
@@ -206,7 +208,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-programs/${programId}`)
-        .set('x-user-id', userId)
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
         .send({ description: 'Updated description' });
 
       expect(response.status).toBe(200);
@@ -224,7 +226,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-programs/${fakeId}`)
-        .set('x-user-id', userId)
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
         .send({ name: 'Ghost Program' });
 
       expect(response.status).toBe(404);
@@ -236,7 +238,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-programs/${new mongoose.Types.ObjectId()}`)
-        .set('x-user-id', nonExistentId)
+        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`)
         .send({ name: 'X' });
 
       expect(response.status).toBe(404);
@@ -264,7 +266,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-programs/${programId}`)
-        .set('x-user-id', userId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Treeniohjelma poistettu');
@@ -279,7 +281,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-programs/${fakeId}`)
-        .set('x-user-id', userId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Treeniohjelmaa ei löytynyt');
@@ -290,7 +292,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-programs/${new mongoose.Types.ObjectId()}`)
-        .set('x-user-id', nonExistentId);
+        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
