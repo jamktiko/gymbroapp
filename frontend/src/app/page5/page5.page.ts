@@ -27,7 +27,6 @@ import {
     IonMenuButton,
     IonButton,
     IonFooter,
-    IonTitle,
   ],
 })
 export class Page5Page implements OnDestroy {
