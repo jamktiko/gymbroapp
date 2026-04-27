@@ -7,15 +7,13 @@ on:
   pull_request:
     branches: [ main ]
     paths: [ 'backend/**' ]
-  workflow_dispatch:
-
 jobs:
   test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [20.x, 22.x]
+        node-version: [22.x]
 
     defaults:
       run:
