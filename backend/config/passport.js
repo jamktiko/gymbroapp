@@ -4,13 +4,13 @@ const User = require('../models/User');
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientID: process.env.GOOGLE_CLIENT_ID || 'test_client_id',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'test_client_secret',
       callbackURL: '/api/auth/google/callback',
     },
     async (accessToken, refreshToken, profile, done) => {
-        console.log('PASSPORT CALLBACK HIT');
-        console.log('Profile:', profile.displayName, profile.emails);
+      console.log('PASSPORT CALLBACK HIT');
+      console.log('Profile:', profile.displayName, profile.emails);
       try {
         let user = await User.findOne({ googleId: profile.id });
         console.log('User found:', user);
@@ -25,8 +25,8 @@ passport.use(
       } catch (err) {
         done(err, null);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {
