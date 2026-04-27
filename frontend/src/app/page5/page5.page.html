@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="content-container ion-padding">
+    <h1>temporary</h1>
+    <p>temporary</p>
+    <ion-button
+      class="timer"
+      fill="clear"
+      expand="block"
+      (click)="toggleTimer()"
+    >
+      {{ timerValue }}
+    </ion-button>
+  </div>
+</ion-content>
