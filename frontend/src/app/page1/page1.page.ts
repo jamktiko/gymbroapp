@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,6 +13,11 @@ import {
 
 import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
+import {
+  GoogleLoginProvider,
+  SocialAuthService,
+} from '@abacritt/angularx-social-login';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-page1',
@@ -31,15 +36,32 @@ import { logoGoogle, logInOutline } from 'ionicons/icons';
   ],
 })
 export class Page1Page implements OnInit {
+  private socauthService = inject(SocialAuthService);
+  private authService = inject(AuthService);
+
   constructor(private router: Router) {
     addIcons({ logoGoogle, logInOutline });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._googleLogin();
+  }
 
   async _googleLogin() {
-    console.log('Kirjautumispainiketta painettu.');
-    localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
+    this.socauthService
+      .signIn(GoogleLoginProvider.PROVIDER_ID)
+      .then((user) => {
+        console.log('Successfully logged in via custom button', user);
+        // The authState subscription in your ngOnInit/signInGoogle will
+        // still catch this user change and handle the backend sending!
+      })
+      .catch((error) => {
+        console.error('Google sign-in error:', error);
+        // this.error = 'Google kirjautuminen epäonnistui';
+      });
+
+    // console.log('Kirjautumispainiketta painettu.');
+    // localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
 
     // --- TESTIKOODI ALKAA ---
     // Poista kommentit alta, jos haluat testata nimen vaihtumista:
