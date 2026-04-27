@@ -5,8 +5,10 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
   IonMenuButton,
+  IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
 
@@ -24,10 +26,12 @@ import {
     IonButtons,
     IonMenuButton,
     IonButton,
+    IonFooter,
+    IonTitle,
   ],
 })
 export class Page5Page implements OnDestroy {
-  timerValue: string = '00:10'; //tällä hetkellä näyttää mikä taukoaika
+  timerValue: string = '00:10:00'; //tällä hetkellä näyttää mikä on tauon pituus
   isRunning: boolean = false;
 
   private timerInterval: any;
@@ -58,7 +62,7 @@ export class Page5Page implements OnDestroy {
       }
 
       this.timerValue = this.formatTime(diff);
-    }, 100);
+    }, 80);
   }
 
   private resetTimer() {
@@ -68,12 +72,13 @@ export class Page5Page implements OnDestroy {
   }
 
   private formatTime(ms: number): string {
-    const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-    const m = Math.floor(totalSeconds / 60);
-    const s = totalSeconds % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  }
+    const totalMs = Math.max(0, ms);
+    const m = Math.floor(totalMs / 60000);
+    const s = Math.floor((totalMs % 60000) / 1000);
+    const msRemainder = Math.floor((totalMs % 1000) / 10);
 
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')},${msRemainder.toString().padStart(2, '0')}`;
+  }
   private stopInterval() {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
