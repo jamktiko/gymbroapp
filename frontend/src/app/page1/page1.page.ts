@@ -8,10 +8,10 @@ import {
   IonTitle,
   IonToolbar,
   IonButton,
-  IonIcon, 
+  IonIcon,
 } from '@ionic/angular/standalone';
 
-import { addIcons } from 'ionicons'; 
+import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
 
 @Component({
@@ -31,7 +31,6 @@ import { logoGoogle, logInOutline } from 'ionicons/icons';
   ],
 })
 export class Page1Page implements OnInit {
-  
   constructor(private router: Router) {
     addIcons({ logoGoogle, logInOutline });
   }
@@ -40,9 +39,7 @@ export class Page1Page implements OnInit {
 
   async _googleLogin() {
     console.log('Kirjautumispainiketta painettu.');
-  localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
-  
-
+    localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
 
     // --- TESTIKOODI ALKAA ---
     // Poista kommentit alta, jos haluat testata nimen vaihtumista:
@@ -50,10 +47,10 @@ export class Page1Page implements OnInit {
     //localStorage.setItem('userEmail', 'arnold@power.com');
     //localStorage.setItem('isLoggedIn', 'true');
     // --- TESTIKOODI PÄÄTTYY ---
-    
+
     // Navigoidaan sivulle 2
     // Jos käytit yllä olevaa testikoodia, voit lisätä navigateByUrl:n perään
     // .then(() => window.location.reload()); jotta nimi päivittyy heti.
-    this.router.navigateByUrl('/page2', { replaceUrl: true })//.then(() => window.location.reload());
+    this.router.navigateByUrl('/page2', { replaceUrl: true }); //.then(() => window.location.reload());
   }
 }
