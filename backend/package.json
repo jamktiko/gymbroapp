@@ -1,13 +1,16 @@
 {
   "name": "backend",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": "team-gymbro",
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www -e js,json,css,mjs,hbs",
     "dev": "nodemon ./bin/www -e js,json",
     "defaultDataLibrary": "node defaultDataLibrary.js",
-    "build": "echo \"No build step required\""
+    "build": "echo \"No build step required\"",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -19,6 +22,7 @@
     "express-session": "^1.19.0",
     "hbs": "^4.2.1",
     "http-errors": "~1.6.3",
+    "mongodb": "^7.2.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.4.1",
     "morgan": "^1.10.1",
@@ -26,6 +30,12 @@
     "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
+    "mongodb-memory-server": "^11.0.1",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.5"
   }
 }

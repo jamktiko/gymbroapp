@@ -1,7 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const { Move } = require('./models/Move');
-const TrainingSessionSchema = require('./models/TrainingSession');
 const { Trainingprogram } = require('./models/TrainingProgram');
 
 const defaultMoves = [

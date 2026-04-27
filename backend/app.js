@@ -6,7 +6,6 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 
 const authRouter = require('./routes/auth');
-const verifyToken = require('./middleware/verifyToken');
 
 // import routes to variables
 const movesRouter = require('./routes/moves');
@@ -24,7 +23,7 @@ app.use(
     secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: false,
-  })
+  }),
 );
 
 app.use(passport.initialize());
@@ -54,7 +53,7 @@ app.use((req, res) => {
 });
 
 // Virheenkäsittely
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(err.status || 500).json({ error: err.message || 'Palvelinvirhe' });
 });
