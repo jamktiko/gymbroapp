@@ -38,7 +38,7 @@ export class Page1Page implements OnInit {
 
   ngOnInit() {}
 
-  async _googleLogin() {
+  async _googleLogin() {  // TÄNNE GOOGLE-KIRJAUTUMISLOHKO
     console.log('Kirjautumispainiketta painettu.');
   localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
   
@@ -46,14 +46,14 @@ export class Page1Page implements OnInit {
 
     // --- TESTIKOODI ALKAA ---
     // Poista kommentit alta, jos haluat testata nimen vaihtumista:
-    //localStorage.setItem('userName', 'Arnold Gymbro');
-    //localStorage.setItem('userEmail', 'arnold@power.com');
+    //localStorage.setItem('userName', 'Gymbro');
+    //localStorage.setItem('userEmail', 'Testo@power.com');
     //localStorage.setItem('isLoggedIn', 'true');
     // --- TESTIKOODI PÄÄTTYY ---
     
     // Navigoidaan sivulle 2
     // Jos käytit yllä olevaa testikoodia, voit lisätä navigateByUrl:n perään
     // .then(() => window.location.reload()); jotta nimi päivittyy heti.
-    this.router.navigateByUrl('/page2', { replaceUrl: true })//.then(() => window.location.reload());
+    this.router.navigateByUrl('/page2', { replaceUrl: true });//.then(() => window.location.reload());
   }
 }
