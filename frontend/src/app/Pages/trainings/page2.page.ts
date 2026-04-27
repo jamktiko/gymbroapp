@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router'; // Reititin takaisin
 
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton, 
-  IonFooter, 
-  IonFab,      
-  IonFabButton, 
-  IonIcon      
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+  IonFooter,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -25,22 +25,21 @@ import { add } from 'ionicons/icons';
   styleUrls: ['./page2.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    CommonModule, 
-    FormsModule, 
-    IonButtons, 
-    IonMenuButton, 
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    IonButtons,
+    IonMenuButton,
     IonFooter,
-    IonFab,      
-    IonFabButton, 
-    IonIcon      
+    IonFab,
+    IonFabButton,
+    IonIcon,
   ],
 })
 export class Page2Page implements OnInit {
-  
   /* public user = {
     firstName: 'Päällikkö',
     lastName: 'Gymbro',
@@ -57,5 +56,8 @@ export class Page2Page implements OnInit {
   // Tämä funktio ohjaa käyttäjän uudelle sivulle
   lisaaOhjelma() {
     this.router.navigate(['/page4']);
+  }
+  page5temp() {
+    this.router.navigate(['/page5']);
   }
 }
