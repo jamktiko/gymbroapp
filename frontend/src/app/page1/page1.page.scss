@@ -1,8 +1,6 @@
-/* Koko sivun taustaväri (musta) */
-ion-content {
-  --background: #000000;
+.headercolor {
+  --background: #202020;
 }
-
 /* Pääsäiliö, joka jakaa tilan pystysuunnassa */
 .login-container {
   display: flex;
@@ -11,23 +9,21 @@ ion-content {
   height: 100%;
   padding: 40px 20px;
   text-align: center;
-  background-color: #000000; /* Varmistetaan musta tausta */
+  background-color: #202020; /* Varmistetaan musta tausta */
 }
 
+h1 {
+  font-size: 35px;
+  font-weight: 700;
+  color: #ffd900; /* Keltainen otsikko */
+  margin-bottom: 8px;
+}
 
-  h1 {
-    font-size: 32px;
-    font-weight: 700;
-    color: #ffff00; /* Keltainen otsikko */
-    margin-bottom: 8px;
-  }
-
-  p {
-    font-size: 18px;
-    color: #ffff00;
-    opacity: 0.8; /* Hieman himmeämpi keltainen */
-  }
-
+p {
+  font-size: 23px;
+  color: #ffdf3e;
+  opacity: 0.8; /* Hieman himmeämpi keltainen */
+}
 
 /* Nappiosio (Keskellä) */
 .action-section {
@@ -43,24 +39,24 @@ ion-content {
   max-width: 300px;
   height: 80px;
   --border-radius: 15px; /* Pyöristetyt kulmat */
-  --background: #ffff00; /* Keltainen tausta */
-  --color: #000000;      /* Musta teksti */
+  --background: #ffd900; /* Keltainen tausta */
+  --color: #0f0f0f; /* Musta teksti */
   font-weight: 700;
   font-size: 20px;
-  
+
   /* Keltainen hohde napin ympärille */
   --box-shadow: 0 4px 10px rgba(255, 255, 0, 0.2);
 
   ion-icon {
     font-size: 40px;
     margin-right: 10px;
-    color: #000000; /* Ikonikin mustaksi */
+    color: #0f0f0f; /* Ikonikin mustaksi */
   }
 }
 
 /* Efekti, kun hiiri on napin päällä */
 .google-btn:hover {
-  --background: #e6e600; /* Tummempi keltainen */
+  --background: #e6b400; /* Tummempi keltainen */
   transform: translateY(-2px); /* Nousee hieman */
   transition: 0.2s ease;
 }
@@ -68,16 +64,17 @@ ion-content {
 /* Alareunan tekstiosio */
 .footer-text {
   margin-bottom: 20px;
-  
+
   p {
-    font-size: 12px;
-    color: #ffff00;
-    opacity: 0.6;
+    font-size: 13px;
+    color: #ffffff;
+    opacity: 0.7;
   }
 
   a {
-    font-size: 13px;
-    color: #ffff00;
+    font-size: 16px;
+    color: #ffffff;
     text-decoration: underline; /* Alleviivaus linkille */
+    opacity: 0, 7;
   }
 }
