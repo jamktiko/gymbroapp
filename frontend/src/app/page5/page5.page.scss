@@ -4,6 +4,14 @@
   --background: transparent;
   --ripple-color: transparent;
   position: fixed;
-  padding: 10px;
-  bottom: 60px;
+  padding: 20px;
+  bottom: 90px;
+}
+
+.next {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
 }
