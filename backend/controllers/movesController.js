@@ -5,7 +5,7 @@ exports.getMoves = async (req, res) => {
   try {
     let filter = { createdBy: null };
 
-    // Jos käyttäjä on tunnistettu headerista, palautetaan myös hänen omat liikkeensä
+    // Jos käyttäjä on tunnistettu headerista,  palautetaan myös hänen omat liikkeensä
     if (req.user && req.user.id) {
       filter = {
         $or: [{ createdBy: null }, { createdBy: req.user.id }],
