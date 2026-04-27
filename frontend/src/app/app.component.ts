@@ -53,13 +53,14 @@ import {
   ],
 })
 export class AppComponent {
-  public userDisplayName: string = 'User'; 
+  public userDisplayName: string = 'User';
   public userEmail: string = 'ei kirjautunut';
 
   public appPages = [
     { title: 'Treenit', url: '/page2', icon: 'golf' },
     { title: 'Saavutukset', url: '/page3', icon: 'trophy' },
-  ]
+    { title: 'ohjelma', url: '/page5', icon: 'trophy' },
+  ];
 
   // Lisätty Router constructorin argumentiksi (private router: Router)
   constructor(private router: Router) {
@@ -94,7 +95,7 @@ export class AppComponent {
   // ---  FUNKTIO: Kirjaudu ulos ---
   logout() {
     console.log('Kirjaudutaan ulos...');
-    
+
     // 1. Tyhjennetään selaimen muisti
     //localStorage.removeItem('isLoggedIn');
     //localStorage.removeItem('userName');

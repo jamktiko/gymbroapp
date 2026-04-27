@@ -1,0 +1,17 @@
+.timer {
+  font-size: 70px;
+  --color: #ffd900;
+  --background: transparent;
+  --ripple-color: transparent;
+  position: fixed;
+  padding: 20px;
+  bottom: 90px;
+}
+
+.next {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+}
