@@ -1,4 +1,7 @@
 const passport = require('passport');
+const {
+  fetchDefaultProgramsForUser,
+} = require('../controllers/trainingProgramsController');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 passport.use(
@@ -20,6 +23,7 @@ passport.use(
             name: profile.displayName,
             email: profile.emails[0].value,
           });
+          user = await fetchDefaultProgramsForUser(user._id);
         }
         done(null, user);
       } catch (err) {

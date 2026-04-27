@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/auth');
 
 // import routes to variables
+const indexRouter = require('./routes/index');
 const movesRouter = require('./routes/moves');
 const usersRouter = require('./routes/users');
 const trainingProgramsRouter = require('./routes/trainingPrograms');
@@ -39,6 +40,7 @@ app.use(cookieParser());
 app.use('/api/auth', authRouter);
 
 // API-reitit
+app.use('/', indexRouter);
 app.use('/api/moves', movesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/training-programs', trainingProgramsRouter);
