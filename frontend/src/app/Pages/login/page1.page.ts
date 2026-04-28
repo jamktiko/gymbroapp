@@ -54,7 +54,8 @@ export class Page1Page implements OnInit {
         /* Lähetetään glogin-metodilla Googlen idToken backendiin josta saadaan JWT
          Myös userin id annetaan authServicelle, jotta sitä voidaan verrata siellä
          backendistä saatuun userin id:hen. 
-     */
+        */
+
         if (this.user != null) {
           this.authService
             .glogin(this.user.idToken!, this.user.id!)
