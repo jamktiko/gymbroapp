@@ -55,7 +55,4 @@ export class Page2Page implements OnInit {
   lisaaOhjelma() {
     this.router.navigate(['/page4']);
   }
-  page5temp() {
-    this.router.navigate(['/page5']);
-  }
 }
