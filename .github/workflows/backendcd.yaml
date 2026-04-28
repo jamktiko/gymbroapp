@@ -78,7 +78,7 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
-            --application-name GymBroApp \
+            --application-name GymBroBackend \
             --version-label "github-action-${{ github.sha }}" \
             --source-bundle S3Bucket=${{ secrets.BUCKET_NAME }},S3Key=backend/deploy.zip
 
