@@ -6,8 +6,7 @@ import {
   IonButton,
   IonContent,
   IonFooter,
-  IonHeader,
-  IonTitle,
+  IonProgressBar,
   IonToolbar,
 } from '@ionic/angular/standalone';
 
@@ -18,19 +17,34 @@ import {
   standalone: true,
   imports: [
     IonContent,
-    IonHeader,
-    IonTitle,
     IonToolbar,
     CommonModule,
     FormsModule,
     IonFooter,
     IonButton,
+    IonProgressBar,
   ],
 })
 export class Page6Page implements OnInit {
-  constructor(private router: Router) {}
+  public progress = 0;
+
+  constructor(private router: Router) {
+    this.kaynnistaProgress();
+  }
 
   ngOnInit() {}
+  //tämä vasta demo
+  kaynnistaProgress() {
+    setInterval(() => {
+      this.progress += 0.01;
+      // Resets the progress bar when it reaches 100%
+      if (this.progress > 1) {
+        setTimeout(() => {
+          this.progress = 0;
+        }, 1000);
+      }
+    }, 20);
+  }
 
   aloitussivulle() {
     this.router.navigate(['/page2']);

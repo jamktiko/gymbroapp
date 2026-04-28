@@ -1,11 +1,9 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar class="headercolor">
-    <ion-title></ion-title>
-  </ion-toolbar>
-</ion-header>
-<ion-content fullscreen]="true">
-  <div class="content-container">
-    <h1>Treeni valmis!</h1>
+<ion-content [fullscreen]="true">
+  <div class="xp-container">
+    <div class="content-wrapper">
+      <h1>Treeni valmis!</h1>
+      <ion-progress-bar class="xpbar" [value]="progress"></ion-progress-bar>
+    </div>
   </div>
 </ion-content>
 <ion-footer>
