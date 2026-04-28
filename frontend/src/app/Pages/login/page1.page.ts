@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,12 +7,17 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonButton,
-  IonIcon, 
 } from '@ionic/angular/standalone';
 
-import { addIcons } from 'ionicons'; 
+import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
+import {
+  SocialAuthService,
+  GoogleSigninButtonModule,
+  SocialUser,
+  SocialLoginModule,
+} from '@abacritt/angularx-social-login';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-page1',
@@ -26,34 +31,46 @@ import { logoGoogle, logInOutline } from 'ionicons/icons';
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonButton,
-    IonIcon,
+    GoogleSigninButtonModule,
+    SocialLoginModule,
   ],
 })
 export class Page1Page implements OnInit {
-  
+  private socauthService = inject(SocialAuthService);
+  private authService = inject(AuthService);
+  user!: SocialUser;
+  error = '';
+
   constructor(private router: Router) {
     addIcons({ logoGoogle, logInOutline });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.socauthService.authState.subscribe((user) => {
+      if (user) {
+        this.user = user;
+        console.log('Successfully logged in via Google button', user);
 
-  async _googleLogin() {  // TÄNNE GOOGLE-KIRJAUTUMISLOHKO
-    console.log('Kirjautumispainiketta painettu.');
-  localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
-  
+        /* Lähetetään glogin-metodilla Googlen idToken backendiin josta saadaan JWT
+         Myös userin id annetaan authServicelle, jotta sitä voidaan verrata siellä
+         backendistä saatuun userin id:hen. 
+        */
 
+        if (this.user != null) {
+          this.authService
+            .glogin(this.user.idToken!, this.user.id!)
+            .subscribe((result) => {
+              if (result === true) {
+                // this.router.navigate(['/secret']);
+              } else {
+                this.error = 'Tunnus tai salasana väärä';
+              }
+            });
+        }
 
-    // --- TESTIKOODI ALKAA ---
-    // Poista kommentit alta, jos haluat testata nimen vaihtumista:
-    //localStorage.setItem('userName', 'Gymbro');
-    //localStorage.setItem('userEmail', 'Testo@power.com');
-    //localStorage.setItem('isLoggedIn', 'true');
-    // --- TESTIKOODI PÄÄTTYY ---
-    
-    // Navigoidaan sivulle 2
-    // Jos käytit yllä olevaa testikoodia, voit lisätä navigateByUrl:n perään
-    // .then(() => window.location.reload()); jotta nimi päivittyy heti.
-    this.router.navigateByUrl('/page2', { replaceUrl: true });//.then(() => window.location.reload());
+        this.router.navigateByUrl('/page2', { replaceUrl: true });
+        // liitä glogin tähän
+      }
+    });
   }
 }

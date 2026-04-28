@@ -4,13 +4,13 @@
   "author": "team-gymbro",
   "private": true,
   "scripts": {
+    "test": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "start": "nodemon ./bin/www -e js,json,css,mjs,hbs",
     "dev": "nodemon ./bin/www -e js,json",
     "defaultDataLibrary": "node defaultDataLibrary.js",
-    "build": "echo \"No build step required\"",
-    "test": "vitest run",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "build": "echo \"No build step required\""
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -20,10 +20,11 @@
     "dotenv": "^17.4.2",
     "express": "^4.22.1",
     "express-session": "^1.19.0",
+    "google-auth-library": "^10.6.2",
     "hbs": "^4.2.1",
     "http-errors": "~1.6.3",
-    "mongodb": "^7.2.0",
     "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.2.0",
     "mongoose": "^9.4.1",
     "morgan": "^1.10.1",
     "passport": "^0.7.0",

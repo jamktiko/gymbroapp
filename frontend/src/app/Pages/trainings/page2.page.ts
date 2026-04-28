@@ -10,7 +10,6 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
-  IonFooter,
   IonFab,
   IonFabButton,
   IonIcon,
@@ -33,7 +32,6 @@ import { add } from 'ionicons/icons';
     FormsModule,
     IonButtons,
     IonMenuButton,
-    IonFooter,
     IonFab,
     IonFabButton,
     IonIcon,
@@ -56,8 +54,5 @@ export class Page2Page implements OnInit {
   // Tämä funktio ohjaa käyttäjän uudelle sivulle
   lisaaOhjelma() {
     this.router.navigate(['/page4']);
-  }
-  page5temp() {
-    this.router.navigate(['/page5']);
   }
 }

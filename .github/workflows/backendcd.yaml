@@ -72,13 +72,23 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::318542846215:oidc-provider/token.actions.githubusercontent.com
+          role-to-assume: arn:aws:iam::318542846215:role/putkilo
           aws-region: eu-north-1
+
+      - name: Check files
+        run: ls -R backend   
+
+      - name: Upload ZIP to S3
+        run: |
+          aws s3 cp backend/deploy.zip s3://${{ secrets.BUCKET_NAME }}/backend/deploy.zip  
+
+      - name: Verify S3 upload
+        run: aws s3 ls s3://${{ secrets.BUCKET_NAME }}/backend/
 
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
-            --application-name GymBroApp \
+            --application-name GymBroBackend \
             --version-label "github-action-${{ github.sha }}" \
             --source-bundle S3Bucket=${{ secrets.BUCKET_NAME }},S3Key=backend/deploy.zip
 

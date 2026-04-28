@@ -11,11 +11,8 @@
       <p>Kirjaudu sisään jatkaaksesi</p>
     </div>
 
-    <div class="action-section">
-      <ion-button class="google-btn" expand="block" (click)="_googleLogin()">
-        <ion-icon slot="start" name="logo-google"></ion-icon>
-        Jatka Google-tunnuksilla
-      </ion-button>
+    <div class="action-section" style="display: flex; justify-content: center;">
+      <asl-google-signin-button type="standard" size="large"></asl-google-signin-button>
     </div>
 
     <div class="footer-text">
