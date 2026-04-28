@@ -14,17 +14,18 @@ import {
   SocialAuthServiceConfig,
   SOCIAL_AUTH_CONFIG,
 } from '@abacritt/angularx-social-login';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { LoadingInterceptor } from './app/interceptors/loading.interceptor';
 // import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([LoadingInterceptor])),
 
     provideRouter(routes, withPreloading(PreloadAllModules)),
     {

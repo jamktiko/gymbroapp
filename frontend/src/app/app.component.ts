@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router'; // Lisätty Router
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import {
   IonApp,
   IonSplitPane,
@@ -16,6 +17,8 @@ import {
   IonRouterLink,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
+import { LoadingService } from './loading.service';
+import { CommonModule } from '@angular/common';
 import {
   trophyOutline,
   trophy,
@@ -33,7 +36,7 @@ import {
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  standalone: true, // Varmistetaan standalone-tila
+  standalone: true,
   imports: [
     RouterLink,
     RouterLinkActive,
@@ -50,6 +53,8 @@ import {
     IonLabel,
     IonRouterLink,
     IonRouterOutlet,
+    LoadingSpinnerComponent,
+    CommonModule,
   ],
 })
 export class AppComponent {
@@ -62,8 +67,10 @@ export class AppComponent {
     { title: 'ohjelma', url: '/page5', icon: 'trophy' },
   ];
 
-  // Lisätty Router constructorin argumentiksi (private router: Router)
-  constructor(private router: Router) {
+  protected router = inject(Router);
+  public loadingService = inject(LoadingService);
+
+  constructor() {
     addIcons({
       trophyOutline,
       trophy,
@@ -76,7 +83,6 @@ export class AppComponent {
       backspaceOutline,
       backspace,
     });
-
     this.checkUserStatus();
   }
 
