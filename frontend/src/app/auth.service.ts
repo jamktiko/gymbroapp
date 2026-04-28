@@ -20,38 +20,31 @@ export class AuthService {
     this.token = currentUser || currentUser.token;
   }
 
-  glogin(gtoken: string, userid: string): Observable<boolean> {
-    // console.log('hep');
-    return this.http.post(this.googleLoginUrl, { gtoken: gtoken }).pipe(
+  glogin(googleIdToken: string, googleId: string): Observable<boolean> {
+    // console.log(googleId);
+    // console.log(googleIdToken);
+    return this.http.post(this.googleLoginUrl, { gtoken: googleIdToken }).pipe(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       map((res: any) => {
-        // console.log(
-        //   `Tämän kaltainen response otettiin vastaan: ${JSON.stringify(res)}`,
-        // );
-        // console.log(res); // loggaa alla olevan tyylisen vastauksen
-        /*
-        {success: true, message:
-          "Tässä on valmis JWT-Token!",
-          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ…zNzV9.x1gWEg9DtoPtEUUHlR8aDgpuzG6NBNJpa2L-MEhyraQ"}
-        */
         const token = res['token']; // otetaan vastauksesta token
         if (token) {
           this.token = token;
-          /* Tässä tutkitaan onko tokenin payloadin sisältö oikea.
-            Jos on, laitetaan token sessionStorageen ja palautetaan true
-            jolloin käyttäjä pääsee Admin-sivulle
-         */
           try {
             // dekoodataan token
-            const payload = this.jwtHelp.decodeToken(token);
-            console.log(`payload: ${payload}`);
+            const decodedToken = this.jwtHelp.decodeToken(token);
+            console.log(`decodedToken: ${decodedToken}`);
+            console.log(JSON.stringify(decodedToken));
             // Tässä voidaan tarkistaa tokenin oikeellisuus
-            if (payload.username === userid) {
+            if (googleId === decodedToken.googleId) {
               // token sessionStorageen
               sessionStorage.setItem(
                 'accesstoken',
-                JSON.stringify({ userid: userid, token: token }),
+                JSON.stringify({ googleId: googleId, token: token }),
               );
+
+              console.log('test1');
+              console.log(token);
+              console.log(this.jwtHelp.decodeToken(token));
               // this.loginTrue(); // lähetetään viesti navbariin että vaihdetaan login:true -tilaan
               console.log('login onnistui');
               return true; // saatiin token

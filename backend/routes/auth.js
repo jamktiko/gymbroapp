@@ -37,12 +37,17 @@ router.post('/google', async (req, res) => {
 
     console.log('signing jwt token');
     const token = jwt.sign(
-      { userId: user.googleid, username: user.email },
+      { googleId: user.googleId, email: user.email, name: user.name },
       process.env.JWT_SECRET,
       {
         expiresIn: '7d',
       },
     );
+
+    console.log(token);
+
+    const decodedToken = jwt.decode(token);
+    console.log(decodedToken);
 
     console.log('sending json response to frontend');
     res.json({
