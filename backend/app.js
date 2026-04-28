@@ -1,6 +1,5 @@
 const express = require('express');
 const session = require('express-session');
-const passport = require('./config/passport');
 const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -8,7 +7,6 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/auth');
 
 // import routes to variables
-const indexRouter = require('./routes/index');
 const movesRouter = require('./routes/moves');
 const usersRouter = require('./routes/users');
 const trainingProgramsRouter = require('./routes/trainingPrograms');
@@ -27,9 +25,6 @@ app.use(
   }),
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
@@ -40,7 +35,6 @@ app.use(cookieParser());
 app.use('/api/auth', authRouter);
 
 // API-reitit
-app.use('/', indexRouter);
 app.use('/api/moves', movesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/training-programs', trainingProgramsRouter);
