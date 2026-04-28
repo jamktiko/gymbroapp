@@ -17,7 +17,7 @@ import {
   SocialUser,
   SocialLoginModule,
 } from '@abacritt/angularx-social-login';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-page1',

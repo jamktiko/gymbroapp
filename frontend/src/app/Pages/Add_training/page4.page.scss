@@ -1,0 +1,104 @@
+.content-container {
+  display: flex;
+  flex-direction: column; // Asettaa elementit päällekkäin
+  width: 100%;            // Käyttää koko käytettävissä olevan leveyden...
+  max-width: 400px;       // ...mutta ei levene tätä suuremmaksi (hyvä tableteilla/desktopilla)
+  margin: auto;           // Keskittää kontin vaakasuunnassa
+  /* MUOKATTU: Nostettu 5vh -> 12vh, jotta valikko tippuu alemmas */
+  margin-top: 12vh;       
+}
+
+ion-item {
+  --background: transparent; // Taustaväri (nyt läpinäkyvä)
+  --color: white;           // Tekstin perusväri
+  --highlight-color-focused: var(--ion-color-primary); // Väri, kun kenttä on aktiivinen
+  --padding-start: 0px;     // Tyhjä tila rivin alussa (vasen)
+  --inner-padding-end: 8px; // Tyhjä tila rivin lopussa (oikea)
+  min-height: 70px;         // Rivin minimikorkeus (nostettu hieman, jotta 3 kenttää mahtuu paremmin)
+  cursor: pointer;          // Näyttää kämmen-ikonin tietokoneella
+}
+
+ion-label {
+  font-size: 18px !important;    // Pienennetty hieman (20px -> 18px), jotta data mahtuu viereen
+  font-weight: 700 !important;   // Tekstin paksuus (700 = lihavoitu)
+  color: var(--ion-color-primary) !important; // Väri (nyt teeman pääväri, yleensä keltainen/sininen)
+  text-transform: uppercase;     // Muuttaa kaikki kirjaimet ISOIKSI
+  letter-spacing: 1px;           // Kirjainten välinen etäisyys
+  margin: 0 10px !important;     // Ulkopuolinen tila (ylä/ala 0, vasen/oikea 10px)
+  pointer-events: none;          // KLIKKAUS menee läpi taustalla olevaan riviin
+  white-space: normal !important; // Sallii tekstin jakautumisen usealle riville
+  display: -webkit-box;
+  -webkit-line-clamp: 2;         // Näyttää vain 2 riviä tekstiä
+  -webkit-box-orient: vertical;
+  overflow: hidden;              // Piilottaa ylimenevän tekstin
+  align-items: center;
+  flex: 1;
+  margin-right: 10px !important;
+
+}
+
+/* STATS-SÄILIÖ (Sarjat, Toistot, Paino) */
+.stats-container {
+  flex-shrink: 0;           // Estää laatikkoa puristumasta kasaan
+  display: flex;
+  align-items: center;      // Keskittää numerot pystysuunnassa
+  gap: 4px;                 // Tiivistetty väli, jotta kaikki mahtuu
+  background: rgba(var(--ion-color-primary-rgb), 0.15); // Läpinäkyvä taustaväri
+  padding: 6px 10px;        // Sisäpuolinen tila
+  border-radius: 10px;      // Pyöreämmät kulmat
+  border: 2px solid var(--ion-color-primary); // Reunan väri ja paksuus
+  pointer-events: auto;     // Sallii klikkaamisen tähän kohtaan
+}
+
+/* YLEINEN TYYLI KAIKILLE PIENILLE SYÖTTÖKENTILLE */
+.small-input {
+  --padding-start: 0;
+  --padding-end: 0;
+  width: 25px;              // Kentän leveys
+  font-weight: 800;         // Erittäin lihavoitu numero
+  text-align: center;       // Keskittää numeron kentän sisällä
+  font-size: 1rem;          // Numeron koko
+  color: white !important;  // Numeron väri
+  pointer-events: auto !important;
+}
+
+/* Painokenttä tarvitsee hieman enemmän tilaa */
+.weight-input {
+  width: 40px; 
+  color: var(--ion-color-primary) !important; // Paino voi olla korostusvärillä
+}
+
+.stat-group {
+  display: flex;
+  flex-direction: column;   // Numero ylhäällä, yksikkö alla
+  align-items: center;
+}
+
+.unit {
+  font-size: 0.6rem;        // Erittäin pieni yksikköteksti (S, T, kg)
+  color: var(--ion-color-medium);
+  text-transform: uppercase;
+  margin-top: -4px;         // Vedetään lähemmäs numeroa
+}
+
+.separator {
+  color: var(--ion-color-medium);
+  font-size: 0.8rem;
+  padding: 0 2px;
+}
+
+/* OHJELMAN NIMI -KENTTÄ */
+ion-input[type="text"] {
+  font-size: 20px;          // Ohjelman nimen tekstikoko
+  --color: white;           // Kirjoitetun tekstin väri
+}
+
+/* SÄILYTETTY: yhteensopivuus reps-wrapper nimen kanssa */
+.reps-wrapper {
+  @extend .stats-container;
+}
+
+/* SÄILYTETTY: yhteensopivuus reps-input nimen kanssa (jos käytössä) */
+.reps-input {
+  @extend .small-input;
+}
