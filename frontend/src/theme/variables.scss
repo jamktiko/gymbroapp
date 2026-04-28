@@ -16,6 +16,6 @@
   /* Jos haluat, että Toolbar (yläpalkki) on myös musta keltaisella tekstillä */
   ion-toolbar {
     --background: #111111;
-    --color: yellow;
+    color: var(--ion-color-primary);
   }
 }

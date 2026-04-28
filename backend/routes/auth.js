@@ -40,7 +40,7 @@ router.post('/google', async (req, res) => {
       { googleId: user.googleId, email: user.email, name: user.name },
       process.env.JWT_SECRET,
       {
-        expiresIn: '7d',
+        expiresIn: '1d',
       },
     );
 
