@@ -46,6 +46,9 @@ export class Page1Page implements OnInit {
   }
 
   ngOnInit() {
+    this.socauthService.signOut();
+    this.authService.logout();
+
     this.socauthService.authState.subscribe((user) => {
       if (user) {
         this.user = user;
@@ -69,7 +72,6 @@ export class Page1Page implements OnInit {
         }
 
         this.router.navigateByUrl('/page2', { replaceUrl: true });
-        // liitä glogin tähän
       }
     });
   }

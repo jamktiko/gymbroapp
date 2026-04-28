@@ -37,6 +37,11 @@ bootstrapApplication(AppComponent, {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
               '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com',
+              {
+                // oneTapEnabled: false,
+                // prompt: 'select_account',
+                // prompt_parent_id: 'google-one-tap-container',
+              },
             ),
           },
         ],

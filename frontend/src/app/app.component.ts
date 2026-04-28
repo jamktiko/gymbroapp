@@ -31,6 +31,7 @@ import {
   backspaceOutline,
   backspace,
 } from 'ionicons/icons';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -69,6 +70,7 @@ export class AppComponent {
 
   protected router = inject(Router);
   public loadingService = inject(LoadingService);
+  public authService = inject(AuthService);
 
   constructor() {
     addIcons({
@@ -102,6 +104,8 @@ export class AppComponent {
   logout() {
     console.log('Kirjaudutaan ulos...');
 
+    this.authService.logout();
+
     // 1. Tyhjennetään selaimen muisti
     //localStorage.removeItem('isLoggedIn');
     //localStorage.removeItem('userName');
@@ -111,7 +115,7 @@ export class AppComponent {
     // replaceUrl: true poistaa historian, jotta ei pääse "takaisin"-napilla sisään
     this.router.navigateByUrl('/page1', { replaceUrl: true }).then(() => {
       // 3. Päivitetään sivu, jotta AppComponent nollautuu (nimet ja tilat)
-      window.location.reload();
+      // window.location.reload();
     });
   }
 }
