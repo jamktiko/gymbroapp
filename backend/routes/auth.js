@@ -20,7 +20,6 @@ router.get(
     );
     res.json({ token }); // Tähän ionicin osoite tokenia varten.
     // res.cookie('token', token, { httpOnly: true });
-    // res.redirect('/profile');
   },
 );
 
