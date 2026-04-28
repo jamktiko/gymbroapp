@@ -26,7 +26,7 @@ export const routes: Routes = [
   loadComponent: () => import('./Pages/Add_training/page4.page').then( m => m.LisaaTreeni)
 },
 { path: 'page5',
-    loadComponent: () => import('./page5/page5.page').then((m) => m.Page5Page),
+    loadComponent: () => import('./Pages/page5/page5.page').then((m) => m.Page5Page),
   },
 ];
 
