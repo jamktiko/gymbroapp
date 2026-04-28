@@ -72,7 +72,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::318542846215:oidc-provider/token.actions.githubusercontent.com
+          role-to-assume: arn:aws:iam::318542846215:role/putkilo
           aws-region: eu-north-1
 
       - name: Deploy to Elastic Beanstalk
