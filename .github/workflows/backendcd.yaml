@@ -75,6 +75,10 @@ jobs:
           role-to-assume: arn:aws:iam::318542846215:role/putkilo
           aws-region: eu-north-1
 
+      - name: Upload ZIP to S3
+        run: |
+          aws s3 cp backend/deploy.zip s3://${{ secrets.BUCKET_NAME }}/backend/deploy.zip  
+
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
