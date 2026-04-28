@@ -60,6 +60,7 @@ export class AppComponent {
     { title: 'Treenit', url: '/page2', icon: 'golf' },
     { title: 'Saavutukset', url: '/page3', icon: 'trophy' },
     { title: 'ohjelma', url: '/page5', icon: 'trophy' },
+    { title: 'valmis', url: '/page6', icon: 'trophy' },
   ];
 
   // Lisätty Router constructorin argumentiksi (private router: Router)

@@ -30,9 +30,10 @@ export const routes: Routes = [
     path: 'page5',
     loadComponent: () =>
       import('./Pages/page5/page5.page').then((m) => m.Page5Page),
-  },  {
-    path: 'page6',
-    loadComponent: () => import('./Pages/page6/page6.page').then( m => m.Page6Page)
   },
-
+  {
+    path: 'page6',
+    loadComponent: () =>
+      import('./Pages/page6/page6.page').then((m) => m.Page6Page),
+  },
 ];
