@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router'; // Reititin takaisin
 
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton, 
-  IonFooter, 
-  IonFab,      
-  IonFabButton, 
-  IonIcon      
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -25,22 +24,20 @@ import { add } from 'ionicons/icons';
   styleUrls: ['./page2.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    CommonModule, 
-    FormsModule, 
-    IonButtons, 
-    IonMenuButton, 
-    IonFooter,
-    IonFab,      
-    IonFabButton, 
-    IonIcon      
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    IonButtons,
+    IonMenuButton,
+    IonFab,
+    IonFabButton,
+    IonIcon,
   ],
 })
 export class Page2Page implements OnInit {
-  
   /* public user = {
     firstName: 'Päällikkö',
     lastName: 'Gymbro',

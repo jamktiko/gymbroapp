@@ -14,6 +14,7 @@ import {
   SocialAuthServiceConfig,
   SOCIAL_AUTH_CONFIG,
 } from '@abacritt/angularx-social-login';
+import { provideHttpClient } from '@angular/common/http';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
@@ -23,6 +24,8 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
+    provideHttpClient(),
+
     provideRouter(routes, withPreloading(PreloadAllModules)),
     {
       provide: SOCIAL_AUTH_CONFIG,
