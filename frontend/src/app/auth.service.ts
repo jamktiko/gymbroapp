@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private googleLoginUrl = 'http://localhost:3000/google/callback';
+  private googleLoginUrl = 'http://localhost:3000/api/auth/google';
   public token: string;
   private jwtHelp = new JwtHelperService();
   private http = inject(HttpClient);
@@ -21,6 +21,7 @@ export class AuthService {
   }
 
   glogin(gtoken: string, userid: string): Observable<boolean> {
+    console.log('hep');
     return this.http.post(this.googleLoginUrl, { gtoken: gtoken }).pipe(
       map((res: { token?: string }) => {
         console.log(res); // loggaa alla olevan tyylisen vastauksen
