@@ -7,15 +7,13 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonButton,
-  IonIcon,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
 import {
-  GoogleLoginProvider,
   SocialAuthService,
+  GoogleSigninButtonModule,
 } from '@abacritt/angularx-social-login';
 import { AuthService } from '../auth.service';
 
@@ -31,8 +29,7 @@ import { AuthService } from '../auth.service';
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonButton,
-    IonIcon,
+    GoogleSigninButtonModule,
   ],
 })
 export class Page1Page implements OnInit {
@@ -44,35 +41,11 @@ export class Page1Page implements OnInit {
   }
 
   ngOnInit() {
-    this._googleLogin();
-  }
-
-  async _googleLogin() {
-    this.socauthService
-      .signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then((user) => {
-        console.log('Successfully logged in via custom button', user);
-        // The authState subscription in your ngOnInit/signInGoogle will
-        // still catch this user change and handle the backend sending!
-      })
-      .catch((error) => {
-        console.error('Google sign-in error:', error);
-        // this.error = 'Google kirjautuminen epäonnistui';
-      });
-
-    // console.log('Kirjautumispainiketta painettu.');
-    // localStorage.setItem('isLoggedIn', 'true'); // Tallennetaan tieto
-
-    // --- TESTIKOODI ALKAA ---
-    // Poista kommentit alta, jos haluat testata nimen vaihtumista:
-    //localStorage.setItem('userName', 'Arnold Gymbro');
-    //localStorage.setItem('userEmail', 'arnold@power.com');
-    //localStorage.setItem('isLoggedIn', 'true');
-    // --- TESTIKOODI PÄÄTTYY ---
-
-    // Navigoidaan sivulle 2
-    // Jos käytit yllä olevaa testikoodia, voit lisätä navigateByUrl:n perään
-    // .then(() => window.location.reload()); jotta nimi päivittyy heti.
-    this.router.navigateByUrl('/page2', { replaceUrl: true }); //.then(() => window.location.reload());
+    this.socauthService.authState.subscribe((user) => {
+      if (user) {
+        console.log('Successfully logged in via Google button', user);
+        this.router.navigateByUrl('/page2', { replaceUrl: true });
+      }
+    });
   }
 }

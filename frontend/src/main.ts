@@ -17,7 +17,7 @@ import {
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
-import { environment } from './environments/environment';
+// import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -31,7 +31,9 @@ bootstrapApplication(AppComponent, {
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(environment.googleClientId),
+            provider: new GoogleLoginProvider(
+              '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com',
+            ),
           },
         ],
         onError: (err) => {
