@@ -21,16 +21,20 @@ export class AuthService {
   }
 
   glogin(gtoken: string, userid: string): Observable<boolean> {
-    console.log('hep');
+    // console.log('hep');
     return this.http.post(this.googleLoginUrl, { gtoken: gtoken }).pipe(
-      map((res: { token?: string }) => {
-        console.log(res); // loggaa alla olevan tyylisen vastauksen
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      map((res: any) => {
+        // console.log(
+        //   `Tämän kaltainen response otettiin vastaan: ${JSON.stringify(res)}`,
+        // );
+        // console.log(res); // loggaa alla olevan tyylisen vastauksen
         /*
         {success: true, message:
           "Tässä on valmis JWT-Token!",
           token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ…zNzV9.x1gWEg9DtoPtEUUHlR8aDgpuzG6NBNJpa2L-MEhyraQ"}
         */
-        const token = res.token; // otetaan vastauksesta token
+        const token = res['token']; // otetaan vastauksesta token
         if (token) {
           this.token = token;
           /* Tässä tutkitaan onko tokenin payloadin sisältö oikea.
@@ -40,9 +44,9 @@ export class AuthService {
           try {
             // dekoodataan token
             const payload = this.jwtHelp.decodeToken(token);
-            console.log(payload);
+            console.log(`payload: ${payload}`);
             // Tässä voidaan tarkistaa tokenin oikeellisuus
-            if (payload.username === userid && payload.isadmin === true) {
+            if (payload.username === userid) {
               // token sessionStorageen
               sessionStorage.setItem(
                 'accesstoken',

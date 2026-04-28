@@ -11,7 +11,7 @@ router.post('/google', async (req, res) => {
   try {
     // 1. Verifioi Googlen ID token
 
-    console.log('help');
+    // console.log('help');
     const ticket = await client.verifyIdToken({
       idToken: req.body.gtoken,
 
@@ -35,14 +35,16 @@ router.post('/google', async (req, res) => {
 
     // 3. Palauta oma JWT
 
+    console.log('signing jwt token');
     const token = jwt.sign(
-      { userId: user._id, username: user.email },
+      { userId: user.googleid, username: user.email },
       process.env.JWT_SECRET,
       {
         expiresIn: '7d',
       },
     );
 
+    console.log('sending json response to frontend');
     res.json({
       success: true,
       message: 'Tässä on valmis JWT-Token!',

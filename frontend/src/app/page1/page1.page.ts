@@ -60,7 +60,7 @@ export class Page1Page implements OnInit {
             .glogin(this.user.idToken!, this.user.id!)
             .subscribe((result) => {
               if (result === true) {
-                this.router.navigate(['/secret']);
+                // this.router.navigate(['/secret']);
               } else {
                 this.error = 'Tunnus tai salasana väärä';
               }
