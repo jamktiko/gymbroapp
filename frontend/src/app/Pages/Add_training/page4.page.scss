@@ -1,84 +1,101 @@
 .content-container {
   display: flex;
-  flex-direction: column; // Asettaa elementit päällekkäin
-  width: 100%;            // Käyttää koko käytettävissä olevan leveyden...
-  max-width: 400px;       // ...mutta ei levene tätä suuremmaksi (hyvä tableteilla/desktopilla)
-  margin: auto;           // Keskittää kontin vaakasuunnassa
-  /* MUOKATTU: Nostettu 5vh -> 12vh, jotta valikko tippuu alemmas */
-  margin-top: 12vh;       
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 4vh;
 }
 
 ion-item {
-  --background: transparent; // Taustaväri (nyt läpinäkyvä)
-  --color: white;           // Tekstin perusväri
-  --highlight-color-focused: var(--ion-color-primary); // Väri, kun kenttä on aktiivinen
-  --padding-start: 0px;     // Tyhjä tila rivin alussa (vasen)
-  --inner-padding-end: 8px; // Tyhjä tila rivin lopussa (oikea)
-  min-height: 70px;         // Rivin minimikorkeus (nostettu hieman, jotta 3 kenttää mahtuu paremmin)
-  cursor: pointer;          // Näyttää kämmen-ikonin tietokoneella
+  --background: transparent;
+  --color: white; // Tekstin perusväri (esim. ohjelman nimen syöttö)
+  --highlight-color-focused: var(--ion-color-primary);
+  --padding-start: 0px;
+  --inner-padding-end: 8px;
+  min-height: 70px;
+  cursor: pointer;
 }
 
+/* YLEINEN LABEL (Vakioliikkeet) */
 ion-label {
-  font-size: 18px !important;    // Pienennetty hieman (20px -> 18px), jotta data mahtuu viereen
-  font-weight: 700 !important;   // Tekstin paksuus (700 = lihavoitu)
-  color: var(--ion-color-primary) !important; // Väri (nyt teeman pääväri, yleensä keltainen/sininen)
-  text-transform: uppercase;     // Muuttaa kaikki kirjaimet ISOIKSI
-  letter-spacing: 1px;           // Kirjainten välinen etäisyys
-  margin: 0 10px !important;     // Ulkopuolinen tila (ylä/ala 0, vasen/oikea 10px)
-  pointer-events: none;          // KLIKKAUS menee läpi taustalla olevaan riviin
-  white-space: normal !important; // Sallii tekstin jakautumisen usealle riville
-  display: -webkit-box;
-  -webkit-line-clamp: 2;         // Näyttää vain 2 riviä tekstiä
-  -webkit-box-orient: vertical;
-  overflow: hidden;              // Piilottaa ylimenevän tekstin
-  align-items: center;
+  /* Perustyylit pysyvät samana */
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--ion-color-primary) !important;
+  text-transform: uppercase;
   flex: 1;
-  margin-right: 10px !important;
+  margin: 0 10px !important;
 
 }
 
-/* STATS-SÄILIÖ (Sarjat, Toistot, Paino) */
-.stats-container {
-  flex-shrink: 0;           // Estää laatikkoa puristumasta kasaan
+/* OMILLE LIIKKEILLE ERITYISSÄÄNNÖT (Mörköpötkö-suoja) */
+.custom-category {
+  ion-label {
+    word-break: break-all !important; 
+    display: -webkit-box !important; 
+    -webkit-box-orient: vertical;
+    overflow: hidden !important;
+  }
+}
+
+/* PAINIKKEET */
+.action-buttons {
   display: flex;
-  align-items: center;      // Keskittää numerot pystysuunnassa
-  gap: 4px;                 // Tiivistetty väli, jotta kaikki mahtuu
-  background: rgba(var(--ion-color-primary-rgb), 0.15); // Läpinäkyvä taustaväri
-  padding: 6px 10px;        // Sisäpuolinen tila
-  border-radius: 10px;      // Pyöreämmät kulmat
-  border: 2px solid var(--ion-color-primary); // Reunan väri ja paksuus
-  pointer-events: auto;     // Sallii klikkaamisen tähän kohtaan
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+
+  ion-button[fill="outline"] {
+    height: 45px;
+    /* Käyttää HTML:ssä määriteltyä väriä (esim. color="medium") */
+  }
+
+  ion-button[color="primary"] {
+    height: 65px;
+    font-weight: bold;
+  margin-top: 160px  }
 }
 
-/* YLEINEN TYYLI KAIKILLE PIENILLE SYÖTTÖKENTILLE */
+/* STATS-SÄILIÖ */
+.stats-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(var(--ion-color-primary-rgb), 0.15);
+  padding: 2px 4px;
+  border-radius: 10px;
+  border: 2px solid var(--ion-color-primary);
+  pointer-events: auto;
+}
+
 .small-input {
   --padding-start: 0;
   --padding-end: 0;
-  width: 25px;              // Kentän leveys
-  font-weight: 800;         // Erittäin lihavoitu numero
-  text-align: center;       // Keskittää numeron kentän sisällä
-  font-size: 1rem;          // Numeron koko
-  color: white !important;  // Numeron väri
-  pointer-events: auto !important;
+  width: 25px;
+  font-weight: 800;
+  text-align: center;
+  font-size: 1rem;
+  color: white !important;
 }
 
-/* Painokenttä tarvitsee hieman enemmän tilaa */
 .weight-input {
   width: 40px; 
-  color: var(--ion-color-primary) !important; // Paino voi olla korostusvärillä
+  color: var(--ion-color-primary) !important;
 }
 
 .stat-group {
   display: flex;
-  flex-direction: column;   // Numero ylhäällä, yksikkö alla
+  flex-direction: column;
   align-items: center;
 }
 
 .unit {
-  font-size: 0.6rem;        // Erittäin pieni yksikköteksti (S, T, kg)
+  font-size: 0.6rem;
   color: var(--ion-color-medium);
   text-transform: uppercase;
-  margin-top: -4px;         // Vedetään lähemmäs numeroa
+  margin-top: -4px;
 }
 
 .separator {
@@ -87,18 +104,43 @@ ion-label {
   padding: 0 2px;
 }
 
-/* OHJELMAN NIMI -KENTTÄ */
+/* OHJELMAN NIMI -SYÖTTÖ */
 ion-input[type="text"] {
-  font-size: 20px;          // Ohjelman nimen tekstikoko
-  --color: white;           // Kirjoitetun tekstin väri
+  font-size: 20px;
+  --color: white;
 }
 
-/* SÄILYTETTY: yhteensopivuus reps-wrapper nimen kanssa */
-.reps-wrapper {
-  @extend .stats-container;
+.name-input-item {
+  margin-top: -1vh !important; 
+  margin-bottom: 5vh;
+  width: 100%;
+  max-width: 300px;
+  align-self: center;
 }
 
-/* SÄILYTETTY: yhteensopivuus reps-input nimen kanssa (jos käytössä) */
-.reps-input {
-  @extend .small-input;
+/* ALERT-PAINIKKEET (Luo uusi liike -ikkuna) */
+::ng-deep .alert-button-group {
+  justify-content: space-between !important;
+  padding: 10px 20px !important;
+}
+
+::ng-deep .alert-button-cancel {
+  color: var(--ion-color-medium) !important;
+}
+
+::ng-deep .alert-button-confirm {
+  font-weight: bold !important;
+  color: var(--ion-color-primary) !important;
+}
+
+/* APULUOKAT */
+.reps-wrapper { @extend .stats-container; }
+.reps-input { @extend .small-input; }
+
+exercise-label {
+  /* ... muut tyylit ... */
+  
+  white-space: normal !important;   // Sallii rivinvaihdot
+  word-break: break-all !important;  // PAKOTTAA katkaisun, vaikka välilyöntiä ei olisi
+  overflow-wrap: anywhere !important; // Varmistaa, että se toimii kaikilla selaimilla
 }

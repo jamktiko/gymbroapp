@@ -14,14 +14,15 @@
       <ion-label position="stacked">OHJELMAN NIMI</ion-label>
       <ion-input 
         [(ngModel)]="programName" 
-        type="text" 
+        type="text"
+        maxlength="50"
         placeholder="esim. Jalkapäivä">
       </ion-input>
     </ion-item>
 
     <h3 class="selection-title">VALITSE HARJOITTEET</h3>
     
-    <ion-accordion-group>
+    <ion-accordion-group #myAccordionGroup>
       <ion-accordion *ngFor="let category of exerciseList" [value]="category.title">
         
         <ion-item slot="header" color="light">
@@ -34,7 +35,8 @@
             (click)="toggleSelection(exercise)" 
             lines="full" 
             button="true"
-            class="exercise-item">
+            class="exercise-item"
+            [class.custom-category]="category.title === 'Omat liikkeet'">
             
             <ion-checkbox 
               [checked]="exercise.isSelected" 
@@ -43,6 +45,15 @@
             </ion-checkbox>
             
             <ion-label class="exercise-label">{{ exercise.name }}</ion-label>
+
+            <ion-button 
+              *ngIf="category.title === 'Omat liikkeet'" 
+              fill="clear" 
+              color="danger" 
+              slot="end"
+              (click)="removeExercise(exercise); $event.stopPropagation()">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
 
             <div slot="end" *ngIf="exercise.isSelected" class="stats-container" (click)="$event.stopPropagation()">
               
@@ -53,7 +64,7 @@
                   class="small-input" 
                   placeholder="0">
                 </ion-input>
-                <span class="unit">S</span>
+                <span class="unit">Sets</span>
               </div>
 
               <span class="separator">x</span>
@@ -65,7 +76,7 @@
                   class="small-input" 
                   placeholder="0">
                 </ion-input>
-                <span class="unit">T</span>
+                <span class="unit">Reps</span>
               </div>
 
               <span class="separator"></span>
