@@ -75,9 +75,15 @@ jobs:
           role-to-assume: arn:aws:iam::318542846215:role/putkilo
           aws-region: eu-north-1
 
+      - name: Check files
+        run: ls -R backend   
+
       - name: Upload ZIP to S3
         run: |
           aws s3 cp backend/deploy.zip s3://${{ secrets.BUCKET_NAME }}/backend/deploy.zip  
+
+      - name: Verify S3 upload
+        run: aws s3 ls s3://${{ secrets.BUCKET_NAME }}/backend/
 
       - name: Deploy to Elastic Beanstalk
         run: |
