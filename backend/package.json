@@ -23,7 +23,6 @@
     "google-auth-library": "^10.6.2",
     "hbs": "^4.2.1",
     "http-errors": "~1.6.3",
-    "mongodb": "^7.2.0",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.2.0",
     "mongoose": "^9.4.1",

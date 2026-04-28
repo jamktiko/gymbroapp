@@ -10,10 +10,6 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
-<<<<<<< HEAD:frontend/src/app/page2/page2.page.ts
-=======
-  IonFooter,
->>>>>>> main:frontend/src/app/Pages/trainings/page2.page.ts
   IonFab,
   IonFabButton,
   IonIcon,
@@ -36,10 +32,6 @@ import { add } from 'ionicons/icons';
     FormsModule,
     IonButtons,
     IonMenuButton,
-<<<<<<< HEAD:frontend/src/app/page2/page2.page.ts
-=======
-    IonFooter,
->>>>>>> main:frontend/src/app/Pages/trainings/page2.page.ts
     IonFab,
     IonFabButton,
     IonIcon,
@@ -63,10 +55,7 @@ export class Page2Page implements OnInit {
   lisaaOhjelma() {
     this.router.navigate(['/page4']);
   }
-<<<<<<< HEAD:frontend/src/app/page2/page2.page.ts
-=======
   page5temp() {
     this.router.navigate(['/page5']);
   }
->>>>>>> main:frontend/src/app/Pages/trainings/page2.page.ts
 }
