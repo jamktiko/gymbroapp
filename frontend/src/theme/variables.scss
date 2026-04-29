@@ -20,10 +20,17 @@
   }
 }
 ion-progress-bar {
-  --background: #0f0f0f8b;
+  /*--background: #0f0f0f8b;
   --progress-background: #ffd900;
   height: 25px;
-  border-radius: 12px;
+  border-radius: 12px;*/
+  height: 20px;
+  border-radius: 50px;
+  --progress-background: #ffd900;
+  --background: #131212;
+  box-shadow: 0 0 20px #0000001b;
+  margin: 30px auto;
+  width: 85%;
 }
 //Demo Frontend puolen xp-bar
 ion-progress-bar::part(progress),

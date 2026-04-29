@@ -9,9 +9,26 @@
 }
 
 .next {
-  font-size: 30px;
+  /*font-size: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70px;
+  height: 70px;*/
+  border: 2px solid #ffd900;
+  font-size: 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  width: 100%;
+  margin: 0 auto;
+  outline: none;
+  border-radius: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
 }
