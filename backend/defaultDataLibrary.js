@@ -104,9 +104,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -117,9 +117,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -130,9 +130,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -143,9 +143,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -156,9 +156,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -169,9 +169,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -182,9 +182,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -195,9 +195,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -208,9 +208,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -221,9 +221,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -234,9 +234,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -247,9 +247,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -260,9 +260,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -273,9 +273,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
     ],
@@ -293,9 +293,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -306,9 +306,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -319,9 +319,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -332,9 +332,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -345,9 +345,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -358,9 +358,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -371,9 +371,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
     ],
@@ -391,9 +391,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -404,9 +404,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -417,9 +417,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -430,9 +430,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -443,9 +443,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -456,9 +456,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -469,9 +469,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -482,9 +482,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -495,9 +495,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -508,9 +508,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
       {
@@ -521,9 +521,9 @@ const defaultTrainingprograms = [
           isDefault: true,
         },
         sets: [
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
-          { reps: 10, weight: 0 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
         ],
       },
     ],
@@ -559,9 +559,9 @@ const addDefaultData = async () => {
             tp.exercises = tp.moves.map(m => ({
               move: m,
               sets: [
-                { reps: 10, weight: 0 },
-                { reps: 10, weight: 0 },
-                { reps: 10, weight: 0 }
+                { reps: 10, weight: 20 },
+                { reps: 10, weight: 20 },
+                { reps: 10, weight: 20 }
               ]
             }));
             delete tp.moves;

@@ -27,7 +27,18 @@ const validProgramPayload = {
   name: 'Strength A',
   description: 'Push/pull split',
   isDefault: false,
-  moves: [],
+  exercises: [
+    {
+      move: {
+        name: 'Penkkipunnerrus',
+        type: 'compound',
+        muscleGroup: 'Rinta',
+      },
+      sets: [
+        { reps: 10, weight: 60 }
+      ]
+    }
+  ],
 };
 
 // ──────────────────────────────────────────────────────────────────────────────
