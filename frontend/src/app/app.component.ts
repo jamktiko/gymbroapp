@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router'; // Lisätty Router
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import {
   IonApp,
   IonSplitPane,
@@ -16,6 +17,8 @@ import {
   IonRouterLink,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
+import { LoadingService } from './loading.service';
+import { CommonModule } from '@angular/common';
 import {
   trophyOutline,
   trophy,
@@ -28,12 +31,13 @@ import {
   backspaceOutline,
   backspace,
 } from 'ionicons/icons';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  standalone: true, // Varmistetaan standalone-tila
+  standalone: true,
   imports: [
     RouterLink,
     RouterLinkActive,
@@ -50,6 +54,8 @@ import {
     IonLabel,
     IonRouterLink,
     IonRouterOutlet,
+    LoadingSpinnerComponent,
+    CommonModule,
   ],
 })
 export class AppComponent {
@@ -63,8 +69,11 @@ export class AppComponent {
     { title: 'valmis', url: '/page6', icon: 'trophy' },
   ];
 
-  // Lisätty Router constructorin argumentiksi (private router: Router)
-  constructor(private router: Router) {
+  protected router = inject(Router);
+  public loadingService = inject(LoadingService);
+  public authService = inject(AuthService);
+
+  constructor() {
     addIcons({
       trophyOutline,
       trophy,
@@ -77,7 +86,6 @@ export class AppComponent {
       backspaceOutline,
       backspace,
     });
-
     this.checkUserStatus();
   }
 
@@ -97,6 +105,8 @@ export class AppComponent {
   logout() {
     console.log('Kirjaudutaan ulos...');
 
+    this.authService.logout();
+
     // 1. Tyhjennetään selaimen muisti
     //localStorage.removeItem('isLoggedIn');
     //localStorage.removeItem('userName');
@@ -106,7 +116,7 @@ export class AppComponent {
     // replaceUrl: true poistaa historian, jotta ei pääse "takaisin"-napilla sisään
     this.router.navigateByUrl('/page1', { replaceUrl: true }).then(() => {
       // 3. Päivitetään sivu, jotta AppComponent nollautuu (nimet ja tilat)
-      window.location.reload();
+      // window.location.reload();
     });
   }
 }

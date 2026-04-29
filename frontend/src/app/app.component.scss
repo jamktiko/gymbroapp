@@ -130,3 +130,16 @@ ion-item.selected {
   --ripple-color: var(--ion-color-primary);
   // --ripple-effect-type: "unbounded";
 }
+
+#loading-spinner-container {
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: var(--ion-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}

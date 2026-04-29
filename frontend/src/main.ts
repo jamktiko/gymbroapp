@@ -14,17 +14,18 @@ import {
   SocialAuthServiceConfig,
   SOCIAL_AUTH_CONFIG,
 } from '@abacritt/angularx-social-login';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { LoadingInterceptor } from './app/interceptors/loading.interceptor';
 // import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([LoadingInterceptor])),
 
     provideRouter(routes, withPreloading(PreloadAllModules)),
     {
@@ -36,6 +37,11 @@ bootstrapApplication(AppComponent, {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
               '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com',
+              {
+                // oneTapEnabled: false,
+                // prompt: 'select_account',
+                // prompt_parent_id: 'google-one-tap-container',
+              },
             ),
           },
         ],
