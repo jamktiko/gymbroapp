@@ -9,10 +9,17 @@ module.exports = defineConfig({
       GOOGLE_CLIENT_ID: 'test_google_client_id',
     },
     globals: true,
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
+    },
+    hookTimeout: 30000,
     exclude: [
       '**/node_modules/**',
       '**/.git/**',
-      '**/tests/scratch.test.js', // ad-hoc scratch file, not a real test suite
+      '**/tests/scratch.test.js',
     ],
     reporters: ['verbose'],
   },

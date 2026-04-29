@@ -423,4 +423,98 @@ describe('Training Sessions Controller', () => {
       expect(response.body.error).toBe('Unauthorized');
     });
   });
+
+  // ─── POST /api/training-sessions/from-program/:programId ─────────────────────
+
+  describe('POST /api/training-sessions/from-program/:programId', () => {
+    // A valid program with one exercise (move + sets template)
+    const programWithExercise = {
+      name: 'PPL Program',
+      description: 'Push Pull Legs',
+      isDefault: false,
+      exercises: [
+        {
+          move: {
+            name: 'Bench Press',
+            type: 'compound',
+            muscleGroup: 'chest',
+            isDefault: true,
+            createdBy: null,
+          },
+          sets: [
+            { reps: 10, weight: 60 },
+            { reps: 10, weight: 60 },
+            { reps: 10, weight: 60 },
+          ],
+        },
+      ],
+    };
+
+    it('should create a session from a program template and return 201', async () => {
+      const { user, userId } = await createUser();
+      user.trainingPrograms.push(programWithExercise);
+      await user.save();
+      const programId = user.trainingPrograms[0]._id.toString();
+
+      const response = await request(app)
+        .post(`/api/training-sessions/from-program/${programId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('_id');
+      expect(response.body.exercises).toHaveLength(1);
+      expect(response.body.exercises[0].sets).toHaveLength(3);
+
+      const saved = await User.findById(userId);
+      expect(saved.trainingSessions).toHaveLength(1);
+    });
+
+    it('should copy sets from the program template into the session', async () => {
+      const { user, userId } = await createUser();
+      user.trainingPrograms.push(programWithExercise);
+      await user.save();
+      const programId = user.trainingPrograms[0]._id.toString();
+
+      const response = await request(app)
+        .post(`/api/training-sessions/from-program/${programId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+
+      expect(response.status).toBe(201);
+      const sets = response.body.exercises[0].sets;
+      expect(sets[0].reps).toBe(10);
+      expect(sets[0].weight).toBe(60);
+    });
+
+    it('should return 404 if the program does not exist', async () => {
+      const { userId } = await createUser();
+      const fakeId = new mongoose.Types.ObjectId().toString();
+
+      const response = await request(app)
+        .post(`/api/training-sessions/from-program/${fakeId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body.error).toBe('Ohjelmaa ei löytynyt');
+    });
+
+    it('should return 404 if the user does not exist', async () => {
+      const nonExistentId = new mongoose.Types.ObjectId().toString();
+
+      const response = await request(app)
+        .post(`/api/training-sessions/from-program/${new mongoose.Types.ObjectId()}`)
+        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body.error).toBe('Käyttäjää ei löytynyt');
+    });
+
+    it('should return 401 if no auth header is provided', async () => {
+      const response = await request(app).post(
+        `/api/training-sessions/from-program/${new mongoose.Types.ObjectId()}`,
+      );
+
+      expect(response.status).toBe(401);
+      expect(response.body.error).toBe('Unauthorized');
+    });
+  });
 });
