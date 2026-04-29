@@ -44,22 +44,8 @@ MoveSchema.index({ name: 1 }, { unique: true });
 // Erillinen schema upotukseen – ei indeksejä eikä omaa kokoelmaa,
 // joten sama liike voi esiintyä useassa ohjelmassa ongelmitta.
 const EmbeddedMoveSchema = new mongoose.Schema({
-  ...moveFields,
-  sets: {
-    type: [
-      {
-        reps: { type: Number, required: true },
-        weight: { type: Number, required: true },
-      },
-    ],
-    default: [
-      { reps: 10, weight: 0 },
-      { reps: 10, weight: 0 },
-      { reps: 10, weight: 0 },
-    ],
-  },
+  ...moveFields
 });
-
 const Move = mongoose.model('Move', MoveSchema);
 
 // export models and schemas

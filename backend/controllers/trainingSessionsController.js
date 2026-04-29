@@ -8,9 +8,7 @@ exports.getSessions = async (req, res) => {
     }
 
     // Etsitään käyttäjä
-    const user = await User.findById(req.user.id).populate(
-      'trainingSessions.exercises.move',
-    );
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -44,9 +42,7 @@ exports.getSessionById = async (req, res) => {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id).populate(
-      'trainingSessions.exercises.move',
-    );
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -143,5 +139,44 @@ exports.deleteSession = async (req, res) => {
     res.json({ message: 'Treenisessio poistettu' });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+// POST /api/training-sessions/from-program/:programId
+// Luo uusi sessio ohjelman templatesta
+exports.startFromProgram = async (req, res) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Ei oikeuksia' });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    const program = user.trainingPrograms.id(req.params.programId);
+    if (!program) {
+      return res.status(404).json({ error: 'Ohjelmaa ei löytynyt' });
+    }
+
+    // Rakennetaan sessio ohjelman liikkeistä
+    const exercises = program.moves.map((programMove) => ({
+  move: programMove.move.toObject(),
+  sets: programMove.sets.map((s) => ({
+    plannedReps: s.reps,
+    plannedWeight: s.weight,
+    completedReps: null,
+    completedWeight: null,
+  })),
+}));
+
+    user.trainingSessions.push({ exercises });
+    await user.save();
+
+    const newSession = user.trainingSessions[user.trainingSessions.length - 1];
+    res.status(201).json(newSession);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 };

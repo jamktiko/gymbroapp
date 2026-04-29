@@ -1,17 +1,27 @@
 const mongoose = require('mongoose');
 const { EmbeddedMoveSchema } = require('./Move');
 
-// Yksittäinen setti: toistot + paino
+// Setti: suunniteltu (ohjelmasta) + toteutunut (käyttäjän syöttämä)
 const SetSchema = new mongoose.Schema(
   {
-    reps: {
+    plannedReps: {
       type: Number,
-      required: [true, 'Toistot on pakollinen'],
+      required: [true, 'Suunniteltu toistomäärä on pakollinen'],
       min: 1,
     },
-    weight: {
+    plannedWeight: {
       type: Number,
-      required: [true, 'Paino on pakollinen'],
+      required: [true, 'Suunniteltu paino on pakollinen'],
+      min: 0,
+    },
+    completedReps: {
+      type: Number,
+      default: null,
+      min: 0,
+    },
+    completedWeight: {
+      type: Number,
+      default: null,
       min: 0,
     },
   },
@@ -50,7 +60,6 @@ const TrainingSessionSchema = new mongoose.Schema(
         message: 'Sessiossa täytyy olla vähintään yksi liike',
       },
     },
-    // break time in seconds, defaults to 2 minutes
     breakTimeSeconds: {
       type: Number,
       default: 120,
@@ -60,5 +69,4 @@ const TrainingSessionSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// export TrainingSessionSchema (only used inside User, so no need to make it into a Model here)
 module.exports = TrainingSessionSchema;

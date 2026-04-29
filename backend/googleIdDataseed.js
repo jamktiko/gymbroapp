@@ -10,8 +10,8 @@
 const mongoose = require('mongoose');
 
 // ── KONFIGURAATIO ──────────────────────────────────────────────
-const GOOGLE_ID = '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com'; // <-- vaihda tähän
-const MONGO_URI = 'mongodb://localhost:27017/your-db'; // <-- vaihda tarvittaessa
+const GOOGLE_ID = '111989313889366950'; // <-- vaihda tähän
+const MONGO_URI = 'mongodb://gymbroadmin:kissa123@localhost:27017/gymbrodb'; // <-- vaihda tarvittaessa
 // ───────────────────────────────────────────────────────────────
 
 // ── LIIKKEET ───────────────────────────────────────────────────
@@ -210,7 +210,7 @@ function generateSessions() {
 // ── SEED ───────────────────────────────────────────────────────
 
 async function seed() {
-  if (GOOGLE_ID === 'VAIHDA_OMA_GOOGLE_ID') {
+  if (GOOGLE_ID === '111989313889366950') {
     console.error('⚠️  Vaihda GOOGLE_ID ennen ajamista!');
     process.exit(1);
   }

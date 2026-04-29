@@ -7,9 +7,11 @@ const {
   createSession,
   updateSession,
   deleteSession,
+  startFromProgram,
 } = require('../controllers/trainingSessionsController');
 
 router.get('/',verifyToken, getSessions);
+router.post('/from-program/:programId', verifyToken, startFromProgram);
 router.get('/:id',verifyToken, getSessionById);
 router.post('/',verifyToken, createSession);
 router.patch('/:id',verifyToken, updateSession);
