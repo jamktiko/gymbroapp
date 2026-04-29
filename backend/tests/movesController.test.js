@@ -27,7 +27,7 @@ const userMoveData = {
   type: 'targeted',
   muscleGroup: 'biceps',
   isDefault: false,
-  createdBy: new mongoose.Types.ObjectId(DUMMY_USER_ID),
+  createdBy: DUMMY_USER_ID,
 };
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -248,6 +248,22 @@ describe('Moves Controller', () => {
       expect(response.body.error).toBe('Default-liikettä ei voi muokata');
     });
 
+    it("should return 403 if trying to update another user's custom move", async () => {
+      const otherMove = await Move.create({
+        ...userMoveData,
+        name: 'Other Curl',
+        createdBy: 'some-other-google-id',
+      });
+
+      const response = await request(app)
+        .patch(`/api/moves/${otherMove._id}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .send({ muscleGroup: 'triceps' });
+
+      expect(response.status).toBe(403);
+      expect(response.body.error).toBe('Ei oikeuksia muokata toisen käyttäjän liikettä');
+    });
+
     it('should return 404 if move to update is not found', async () => {
       const fakeId = new mongoose.Types.ObjectId().toString();
 
@@ -312,6 +328,21 @@ describe('Moves Controller', () => {
       // Confirm move still exists in DB
       const stillThere = await Move.findById(move._id);
       expect(stillThere).toBeTruthy();
+    });
+
+    it("should return 403 if trying to delete another user's custom move", async () => {
+      const otherMove = await Move.create({
+        ...userMoveData,
+        name: 'Other Delete Curl',
+        createdBy: 'some-other-google-id',
+      });
+
+      const response = await request(app)
+        .delete(`/api/moves/${otherMove._id}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+
+      expect(response.status).toBe(403);
+      expect(response.body.error).toBe('Ei oikeuksia poistaa toisen käyttäjän liikettä');
     });
 
     it('should return 404 if move to delete is not found', async () => {

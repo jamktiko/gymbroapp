@@ -34,6 +34,9 @@ exports.createUser = async (req, res) => {
 // PATCH /api/users/:id — päivitä käyttäjä (esim. weightUnit)
 exports.updateUser = async (req, res) => {
   try {
+    if (req.user.googleId !== req.params.id) {
+      return res.status(403).json({ error: 'Ei oikeuksia muokata toista käyttäjää' });
+    }
     // Suojataan level ja exp suoralta muokkaukselta (lisätään logiikka myöhemmin)
     const { ...safeFields } = req.body;
     const user = await User.findOneAndUpdate({ googleId: req.params.id }, safeFields, {
@@ -52,6 +55,9 @@ exports.updateUser = async (req, res) => {
 // DELETE /api/users/:id
 exports.deleteUser = async (req, res) => {
   try {
+    if (req.user.googleId !== req.params.id) {
+      return res.status(403).json({ error: 'Ei oikeuksia poistaa toista käyttäjää' });
+    }
     const user = await User.findOneAndDelete({ googleId: req.params.id });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });

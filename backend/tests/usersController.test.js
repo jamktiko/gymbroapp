@@ -137,7 +137,7 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .patch(`/api/users/${user.googleId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: user.googleId }, process.env.JWT_SECRET)}`)
         .send({ weightUnit: 'lbs' });
 
       expect(response.status).toBe(200);
@@ -152,11 +152,27 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .patch(`/api/users/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: fakeId }, process.env.JWT_SECRET)}`)
         .send({ name: 'New Name' });
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
+    });
+
+    it("should return 403 if trying to update another user's profile", async () => {
+      const user = await User.create({
+        name: 'Alice',
+        email: 'alice@example.com',
+        googleId: 'google-alice',
+      });
+
+      const response = await request(app)
+        .patch(`/api/users/${user.googleId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: 'some-other-google-id' }, process.env.JWT_SECRET)}`)
+        .send({ weightUnit: 'lbs' });
+
+      expect(response.status).toBe(403);
+      expect(response.body.error).toBe('Ei oikeuksia muokata toista käyttäjää');
     });
 
     it('should return 400 on validation error', async () => {
@@ -168,7 +184,7 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .patch(`/api/users/${user.googleId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: user.googleId }, process.env.JWT_SECRET)}`)
         .send({ weightUnit: 'invalid_unit' });
 
       expect(response.status).toBe(400);
@@ -197,7 +213,7 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .delete(`/api/users/${user.googleId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: user.googleId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Käyttäjä poistettu');
@@ -211,10 +227,25 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .delete(`/api/users/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: fakeId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
+    });
+
+    it("should return 403 if trying to delete another user's profile", async () => {
+      const user = await User.create({
+        name: 'Alice Delete',
+        email: 'alicedel@example.com',
+        googleId: 'google-alice-del',
+      });
+
+      const response = await request(app)
+        .delete(`/api/users/${user.googleId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: 'some-other-google-id' }, process.env.JWT_SECRET)}`);
+
+      expect(response.status).toBe(403);
+      expect(response.body.error).toBe('Ei oikeuksia poistaa toista käyttäjää');
     });
 
     it('should return 401 if no auth header is provided', async () => {
