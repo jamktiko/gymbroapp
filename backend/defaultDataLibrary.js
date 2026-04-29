@@ -546,41 +546,7 @@ const addDefaultData = async () => {
       defaultTrainingprograms,
     );
     console.log(`${Trainingprograms.length} default-treeniohjelmaa lisätty`);
-
-    // Päivitä olemassa olevien käyttäjien treeniohjelmien 'moves'-kenttä 'exercises'-kentäksi uuteen skeemaan
-    const users = await mongoose.connection.db.collection('users').find({}).toArray();
-    let usersUpdated = 0;
-    for (const user of users) {
-      if (user.trainingPrograms && user.trainingPrograms.length > 0) {
-        let updated = false;
-        const newPrograms = user.trainingPrograms.map(tp => {
-          if (tp.moves) {
-            // Transform old flat moves into new ExerciseSchema structure
-            tp.exercises = tp.moves.map(m => ({
-              move: m,
-              sets: [
-                { reps: 10, weight: 20 },
-                { reps: 10, weight: 20 },
-                { reps: 10, weight: 20 }
-              ]
-            }));
-            delete tp.moves;
-            updated = true;
-          }
-          return tp;
-        });
-        if (updated) {
-          await mongoose.connection.db.collection('users').updateOne(
-            { _id: user._id },
-            { $set: { trainingPrograms: newPrograms } }
-          );
-          usersUpdated++;
-        }
-      }
-    }
-    console.log(`${usersUpdated} käyttäjän treeniohjelmat päivitetty uuteen Exercise-skeemaan`);
-
-
+    
     console.log('Datan lisääminen onnistui!');
     process.exit(0);
   } catch (err) {

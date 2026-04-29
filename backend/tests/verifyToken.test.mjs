@@ -18,14 +18,14 @@ describe('VerifyToken Middleware', () => {
   // ─── Happy paths ─────────────────────────────────────────────────────────────
 
   it('should call next() and set req.user when a valid Bearer token is provided', () => {
-    const payload = { id: 'user-abc-123' };
+    const payload = { googleId: 'user-abc-123' };
     const token = jwt.sign(payload, process.env.JWT_SECRET);
     req.headers['authorization'] = `Bearer ${token}`;
 
     verifyToken(req, res, next);
 
     expect(next).toHaveBeenCalledOnce();
-    expect(req.user).toMatchObject({ id: 'user-abc-123' });
+    expect(req.user).toMatchObject({ googleId: 'user-abc-123' });
     expect(res.status).not.toHaveBeenCalled();
   });
 

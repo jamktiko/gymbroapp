@@ -6,7 +6,7 @@ const {
 // GET /api/users/:id
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ googleId: req.params.id });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -21,7 +21,7 @@ exports.createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
     // fetch default training programs for newly created user:
-    const updatedUser = await fetchDefaultProgramsForUser(user._id);
+    const updatedUser = await fetchDefaultProgramsForUser(user.googleId);
     res.status(201).json(updatedUser);
   } catch (err) {
     if (err.code === 11000) {
@@ -34,9 +34,12 @@ exports.createUser = async (req, res) => {
 // PATCH /api/users/:id — päivitä käyttäjä (esim. weightUnit)
 exports.updateUser = async (req, res) => {
   try {
+    if (req.user.googleId !== req.params.id) {
+      return res.status(403).json({ error: 'Ei oikeuksia muokata toista käyttäjää' });
+    }
     // Suojataan level ja exp suoralta muokkaukselta (lisätään logiikka myöhemmin)
     const { ...safeFields } = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id, safeFields, {
+    const user = await User.findOneAndUpdate({ googleId: req.params.id }, safeFields, {
       returnDocument: 'after',
       runValidators: true,
     });
@@ -52,7 +55,10 @@ exports.updateUser = async (req, res) => {
 // DELETE /api/users/:id
 exports.deleteUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    if (req.user.googleId !== req.params.id) {
+      return res.status(403).json({ error: 'Ei oikeuksia poistaa toista käyttäjää' });
+    }
+    const user = await User.findOneAndDelete({ googleId: req.params.id });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }

@@ -4,12 +4,12 @@ const User = require('../models/User');
 // GET /api/training-programs — haetaan kirjautuneen käyttäjän treeniohjelmat
 exports.getPrograms = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
     // Etsitään käyttäjä
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -23,11 +23,11 @@ exports.getPrograms = async (req, res) => {
 // GET /api/training-programs/:id
 exports.getProgramById = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -48,11 +48,11 @@ exports.getProgramById = async (req, res) => {
 // when creating a new program we literally put all exercises whole JSON-objects inside exercises[]
 exports.createProgram = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -72,11 +72,11 @@ exports.createProgram = async (req, res) => {
 // PATCH /api/training-programs/:id
 exports.updateProgram = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -98,11 +98,11 @@ exports.updateProgram = async (req, res) => {
 // DELETE /api/training-programs/:id
 exports.deleteProgram = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -122,11 +122,11 @@ exports.deleteProgram = async (req, res) => {
 };
 
 // method for fetching default training programs for user
-exports.fetchDefaultProgramsForUser = async (userId) => {
+exports.fetchDefaultProgramsForUser = async (googleId) => {
   try {
     // 1. Etsitään nimenomaan isDefault: true -ohjelmat
     const defaultPrograms = await Trainingprogram.find({ isDefault: true });
-    const user = await User.findById(userId);
+    const user = await User.findOne({ googleId });
 
     if (!user) return null;
 

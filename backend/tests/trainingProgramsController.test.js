@@ -19,7 +19,7 @@ const createUser = async (overrides = {}) => {
     googleId: `google-user-${Date.now()}`,
     ...overrides,
   });
-  return { user, userId: user._id.toString() };
+  return { user, userId: user.googleId };
 };
 
 // A minimal valid training program payload
@@ -64,7 +64,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get('/api/training-programs')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
@@ -77,7 +77,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get('/api/training-programs')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(1);
@@ -89,7 +89,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get('/api/training-programs')
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
@@ -114,7 +114,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-programs/${programId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body._id).toBe(programId);
@@ -127,7 +127,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-programs/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Treeniohjelmaa ei löytynyt');
@@ -138,7 +138,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-programs/${new mongoose.Types.ObjectId()}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
@@ -162,7 +162,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .post('/api/training-programs')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send(validProgramPayload);
 
       expect(response.status).toBe(201);
@@ -170,7 +170,7 @@ describe('Training Programs Controller', () => {
       expect(response.body.name).toBe('Strength A');
 
       // Confirm persisted in DB
-      const saved = await User.findById(userId);
+      const saved = await User.findOne({ googleId: userId });
       expect(saved.trainingPrograms).toHaveLength(1);
     });
 
@@ -179,7 +179,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .post('/api/training-programs')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({ description: 'No name provided' });
 
       expect(response.status).toBe(400);
@@ -191,7 +191,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .post('/api/training-programs')
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`)
         .send(validProgramPayload);
 
       expect(response.status).toBe(404);
@@ -219,13 +219,13 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-programs/${programId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({ description: 'Updated description' });
 
       expect(response.status).toBe(200);
       expect(response.body.description).toBe('Updated description');
 
-      const updated = await User.findById(userId);
+      const updated = await User.findOne({ googleId: userId });
       expect(updated.trainingPrograms[0].description).toBe(
         'Updated description',
       );
@@ -237,7 +237,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-programs/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({ name: 'Ghost Program' });
 
       expect(response.status).toBe(404);
@@ -249,7 +249,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-programs/${new mongoose.Types.ObjectId()}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`)
         .send({ name: 'X' });
 
       expect(response.status).toBe(404);
@@ -277,12 +277,12 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-programs/${programId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Treeniohjelma poistettu');
 
-      const afterDelete = await User.findById(userId);
+      const afterDelete = await User.findOne({ googleId: userId });
       expect(afterDelete.trainingPrograms).toHaveLength(0);
     });
 
@@ -292,7 +292,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-programs/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Treeniohjelmaa ei löytynyt');
@@ -303,7 +303,7 @@ describe('Training Programs Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-programs/${new mongoose.Types.ObjectId()}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');

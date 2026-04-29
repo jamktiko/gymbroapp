@@ -6,9 +6,9 @@ exports.getMoves = async (req, res) => {
     let filter = { createdBy: null };
 
     // Jos käyttäjä on tunnistettu headerista,  palautetaan myös hänen omat liikkeensä
-    if (req.user && req.user.id) {
+    if (req.user && req.user.googleId) {
       filter = {
-        $or: [{ createdBy: null }, { createdBy: req.user.id }],
+        $or: [{ createdBy: null }, { createdBy: req.user.googleId }],
       };
     }
 
@@ -38,7 +38,7 @@ exports.createMove = async (req, res) => {
     const move = await Move.create({
       ...req.body,
       isDefault: false,
-      createdBy: req.user?.id ?? null,
+      createdBy: req.user?.googleId ?? null,
     });
     res.status(201).json(move);
   } catch (err) {
@@ -61,6 +61,9 @@ exports.updateMove = async (req, res) => {
     if (move.isDefault) {
       return res.status(403).json({ error: 'Default-liikettä ei voi muokata' });
     }
+    if (move.createdBy !== req.user.googleId) {
+      return res.status(403).json({ error: 'Ei oikeuksia muokata toisen käyttäjän liikettä' });
+    }
     const updated = await Move.findByIdAndUpdate(req.params.id, req.body, {
       returnDocument: 'after',
       runValidators: true,
@@ -80,6 +83,9 @@ exports.deleteMove = async (req, res) => {
     }
     if (move.isDefault) {
       return res.status(403).json({ error: 'Default-liikettä ei voi poistaa' });
+    }
+    if (move.createdBy !== req.user.googleId) {
+      return res.status(403).json({ error: 'Ei oikeuksia poistaa toisen käyttäjän liikettä' });
     }
     await move.deleteOne();
     res.json({ message: 'Liike poistettu' });

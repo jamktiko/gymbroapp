@@ -27,7 +27,7 @@ const userMoveData = {
   type: 'targeted',
   muscleGroup: 'biceps',
   isDefault: false,
-  createdBy: new mongoose.Types.ObjectId(DUMMY_USER_ID),
+  createdBy: DUMMY_USER_ID,
 };
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -51,7 +51,7 @@ describe('Moves Controller', () => {
     it('should return an empty array when no moves exist', async () => {
       const response = await request(app)
         .get('/api/moves')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
@@ -62,7 +62,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .get('/api/moves')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(1);
@@ -85,7 +85,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .get('/api/moves')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       // default + caller's own = 2; other user's move excluded
@@ -112,7 +112,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .get(`/api/moves/${move._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body._id).toBe(move._id.toString());
@@ -124,7 +124,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .get(`/api/moves/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Liikettä ei löytynyt');
@@ -133,7 +133,7 @@ describe('Moves Controller', () => {
     it('should return 500 if id is an invalid ObjectId', async () => {
       const response = await request(app)
         .get('/api/moves/not-an-id')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBeDefined();
@@ -161,7 +161,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .post('/api/moves')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send(payload);
 
       expect(response.status).toBe(201);
@@ -181,7 +181,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .post('/api/moves')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ name: 'Deadlift', type: 'compound', muscleGroup: 'back' });
 
       expect(response.status).toBe(400);
@@ -191,7 +191,7 @@ describe('Moves Controller', () => {
     it('should return 400 if required fields are missing', async () => {
       const response = await request(app)
         .post('/api/moves')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ muscleGroup: 'chest' }); // missing name and type
 
       expect(response.status).toBe(400);
@@ -201,7 +201,7 @@ describe('Moves Controller', () => {
     it('should return 400 if type is not a valid enum value', async () => {
       const response = await request(app)
         .post('/api/moves')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ name: 'Invalid Move', type: 'isolation', muscleGroup: 'arms' });
 
       expect(response.status).toBe(400);
@@ -226,7 +226,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .patch(`/api/moves/${move._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ muscleGroup: 'forearms' });
 
       expect(response.status).toBe(200);
@@ -241,11 +241,27 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .patch(`/api/moves/${move._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ muscleGroup: 'triceps' });
 
       expect(response.status).toBe(403);
       expect(response.body.error).toBe('Default-liikettä ei voi muokata');
+    });
+
+    it("should return 403 if trying to update another user's custom move", async () => {
+      const otherMove = await Move.create({
+        ...userMoveData,
+        name: 'Other Curl',
+        createdBy: 'some-other-google-id',
+      });
+
+      const response = await request(app)
+        .patch(`/api/moves/${otherMove._id}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .send({ muscleGroup: 'triceps' });
+
+      expect(response.status).toBe(403);
+      expect(response.body.error).toBe('Ei oikeuksia muokata toisen käyttäjän liikettä');
     });
 
     it('should return 404 if move to update is not found', async () => {
@@ -253,7 +269,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .patch(`/api/moves/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ muscleGroup: 'shoulders' });
 
       expect(response.status).toBe(404);
@@ -265,7 +281,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .patch(`/api/moves/${move._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ type: 'invalid_type' });
 
       expect(response.status).toBe(400);
@@ -290,7 +306,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .delete(`/api/moves/${move._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Liike poistettu');
@@ -304,7 +320,7 @@ describe('Moves Controller', () => {
 
       const response = await request(app)
         .delete(`/api/moves/${move._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(403);
       expect(response.body.error).toBe('Default-liikettä ei voi poistaa');
@@ -314,12 +330,27 @@ describe('Moves Controller', () => {
       expect(stillThere).toBeTruthy();
     });
 
+    it("should return 403 if trying to delete another user's custom move", async () => {
+      const otherMove = await Move.create({
+        ...userMoveData,
+        name: 'Other Delete Curl',
+        createdBy: 'some-other-google-id',
+      });
+
+      const response = await request(app)
+        .delete(`/api/moves/${otherMove._id}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+
+      expect(response.status).toBe(403);
+      expect(response.body.error).toBe('Ei oikeuksia poistaa toisen käyttäjän liikettä');
+    });
+
     it('should return 404 if move to delete is not found', async () => {
       const fakeId = new mongoose.Types.ObjectId().toString();
 
       const response = await request(app)
         .delete(`/api/moves/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Liikettä ei löytynyt');
@@ -328,7 +359,7 @@ describe('Moves Controller', () => {
     it('should return 500 if id is an invalid ObjectId', async () => {
       const response = await request(app)
         .delete('/api/moves/not-an-id')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBeDefined();

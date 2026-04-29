@@ -3,12 +3,12 @@ const User = require('../models/User');
 // GET /api/training-sessions — haetaan kirjautuneen käyttäjän treenisessiot
 exports.getSessions = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
     // Etsitään käyttäjä
-    const user = await User.findById(req.user.id).populate(
+    const user = await User.findOne({ googleId: req.user.googleId }).populate(
       'trainingSessions.exercises.move',
     );
     if (!user) {
@@ -40,11 +40,11 @@ exports.getSessions = async (req, res) => {
 // GET /api/training-sessions/:id
 exports.getSessionById = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id).populate(
+    const user = await User.findOne({ googleId: req.user.googleId }).populate(
       'trainingSessions.exercises.move',
     );
     if (!user) {
@@ -66,11 +66,11 @@ exports.getSessionById = async (req, res) => {
 // POST /api/training-sessions — luo uusi sessio käyttäjälle
 exports.createSession = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -94,11 +94,11 @@ exports.createSession = async (req, res) => {
 // PATCH /api/training-sessions/:id
 exports.updateSession = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -123,11 +123,11 @@ exports.updateSession = async (req, res) => {
 // DELETE /api/training-sessions/:id
 exports.deleteSession = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.googleId) {
       return res.status(401).json({ error: 'Ei oikeuksia' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ googleId: req.user.googleId });
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }

@@ -8,71 +8,202 @@
  */
 
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 // ── KONFIGURAATIO ──────────────────────────────────────────────
-const GOOGLE_ID = '111989313889366950842'; // <-- vaihda tähän
-const MONGO_URI = 'mongodb+srv://lahmakkonen_db_user:ksL7TVsBp31lJY0V@gymbroapp1.mqg1wa1.mongodb.net/gymbrodb?appName=GymBroApp1'; // <-- vaihda tarvittaessa
+const GOOGLE_ID = process.env.DATASEED_GOOGLE_USERID; // <-- vaihda tähän
+const MONGO_URI = process.env.MONGODB_ATLAS_URL; // <-- vaihda tarvittaessa
 // ───────────────────────────────────────────────────────────────
 
 // ── LIIKKEET ───────────────────────────────────────────────────
 const MOVES = {
   // PUSH
-  benchPress:    { name: 'Penkkipunnerrus',       type: 'compound',  muscleGroup: 'Rinta' },
-  ohp:           { name: 'Pystypunnerrus',         type: 'compound',  muscleGroup: 'Olkapäät' },
-  inclineDB:     { name: 'Vinopenkin käsipainopunnerrus', type: 'compound', muscleGroup: 'Rinta' },
-  tricepPushdown:{ name: 'Ojentajapunnerrus',      type: 'targeted', muscleGroup: 'Ojentajat' },
-  lateralRaise:  { name: 'Sivunosto',              type: 'targeted', muscleGroup: 'Olkapäät' },
-  dips:          { name: 'Dippipunnerrus',          type: 'compound',  muscleGroup: 'Rinta' },
+  benchPress: {
+    name: 'Penkkipunnerrus',
+    type: 'compound',
+    muscleGroup: 'Rinta',
+  },
+  ohp: { name: 'Pystypunnerrus', type: 'compound', muscleGroup: 'Olkapäät' },
+  inclineDB: {
+    name: 'Vinopenkin käsipainopunnerrus',
+    type: 'compound',
+    muscleGroup: 'Rinta',
+  },
+  tricepPushdown: {
+    name: 'Ojentajapunnerrus',
+    type: 'targeted',
+    muscleGroup: 'Ojentajat',
+  },
+  lateralRaise: {
+    name: 'Sivunosto',
+    type: 'targeted',
+    muscleGroup: 'Olkapäät',
+  },
+  dips: { name: 'Dippipunnerrus', type: 'compound', muscleGroup: 'Rinta' },
 
   // PULL
-  deadlift:      { name: 'Maastaveto',             type: 'compound',  muscleGroup: 'Selkä' },
-  barbellRow:    { name: 'Kulmasoutu',              type: 'compound',  muscleGroup: 'Selkä' },
-  latPulldown:   { name: 'Ylätalja',                type: 'compound',  muscleGroup: 'Selkä' },
-  bicepCurl:     { name: 'Hauiskääntö',             type: 'targeted', muscleGroup: 'Hauikset' },
-  facePull:      { name: 'Face Pull',               type: 'targeted', muscleGroup: 'Olkapäät (taka)' },
-  hammerCurl:    { name: 'Vasarakääntö',            type: 'targeted', muscleGroup: 'Hauikset' },
+  deadlift: { name: 'Maastaveto', type: 'compound', muscleGroup: 'Selkä' },
+  barbellRow: { name: 'Kulmasoutu', type: 'compound', muscleGroup: 'Selkä' },
+  latPulldown: { name: 'Ylätalja', type: 'compound', muscleGroup: 'Selkä' },
+  bicepCurl: { name: 'Hauiskääntö', type: 'targeted', muscleGroup: 'Hauikset' },
+  facePull: {
+    name: 'Face Pull',
+    type: 'targeted',
+    muscleGroup: 'Olkapäät (taka)',
+  },
+  hammerCurl: {
+    name: 'Vasarakääntö',
+    type: 'targeted',
+    muscleGroup: 'Hauikset',
+  },
 
   // LEGS
-  squat:         { name: 'Kyykky',                  type: 'compound',  muscleGroup: 'Jalat' },
-  romanianDL:    { name: 'Romanian Deadlift',       type: 'compound',  muscleGroup: 'Takareisi' },
-  legPress:      { name: 'Jalkaprässi',             type: 'compound',  muscleGroup: 'Jalat' },
-  legCurl:       { name: 'Jalkakoukistus',          type: 'targeted', muscleGroup: 'Takareisi' },
-  calfRaise:     { name: 'Pohjenosto',              type: 'targeted', muscleGroup: 'Pohkeet' },
-  legExtension:  { name: 'Jalkojen ojennus',        type: 'targeted', muscleGroup: 'Etureidet' },
-  bulgarianSplit:{ name: 'Bulgaria split squat',    type: 'compound',  muscleGroup: 'Jalat' },
+  squat: { name: 'Kyykky', type: 'compound', muscleGroup: 'Jalat' },
+  romanianDL: {
+    name: 'Romanian Deadlift',
+    type: 'compound',
+    muscleGroup: 'Takareisi',
+  },
+  legPress: { name: 'Jalkaprässi', type: 'compound', muscleGroup: 'Jalat' },
+  legCurl: {
+    name: 'Jalkakoukistus',
+    type: 'targeted',
+    muscleGroup: 'Takareisi',
+  },
+  calfRaise: { name: 'Pohjenosto', type: 'targeted', muscleGroup: 'Pohkeet' },
+  legExtension: {
+    name: 'Jalkojen ojennus',
+    type: 'targeted',
+    muscleGroup: 'Etureidet',
+  },
+  bulgarianSplit: {
+    name: 'Bulgaria split squat',
+    type: 'compound',
+    muscleGroup: 'Jalat',
+  },
 };
 
 // ── OHJELMAT (3 päivää / viikko, PPL) ─────────────────────────
 const PROGRAMS = {
   push: [
-    { moveKey: 'benchPress',     baseWeight: 60,  progression: 0.5, reps: [8, 8, 6],    setsCount: 3 },
-    { moveKey: 'ohp',            baseWeight: 35,  progression: 0.3, reps: [10, 8, 8],   setsCount: 3 },
-    { moveKey: 'inclineDB',      baseWeight: 18,  progression: 0.25,reps: [10, 10, 8],  setsCount: 3 },
-    { moveKey: 'tricepPushdown', baseWeight: 25,  progression: 0.2, reps: [12, 12, 10], setsCount: 3 },
-    { moveKey: 'lateralRaise',   baseWeight: 8,   progression: 0.1, reps: [15, 12, 12], setsCount: 3 },
+    {
+      moveKey: 'benchPress',
+      baseWeight: 60,
+      progression: 0.5,
+      reps: [8, 8, 6],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'ohp',
+      baseWeight: 35,
+      progression: 0.3,
+      reps: [10, 8, 8],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'inclineDB',
+      baseWeight: 18,
+      progression: 0.25,
+      reps: [10, 10, 8],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'tricepPushdown',
+      baseWeight: 25,
+      progression: 0.2,
+      reps: [12, 12, 10],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'lateralRaise',
+      baseWeight: 8,
+      progression: 0.1,
+      reps: [15, 12, 12],
+      setsCount: 3,
+    },
   ],
   pull: [
-    { moveKey: 'deadlift',    baseWeight: 80,  progression: 0.6, reps: [5, 5, 5],    setsCount: 3 },
-    { moveKey: 'barbellRow',  baseWeight: 50,  progression: 0.4, reps: [8, 8, 8],    setsCount: 3 },
-    { moveKey: 'latPulldown', baseWeight: 45,  progression: 0.3, reps: [10, 10, 8],  setsCount: 3 },
-    { moveKey: 'bicepCurl',   baseWeight: 10,  progression: 0.15,reps: [12, 10, 10], setsCount: 3 },
-    { moveKey: 'facePull',    baseWeight: 15,  progression: 0.15,reps: [15, 15, 12], setsCount: 3 },
+    {
+      moveKey: 'deadlift',
+      baseWeight: 80,
+      progression: 0.6,
+      reps: [5, 5, 5],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'barbellRow',
+      baseWeight: 50,
+      progression: 0.4,
+      reps: [8, 8, 8],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'latPulldown',
+      baseWeight: 45,
+      progression: 0.3,
+      reps: [10, 10, 8],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'bicepCurl',
+      baseWeight: 10,
+      progression: 0.15,
+      reps: [12, 10, 10],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'facePull',
+      baseWeight: 15,
+      progression: 0.15,
+      reps: [15, 15, 12],
+      setsCount: 3,
+    },
   ],
   legs: [
-    { moveKey: 'squat',      baseWeight: 60,  progression: 0.5, reps: [8, 6, 6],    setsCount: 3 },
-    { moveKey: 'romanianDL', baseWeight: 50,  progression: 0.4, reps: [10, 8, 8],   setsCount: 3 },
-    { moveKey: 'legPress',   baseWeight: 100, progression: 0.7, reps: [10, 10, 8],  setsCount: 3 },
-    { moveKey: 'legCurl',    baseWeight: 30,  progression: 0.2, reps: [12, 12, 10], setsCount: 3 },
-    { moveKey: 'calfRaise',  baseWeight: 40,  progression: 0.2, reps: [15, 15, 15], setsCount: 3 },
+    {
+      moveKey: 'squat',
+      baseWeight: 60,
+      progression: 0.5,
+      reps: [8, 6, 6],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'romanianDL',
+      baseWeight: 50,
+      progression: 0.4,
+      reps: [10, 8, 8],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'legPress',
+      baseWeight: 100,
+      progression: 0.7,
+      reps: [10, 10, 8],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'legCurl',
+      baseWeight: 30,
+      progression: 0.2,
+      reps: [12, 12, 10],
+      setsCount: 3,
+    },
+    {
+      moveKey: 'calfRaise',
+      baseWeight: 40,
+      progression: 0.2,
+      reps: [15, 15, 15],
+      setsCount: 3,
+    },
   ],
 };
 
 // Vaihtoliikkeet joskus (vaihtelua ~20% sessioista)
 const SWAPS = {
-  benchPress:    { moveKey: 'dips',           baseWeight: 0,   progression: 0.3 },
-  bicepCurl:     { moveKey: 'hammerCurl',     baseWeight: 10,  progression: 0.15 },
-  squat:         { moveKey: 'bulgarianSplit', baseWeight: 16,  progression: 0.2 },
-  legCurl:       { moveKey: 'legExtension',   baseWeight: 25,  progression: 0.2 },
+  benchPress: { moveKey: 'dips', baseWeight: 0, progression: 0.3 },
+  bicepCurl: { moveKey: 'hammerCurl', baseWeight: 10, progression: 0.15 },
+  squat: { moveKey: 'bulgarianSplit', baseWeight: 16, progression: 0.2 },
+  legCurl: { moveKey: 'legExtension', baseWeight: 25, progression: 0.2 },
 };
 
 // ── APUFUNKTIOT ────────────────────────────────────────────────
@@ -119,7 +250,11 @@ function buildMove(moveKey) {
 }
 
 function buildExercise(template, weekIndex) {
-  const weight = calcWeight(template.baseWeight, template.progression, weekIndex);
+  const weight = calcWeight(
+    template.baseWeight,
+    template.progression,
+    weekIndex,
+  );
 
   const sets = template.reps.map((baseReps) => {
     // Joskus ±1 toisto
@@ -222,10 +357,12 @@ async function seed() {
   console.log(`📊 Generoitu ${sessions.length} treeni-sessiota`);
 
   // Päivitä käyttäjän trainingSessions
-  const result = await mongoose.connection.db.collection('users').updateOne(
-    { googleId: GOOGLE_ID },
-    { $push: { trainingSessions: { $each: sessions } } },
-  );
+  const result = await mongoose.connection.db
+    .collection('users')
+    .updateOne(
+      { googleId: GOOGLE_ID },
+      { $push: { trainingSessions: { $each: sessions } } },
+    );
 
   if (result.matchedCount === 0) {
     console.error('❌ Käyttäjää ei löytynyt googleId:llä:', GOOGLE_ID);

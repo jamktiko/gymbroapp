@@ -30,8 +30,7 @@ const moveFields = {
   },
   // null = adminin luoma default-liike
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     default: null,
   },
 };
