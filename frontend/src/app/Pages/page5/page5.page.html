@@ -8,20 +8,17 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-    <h1>temporary</h1>
-    <p>temporary</p>
-    <ion-button
-      class="timer"
-      fill="clear"
-      expand="block"
-      (click)="toggleTimer()"
-    >
+    <div class="center-content">
+      <h1 class="main-title">temporary</h1>
+      <p class="sub-title">temporary</p>
+    </div>
+    <ion-button class="timer" expand="block" (click)="toggleTimer()">
       {{ timerValue }}
     </ion-button>
   </div>
 </ion-content>
-<ion-footer>
+<ion-footer class="ion-no-border">
   <ion-toolbar>
-    <ion-button class="next" color="primary">next</ion-button>
+    <ion-button class="next">next</ion-button>
   </ion-toolbar>
 </ion-footer>

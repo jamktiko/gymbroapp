@@ -1,6 +1,12 @@
+ion-content {
+  --overflow: hidden;
+  overflow: hidden;
+  --background: radial-gradient(circle at center, #222 0%, #111 100%);
+}
 .content-wrapper {
   text-align: center;
   padding: 10px;
+  letter-spacing: 1px;
 }
 .xp-container {
   display: flex;
@@ -14,18 +20,21 @@
 .content-wrapper {
   width: 100%;
 }
-.xpbar {
-  height: 25px;
-  border-radius: 10px;
-  margin: 30px 0;
-  --background: #0f0f0f8b;
-}
 .next {
+  border: 2px solid #ffd900;
   font-size: 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 70px;
+  margin: 0 auto;
+  outline: none;
+  border-radius: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 .headercolor {
   --background: #202020;
@@ -33,10 +42,20 @@
 
 h1 {
   color: #ffd900;
-  font-size: 50px;
+  font-weight: bold;
   text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 30px auto;
+  font-size: 38px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  text-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  margin-bottom: 10px;
 }
 
-//.xpbar-bar::part(progress) {
-//  transition: transform 0.5s ease-in-out;
-//}
+p {
+  font-size: 28px;
+  color: #e7e7e7fd;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}

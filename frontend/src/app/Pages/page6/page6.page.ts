@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { XpService } from '../../xp.service';
 import {
   IonButton,
   IonContent,
@@ -26,24 +27,13 @@ import {
   ],
 })
 export class Page6Page implements OnInit {
-  public progress = 0;
+  constructor(
+    public xpService: XpService,
+    private router: Router,
+  ) {}
 
-  constructor(private router: Router) {
-    this.kaynnistaProgress();
-  }
-
-  ngOnInit() {}
-  //tämä vasta demo
-  kaynnistaProgress() {
-    setInterval(() => {
-      this.progress += 0.01;
-      // Resets the progress bar when it reaches 100%
-      if (this.progress > 1) {
-        setTimeout(() => {
-          this.progress = 0;
-        }, 1000);
-      }
-    }, 20);
+  ngOnInit() {
+    this.xpService.testaaProgress();
   }
 
   aloitussivulle() {

@@ -18,3 +18,25 @@ ion-toolbar {
   --background: #111111;
   --color: var(--ion-color-primary); // Käytetään muuttujaa
 }
+ion-progress-bar {
+  /*--background: #0f0f0f8b;
+  --progress-background: #ffd900;
+  height: 25px;
+  border-radius: 12px;*/
+  height: 20px;
+  border-radius: 50px;
+  --progress-background: #ffd900;
+  --background: #131212;
+  box-shadow: 0 0 20px #0000001b;
+  margin: 30px auto;
+  width: 85%;
+}
+//Demo Frontend puolen xp-bar
+ion-progress-bar::part(progress),
+ion-progress-bar::part(track) {
+  border-radius: 12px;
+  transition: none !important;
+}
+/*.xpbar::part(progress) {
+  transition: transform 1.2s ease-in-out !important;
+} */ //backend:n transition, testattava onko ok
