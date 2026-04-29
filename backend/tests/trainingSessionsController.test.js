@@ -16,7 +16,7 @@ const createUser = async (overrides = {}) => {
     googleId: `google-user-${Date.now()}`,
     ...overrides,
   });
-  return { user, userId: user._id.toString() };
+  return { user, userId: user.googleId };
 };
 
 // A minimal valid embedded move object (matches EmbeddedMoveSchema).
@@ -67,7 +67,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .get('/api/training-sessions')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
@@ -91,7 +91,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .get('/api/training-sessions')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
@@ -116,7 +116,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .get('/api/training-sessions?from=2024-06-01')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(1);
@@ -139,7 +139,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .get('/api/training-sessions?to=2024-03-01')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(1);
@@ -151,7 +151,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .get('/api/training-sessions')
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
@@ -176,7 +176,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-sessions/${sessionId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body._id).toBe(sessionId);
@@ -189,7 +189,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-sessions/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Treenisessiota ei löytynyt');
@@ -200,7 +200,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .get(`/api/training-sessions/${new mongoose.Types.ObjectId()}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
@@ -224,7 +224,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .post('/api/training-sessions')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send(validSessionPayload);
 
       expect(response.status).toBe(201);
@@ -232,7 +232,7 @@ describe('Training Sessions Controller', () => {
       expect(response.body.exercises).toHaveLength(1);
       expect(response.body.breakTimeSeconds).toBe(90);
 
-      const saved = await User.findById(userId);
+      const saved = await User.findOne({ googleId: userId });
       expect(saved.trainingSessions).toHaveLength(1);
     });
 
@@ -241,7 +241,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .post('/api/training-sessions')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({ ...validSessionPayload, exercises: [] });
 
       expect(response.status).toBe(400);
@@ -253,7 +253,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .post('/api/training-sessions')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({
           ...validSessionPayload,
           exercises: [{ move: embeddedMove, sets: [] }],
@@ -268,7 +268,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .post('/api/training-sessions')
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({
           ...validSessionPayload,
           exercises: [{ sets: [{ reps: 10, weight: 50 }] }],
@@ -283,7 +283,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .post('/api/training-sessions')
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`)
         .send(validSessionPayload);
 
       expect(response.status).toBe(404);
@@ -311,13 +311,13 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-sessions/${sessionId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({ breakTimeSeconds: 180 });
 
       expect(response.status).toBe(200);
       expect(response.body.breakTimeSeconds).toBe(180);
 
-      const updated = await User.findById(userId);
+      const updated = await User.findOne({ googleId: userId });
       expect(updated.trainingSessions[0].breakTimeSeconds).toBe(180);
     });
 
@@ -329,7 +329,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-sessions/${sessionId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({ breakTimeSeconds: 0 });
 
       expect(response.status).toBe(400);
@@ -342,7 +342,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-sessions/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`)
         .send({ breakTimeSeconds: 60 });
 
       expect(response.status).toBe(404);
@@ -354,7 +354,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .patch(`/api/training-sessions/${new mongoose.Types.ObjectId()}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`)
         .send({ breakTimeSeconds: 60 });
 
       expect(response.status).toBe(404);
@@ -382,12 +382,12 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-sessions/${sessionId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Treenisessio poistettu');
 
-      const afterDelete = await User.findById(userId);
+      const afterDelete = await User.findOne({ googleId: userId });
       expect(afterDelete.trainingSessions).toHaveLength(0);
     });
 
@@ -397,7 +397,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-sessions/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: userId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: userId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Treenisessiota ei löytynyt');
@@ -408,7 +408,7 @@ describe('Training Sessions Controller', () => {
 
       const response = await request(app)
         .delete(`/api/training-sessions/${new mongoose.Types.ObjectId()}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: nonExistentId }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: nonExistentId }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');

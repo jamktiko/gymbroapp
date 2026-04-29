@@ -1,0 +1,215 @@
+
+> backend@0.2.0 test
+> vitest run
+
+
+ RUN  v4.1.5 /home/lauri/github/gymbroapp/backend
+
+ ✓ tests/verifyToken.test.mjs > VerifyToken Middleware > should call next() and set req.user when a valid Bearer token is provided 37ms
+ ✓ tests/verifyToken.test.mjs > VerifyToken Middleware > should return 401 and NOT call next() when no credentials are provided 15ms
+ ✓ tests/verifyToken.test.mjs > VerifyToken Middleware > should return 401 when auth header is missing Bearer prefix 3ms
+ ✓ tests/verifyToken.test.mjs > VerifyToken Middleware > should return 401 when token is invalid or manipulated 3ms
+[0mGET /api/moves [32m200[0m 64.368 ms - 2[0m
+[0mGET /api/training-sessions [33m404[0m 35.836 ms - 38[0m
+[0mGET /api/moves [32m200[0m 10.577 ms - 139[0m
+ ✓ tests/movesController.test.js > Moves Controller > GET /api/moves > should return an empty array when no moves exist 211ms
+[0mGET /api/moves [32m200[0m 4.945 ms - 301[0m
+[0mGET /api/moves [33m401[0m 0.940 ms - 24[0m
+[0mPOST /api/users [32m201[0m 92.266 ms - 270[0m
+[0mGET /api/training-programs [33m404[0m 32.275 ms - 38[0m
+[0mGET /api/training-sessions [33m404[0m 5.135 ms - 38[0m
+[0mGET /api/moves/69f23970c5a1f34839989650 [32m200[0m 8.697 ms - 137[0m
+[0mGET /api/moves/69f23970c5a1f34839989651 [33m404[0m 3.835 ms - 34[0m
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions > should return an empty array when the user has no sessions 287ms
+   → expected 404 to be 200 // Object.is equality
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions > should return the user's sessions sorted newest-first 79ms
+   → expected 404 to be 200 // Object.is equality
+ ✓ tests/movesController.test.js > Moves Controller > GET /api/moves > should return default moves for any authenticated user 62ms
+ ✓ tests/movesController.test.js > Moves Controller > GET /api/moves > should return both default moves and the caller's own moves 33ms
+ ✓ tests/movesController.test.js > Moves Controller > GET /api/moves > should return 401 if no auth header is provided 17ms
+ ✓ tests/movesController.test.js > Moves Controller > GET /api/moves/:id > should return a move by id with 200 status 28ms
+[0mGET /api/training-sessions?from=2024-06-01 [33m404[0m 5.594 ms - 38[0m
+[0mGET /api/moves/not-an-id [31m500[0m 11.790 ms - 108[0m
+[0mPOST /api/users [33m400[0m 20.529 ms - 42[0m
+ ✓ tests/usersController.test.js > Users Controller > POST /api/users > should create a new user and return 201 198ms
+[0mGET /api/moves/69f23970c5a1f34839989652 [33m401[0m 0.457 ms - 24[0m
+[0mPOST /api/users [33m400[0m 8.869 ms - 128[0m
+[0mGET /api/training-sessions?to=2024-03-01 [33m404[0m 3.813 ms - 38[0m
+[0mPOST /api/users [33m401[0m 0.719 ms - 24[0m
+[0mGET /api/training-sessions [33m404[0m 7.447 ms - 38[0m
+[0mGET /api/training-programs [33m404[0m 6.529 ms - 38[0m
+[0mPOST /api/moves [32m201[0m 7.742 ms - 153[0m
+[0mGET /api/users/69f239700e7fba7a06c3160d [33m404[0m 6.362 ms - 38[0m
+ ✓ tests/movesController.test.js > Moves Controller > GET /api/moves/:id > should return 404 if move is not found 23ms
+ ✓ tests/movesController.test.js > Moves Controller > GET /api/moves/:id > should return 500 if id is an invalid ObjectId 29ms
+ ✓ tests/movesController.test.js > Moves Controller > GET /api/moves/:id > should return 401 if no auth header is provided 13ms
+[0mGET /api/training-sessions [33m401[0m 1.159 ms - 24[0m
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions > should filter sessions by ?from= query param 52ms
+   → expected 404 to be 200 // Object.is equality
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions > should filter sessions by ?to= query param 42ms
+   → expected 404 to be 200 // Object.is equality
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions > should return 404 if the user does not exist 28ms
+[0mGET /api/training-programs [33m404[0m 4.991 ms - 38[0m
+ × tests/trainingProgramsController.test.js > Training Programs Controller > GET /api/training-programs > should return an empty array when the user has no programs 273ms
+   → expected 404 to be 200 // Object.is equality
+ × tests/trainingProgramsController.test.js > Training Programs Controller > GET /api/training-programs > should return the user's training programs 73ms
+   → expected 404 to be 200 // Object.is equality
+[0mGET /api/training-programs [33m401[0m 0.819 ms - 24[0m
+[0mPOST /api/moves [33m400[0m 8.631 ms - 45[0m
+ ✓ tests/usersController.test.js > Users Controller > POST /api/users > should return 400 if email is already in use 53ms
+ ✓ tests/usersController.test.js > Users Controller > POST /api/users > should return 400 if required fields are missing 23ms
+ ✓ tests/usersController.test.js > Users Controller > POST /api/users > should return 401 if no auth header is provided 15ms
+[0mGET /api/training-sessions/69f23970670df2cc4f12b2a6 [33m404[0m 6.649 ms - 38[0m
+[0mPOST /api/moves [33m400[0m 8.199 ms - 117[0m
+[0mGET /api/users/507f1f77bcf86cd799439011 [33m404[0m 7.698 ms - 38[0m
+[0mGET /api/training-programs/69f23970c0366f6c75bad6b3 [33m404[0m 8.833 ms - 38[0m
+[0mPOST /api/moves [33m400[0m 3.613 ms - 90[0m
+[0mGET /api/training-sessions/69f23970670df2cc4f12b2a9 [33m404[0m 6.842 ms - 38[0m
+[0mGET /api/users/invalid_id [33m404[0m 4.761 ms - 38[0m
+[0mPOST /api/moves [33m401[0m 1.066 ms - 24[0m
+ ✓ tests/movesController.test.js > Moves Controller > POST /api/moves > should create a new move and return 201 61ms
+ ✓ tests/movesController.test.js > Moves Controller > POST /api/moves > should return 400 if a duplicate move name exists 34ms
+ ✓ tests/movesController.test.js > Moves Controller > POST /api/moves > should return 400 if required fields are missing 25ms
+ ✓ tests/movesController.test.js > Moves Controller > POST /api/moves > should return 400 if type is not a valid enum value 25ms
+[0mGET /api/training-programs/69f23970c0366f6c75bad6b6 [33m404[0m 9.111 ms - 38[0m
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions > should return 401 if no auth header is provided 19ms
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions/:id > should return a session by id with 200 status 46ms
+   → expected 404 to be 200 // Object.is equality
+[0mGET /api/users/507f1f77bcf86cd799439011 [33m401[0m 1.112 ms - 24[0m
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > GET /api/training-programs > should return 404 if the user does not exist 27ms
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > GET /api/training-programs > should return 401 if no auth header is provided 17ms
+ × tests/trainingProgramsController.test.js > Training Programs Controller > GET /api/training-programs/:id > should return a program by id with 200 status 49ms
+   → expected 404 to be 200 // Object.is equality
+ × tests/usersController.test.js > Users Controller > GET /api/users/:id > should return a user by id with 200 status 73ms
+   → expected 404 to be 200 // Object.is equality
+ ✓ tests/usersController.test.js > Users Controller > GET /api/users/:id > should return 404 if user is not found 28ms
+ × tests/usersController.test.js > Users Controller > GET /api/users/:id > should return 500 if id is invalid (cast error) 31ms
+   → expected 404 to be 500 // Object.is equality
+ ✓ tests/usersController.test.js > Users Controller > GET /api/users/:id > should return 401 if no auth header is provided 29ms
+[0mPATCH /api/moves/69f23970c5a1f34839989658 [32m200[0m 33.635 ms - 163[0m
+[0mGET /api/training-programs/69f23971c0366f6c75bad6b8 [33m404[0m 21.196 ms - 38[0m
+[0mGET /api/training-programs/69f23971c0366f6c75bad6b9 [33m401[0m 0.738 ms - 24[0m
+[0mGET /api/training-sessions/69f23971670df2cc4f12b2ab [33m404[0m 11.021 ms - 38[0m
+[0mGET /api/training-sessions/69f23971670df2cc4f12b2ac [33m401[0m 1.513 ms - 24[0m
+ ✓ tests/movesController.test.js > Moves Controller > POST /api/moves > should return 401 if no auth header is provided 18ms
+ ✓ tests/movesController.test.js > Moves Controller > PATCH /api/moves/:id > should update a user-owned move and return 200 68ms
+[0mPATCH /api/moves/69f23971c5a1f34839989659 [33m403[0m 32.362 ms - 44[0m
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions/:id > should return 404 if the session sub-document is not found 73ms
+   → expected 'Käyttäjää ei löytynyt' to be 'Treenisessiota ei löytynyt' // Object.is equality
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions/:id > should return 404 if the user does not exist 45ms
+[0mPATCH /api/users/69f239710e7fba7a06c3160e [33m404[0m 50.283 ms - 38[0m
+[0mPATCH /api/moves/69f23971c5a1f3483998965a [33m404[0m 5.263 ms - 34[0m
+ × tests/trainingProgramsController.test.js > Training Programs Controller > GET /api/training-programs/:id > should return 404 if the sub-document is not found 48ms
+   → expected 'Käyttäjää ei löytynyt' to be 'Treeniohjelmaa ei löytynyt' // Object.is equality
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > GET /api/training-programs/:id > should return 404 if the user does not exist 37ms
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > GET /api/training-programs/:id > should return 401 if no auth header is provided 14ms
+[0mPOST /api/training-programs [33m404[0m 6.755 ms - 38[0m
+[0mPATCH /api/users/507f1f77bcf86cd799439011 [33m404[0m 10.106 ms - 38[0m
+[0mPATCH /api/moves/69f23971c5a1f3483998965b [33m400[0m 8.713 ms - 85[0m
+[0mPATCH /api/moves/69f23971c5a1f3483998965c [33m401[0m 0.789 ms - 24[0m
+[0mPOST /api/training-programs [33m404[0m 5.644 ms - 38[0m
+[0mPATCH /api/users/69f239710e7fba7a06c3160f [33m400[0m 7.826 ms - 106[0m
+[0mPATCH /api/users/507f1f77bcf86cd799439011 [33m401[0m 0.871 ms - 24[0m
+ ✓ tests/movesController.test.js > Moves Controller > PATCH /api/moves/:id > should return 403 if trying to update a default move 67ms
+ ✓ tests/movesController.test.js > Moves Controller > PATCH /api/moves/:id > should return 404 if move to update is not found 23ms
+ ✓ tests/movesController.test.js > Moves Controller > PATCH /api/moves/:id > should return 400 on validation error (invalid enum) 31ms
+ ✓ tests/movesController.test.js > Moves Controller > PATCH /api/moves/:id > should return 401 if no auth header is provided 17ms
+[0mPOST /api/training-sessions [33m404[0m 11.138 ms - 38[0m
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > GET /api/training-sessions/:id > should return 401 if no auth header is provided 78ms
+[0mPOST /api/training-programs [33m404[0m 11.620 ms - 38[0m
+ × tests/usersController.test.js > Users Controller > PATCH /api/users/:id > should update a user and return 200 118ms
+   → expected 404 to be 200 // Object.is equality
+ ✓ tests/usersController.test.js > Users Controller > PATCH /api/users/:id > should return 404 if user to update is not found 37ms
+ ✓ tests/usersController.test.js > Users Controller > PATCH /api/users/:id > should return 400 on validation error 30ms
+ ✓ tests/usersController.test.js > Users Controller > PATCH /api/users/:id > should return 401 if no auth header is provided 24ms
+[0mPOST /api/training-programs [33m401[0m 1.280 ms - 24[0m
+[0mDELETE /api/users/69f239710e7fba7a06c31610 [33m404[0m 7.520 ms - 38[0m
+[0mPOST /api/training-sessions [33m404[0m 6.547 ms - 38[0m
+ × tests/trainingProgramsController.test.js > Training Programs Controller > POST /api/training-programs > should create a new program and return 201 109ms
+   → expected 404 to be 201 // Object.is equality
+ × tests/trainingProgramsController.test.js > Training Programs Controller > POST /api/training-programs > should return 400 if required field (name) is missing 37ms
+   → expected 404 to be 400 // Object.is equality
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > POST /api/training-programs > should return 404 if the user does not exist 29ms
+[0mDELETE /api/moves/69f23971c5a1f3483998965d [32m200[0m 29.051 ms - 29[0m
+[0mDELETE /api/users/507f1f77bcf86cd799439011 [33m404[0m 6.444 ms - 38[0m
+[0mPOST /api/training-sessions [33m404[0m 4.231 ms - 38[0m
+[0mDELETE /api/moves/69f23971c5a1f3483998965e [33m403[0m 7.823 ms - 44[0m
+[0mPATCH /api/training-programs/69f23971c0366f6c75bad6be [33m404[0m 8.740 ms - 38[0m
+[0mDELETE /api/users/invalid_id [33m404[0m 5.404 ms - 38[0m
+[0mDELETE /api/moves/69f23971c5a1f3483998965f [33m404[0m 3.129 ms - 34[0m
+[0mPOST /api/training-sessions [33m404[0m 6.562 ms - 38[0m
+ ✓ tests/movesController.test.js > Moves Controller > DELETE /api/moves/:id > should delete a user-owned move and return 200 80ms
+ ✓ tests/movesController.test.js > Moves Controller > DELETE /api/moves/:id > should return 403 if trying to delete a default move 34ms
+[0mDELETE /api/users/507f1f77bcf86cd799439011 [33m401[0m 0.642 ms - 24[0m
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > POST /api/training-sessions > should create a new session and return 201 96ms
+   → expected 404 to be 201 // Object.is equality
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > POST /api/training-sessions > should return 400 if exercises array is empty 33ms
+   → expected 404 to be 400 // Object.is equality
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > POST /api/training-sessions > should return 400 if an exercise has no sets 27ms
+   → expected 404 to be 400 // Object.is equality
+[0mPATCH /api/training-programs/69f23971c0366f6c75bad6c1 [33m404[0m 4.856 ms - 38[0m
+[0mDELETE /api/moves/not-an-id [31m500[0m 1.987 ms - 108[0m
+[0mPOST /api/training-sessions [33m404[0m 5.680 ms - 38[0m
+[0mDELETE /api/moves/69f23971c5a1f34839989660 [33m401[0m 1.303 ms - 24[0m
+ × tests/usersController.test.js > Users Controller > DELETE /api/users/:id > should delete a user and return 200 37ms
+   → expected 404 to be 200 // Object.is equality
+ ✓ tests/usersController.test.js > Users Controller > DELETE /api/users/:id > should return 404 if user to delete is not found 23ms
+ × tests/usersController.test.js > Users Controller > DELETE /api/users/:id > should return 500 if id is invalid (cast error) 27ms
+   → expected 404 to be 500 // Object.is equality
+ ✓ tests/usersController.test.js > Users Controller > DELETE /api/users/:id > should return 401 if no auth header is provided 13ms
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > POST /api/training-programs > should return 401 if no auth header is provided 17ms
+ × tests/trainingProgramsController.test.js > Training Programs Controller > PATCH /api/training-programs/:id > should update a program and return 200 51ms
+   → expected 404 to be 200 // Object.is equality
+ × tests/trainingProgramsController.test.js > Training Programs Controller > PATCH /api/training-programs/:id > should return 404 if the program sub-document is not found 34ms
+   → expected 'Käyttäjää ei löytynyt' to be 'Treeniohjelmaa ei löytynyt' // Object.is equality
+[0mPOST /api/training-sessions [33m401[0m 0.960 ms - 24[0m
+[0mPATCH /api/training-programs/69f23971c0366f6c75bad6c3 [33m404[0m 10.221 ms - 38[0m
+[0mPATCH /api/training-programs/69f23971c0366f6c75bad6c4 [33m401[0m 0.912 ms - 24[0m
+[0mPATCH /api/training-sessions/69f23971670df2cc4f12b2b3 [33m404[0m 9.487 ms - 38[0m
+[0mDELETE /api/training-programs/69f23971c0366f6c75bad6c6 [33m404[0m 5.199 ms - 38[0m
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > POST /api/training-sessions > should return 400 if required move field is missing from an exercise 34ms
+   → expected 404 to be 400 // Object.is equality
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > POST /api/training-sessions > should return 404 if the user does not exist 23ms
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > POST /api/training-sessions > should return 401 if no auth header is provided 17ms
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > PATCH /api/training-sessions/:id > should update a session and return 200 43ms
+   → expected 404 to be 200 // Object.is equality
+ ✓ tests/movesController.test.js > Moves Controller > DELETE /api/moves/:id > should return 404 if move to delete is not found 19ms
+ ✓ tests/movesController.test.js > Moves Controller > DELETE /api/moves/:id > should return 500 if id is an invalid ObjectId 18ms
+ ✓ tests/movesController.test.js > Moves Controller > DELETE /api/moves/:id > should return 401 if no auth header is provided 16ms
+[0mPATCH /api/training-sessions/69f23971670df2cc4f12b2b6 [33m404[0m 5.165 ms - 38[0m
+[0mDELETE /api/training-programs/69f23971c0366f6c75bad6c9 [33m404[0m 4.810 ms - 38[0m
+[0mPATCH /api/training-sessions/69f23971670df2cc4f12b2b9 [33m404[0m 4.533 ms - 38[0m
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > PATCH /api/training-programs/:id > should return 404 if the user does not exist 28ms
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > PATCH /api/training-programs/:id > should return 401 if no auth header is provided 16ms
+ × tests/trainingProgramsController.test.js > Training Programs Controller > DELETE /api/training-programs/:id > should delete a program and return 200 40ms
+   → expected 404 to be 200 // Object.is equality
+ × tests/trainingProgramsController.test.js > Training Programs Controller > DELETE /api/training-programs/:id > should return 404 if the program sub-document is not found 30ms
+   → expected 'Käyttäjää ei löytynyt' to be 'Treeniohjelmaa ei löytynyt' // Object.is equality
+[0mDELETE /api/training-programs/69f23971c0366f6c75bad6cb [33m404[0m 8.031 ms - 38[0m
+[0mDELETE /api/training-programs/69f23971c0366f6c75bad6cc [33m401[0m 0.790 ms - 24[0m
+[0mPATCH /api/training-sessions/69f23971670df2cc4f12b2bb [33m404[0m 9.332 ms - 38[0m
+[0mPATCH /api/training-sessions/69f23971670df2cc4f12b2bc [33m401[0m 0.667 ms - 24[0m
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > PATCH /api/training-sessions/:id > should return 400 if breakTimeSeconds is below minimum (1) 37ms
+   → expected 404 to be 400 // Object.is equality
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > PATCH /api/training-sessions/:id > should return 404 if the session sub-document is not found 36ms
+   → expected 'Käyttäjää ei löytynyt' to be 'Treenisessiota ei löytynyt' // Object.is equality
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > PATCH /api/training-sessions/:id > should return 404 if the user does not exist 43ms
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > DELETE /api/training-programs/:id > should return 404 if the user does not exist 25ms
+ ✓ tests/trainingProgramsController.test.js > Training Programs Controller > DELETE /api/training-programs/:id > should return 401 if no auth header is provided 18ms
+[0mDELETE /api/training-sessions/69f23971670df2cc4f12b2be [33m404[0m 4.098 ms - 38[0m
+[0mDELETE /api/training-sessions/69f23971670df2cc4f12b2c1 [33m404[0m 5.501 ms - 38[0m
+[0mDELETE /api/training-sessions/69f23971670df2cc4f12b2c3 [33m404[0m 3.823 ms - 38[0m
+[0mDELETE /api/training-sessions/69f23971670df2cc4f12b2c4 [33m401[0m 2.987 ms - 24[0m
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > PATCH /api/training-sessions/:id > should return 401 if no auth header is provided 26ms
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > DELETE /api/training-sessions/:id > should delete a session and return 200 35ms
+   → expected 404 to be 200 // Object.is equality
+ × tests/trainingSessionsController.test.js > Training Sessions Controller > DELETE /api/training-sessions/:id > should return 404 if the session sub-document is not found 27ms
+   → expected 'Käyttäjää ei löytynyt' to be 'Treenisessiota ei löytynyt' // Object.is equality
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > DELETE /api/training-sessions/:id > should return 404 if the user does not exist 15ms
+ ✓ tests/trainingSessionsController.test.js > Training Sessions Controller > DELETE /api/training-sessions/:id > should return 401 if no auth header is provided 23ms
+
+ Test Files  3 failed | 2 passed (5)
+      Tests  30 failed | 58 passed (88)
+   Start at  20:01:33
+   Duration  4.38s (transform 310ms, setup 0ms, import 6.99s, tests 7.73s, environment 2ms)
+

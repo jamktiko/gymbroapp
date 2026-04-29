@@ -36,7 +36,7 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .post('/api/users')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send(userData);
 
       expect(response.status).toBe(201);
@@ -58,7 +58,7 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .post('/api/users')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send(userData);
 
       expect(response.status).toBe(400);
@@ -68,7 +68,7 @@ describe('Users Controller', () => {
     it('should return 400 if required fields are missing', async () => {
       const response = await request(app)
         .post('/api/users')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({});
 
       expect(response.status).toBe(400);
@@ -96,8 +96,8 @@ describe('Users Controller', () => {
       });
 
       const response = await request(app)
-        .get(`/api/users/${user._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .get(`/api/users/${user.googleId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body._id).toBe(user._id.toString());
@@ -109,19 +109,10 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .get(`/api/users/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
-    });
-
-    it('should return 500 if id is invalid (cast error)', async () => {
-      const response = await request(app)
-        .get('/api/users/invalid_id')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
-
-      expect(response.status).toBe(500);
-      expect(response.body.error).toBeDefined();
     });
 
     it('should return 401 if no auth header is provided', async () => {
@@ -145,8 +136,8 @@ describe('Users Controller', () => {
       });
 
       const response = await request(app)
-        .patch(`/api/users/${user._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .patch(`/api/users/${user.googleId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ weightUnit: 'lbs' });
 
       expect(response.status).toBe(200);
@@ -161,7 +152,7 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .patch(`/api/users/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ name: 'New Name' });
 
       expect(response.status).toBe(404);
@@ -176,8 +167,8 @@ describe('Users Controller', () => {
       });
 
       const response = await request(app)
-        .patch(`/api/users/${user._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
+        .patch(`/api/users/${user.googleId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`)
         .send({ weightUnit: 'invalid_unit' });
 
       expect(response.status).toBe(400);
@@ -205,8 +196,8 @@ describe('Users Controller', () => {
       });
 
       const response = await request(app)
-        .delete(`/api/users/${user._id}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .delete(`/api/users/${user.googleId}`)
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Käyttäjä poistettu');
@@ -220,19 +211,10 @@ describe('Users Controller', () => {
 
       const response = await request(app)
         .delete(`/api/users/${fakeId}`)
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
+        .set('Authorization', `Bearer ${jwt.sign({ googleId: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('Käyttäjää ei löytynyt');
-    });
-
-    it('should return 500 if id is invalid (cast error)', async () => {
-      const response = await request(app)
-        .delete('/api/users/invalid_id')
-        .set('Authorization', `Bearer ${jwt.sign({ id: DUMMY_USER_ID }, process.env.JWT_SECRET)}`);
-
-      expect(response.status).toBe(500);
-      expect(response.body.error).toBeDefined();
     });
 
     it('should return 401 if no auth header is provided', async () => {
