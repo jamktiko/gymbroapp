@@ -1,0 +1,77 @@
+// Tervetuloa-otsikko
+h2 {
+  color: var(--ion-color-primary);
+  text-align: center; // Valinnainen: keskittää otsikon
+  margin-bottom: 20px;
+}
+
+// Haitarivalikon yleinen ryhmittely
+ion-accordion-group {
+  background: transparent;
+}
+
+// Yksittäinen haitari (yksi treeniohjelma)
+ion-accordion {
+  margin-bottom: 8px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden; // Varmistaa, että kulman pyöristykset näkyvät
+
+  // TÄRKEÄ: Tämä rajoittaa treeniohjelman nimen pituutta
+  ion-label h3 {
+    white-space: nowrap;      
+    overflow: hidden;         
+    text-overflow: ellipsis;  
+    max-width: 90%; // Jättää tilaa oikean reunan nuolelle
+    display: block;
+    margin: 0;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+  }
+
+  // Otsikko-osan tausta (kun haitari on kiinni)
+  ion-item[slot="header"] {
+    --background: #1a1a1a;
+    --color: var(--ion-color-primary);
+    --border-width: 0;
+    --padding-start: 16px;
+  }
+
+  // Sisältö-osan tausta (kun haitari on auki)
+  div[slot="content"] {
+    background: #252525;
+    color: #ffffff;
+    
+    // Sisällä olevat yksittäiset liikkeet
+    ion-item {
+      --background: transparent;
+      --color: #dddddd;
+      --border-color: #333;
+
+      h3 {
+        white-space: normal; // Liikkeiden nimet voivat rivittyä, jos haluat
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+// Placeholder-teksti, kun treenejä ei ole
+.placeholder {
+  color: #888;
+  text-align: center;
+  font-style: italic;
+  margin-top: 30px;
+}
+
+// Päivämäärän tyyli
+ion-label p {
+  color: #aaaaaa; 
+  font-size: 0.85em;
+}
+
+// Listan väliviivojen väri
+ion-list {
+  --ion-item-border-color: #333333;
+  background: transparent;
+}
