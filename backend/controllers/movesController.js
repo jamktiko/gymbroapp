@@ -6,9 +6,9 @@ exports.getMoves = async (req, res) => {
     let filter = { createdBy: null };
 
     // Jos käyttäjä on tunnistettu headerista,  palautetaan myös hänen omat liikkeensä
-    if (req.user && req.user.id) {
+    if (req.user && req.user.googleId) {
       filter = {
-        $or: [{ createdBy: null }, { createdBy: req.user.id }],
+        $or: [{ createdBy: null }, { createdBy: req.user.googleId }],
       };
     }
 
@@ -38,7 +38,7 @@ exports.createMove = async (req, res) => {
     const move = await Move.create({
       ...req.body,
       isDefault: false,
-      createdBy: req.user?.id ?? null,
+      createdBy: req.user?.googleId ?? null,
     });
     res.status(201).json(move);
   } catch (err) {

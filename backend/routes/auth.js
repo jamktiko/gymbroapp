@@ -30,7 +30,7 @@ router.post('/google', async (req, res) => {
         name: name,
         email: email,
       });
-      user = await fetchDefaultProgramsForUser(user._id);
+      user = await fetchDefaultProgramsForUser(user.googleId);
     }
 
     // 3. Palauta oma JWT
