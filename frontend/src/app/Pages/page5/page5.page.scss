@@ -1,6 +1,7 @@
 ion-content {
   --overflow: hidden;
   overflow: hidden;
+  --background: radial-gradient(circle at center, #222 0%, #111 100%);
 }
 .center-content {
   display: flex;
