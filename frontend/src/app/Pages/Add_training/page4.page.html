@@ -15,7 +15,7 @@
       <ion-input 
         [(ngModel)]="programName" 
         type="text"
-        maxlength="50"
+        maxlength="30"
         placeholder="esim. Jalkapäivä">
       </ion-input>
     </ion-item>
@@ -35,8 +35,7 @@
             (click)="toggleSelection(exercise)" 
             lines="full" 
             button="true"
-            class="exercise-item"
-            [class.custom-category]="category.title === 'Omat liikkeet'">
+            class="exercise-item">
             
             <ion-checkbox 
               [checked]="exercise.isSelected" 
@@ -51,6 +50,7 @@
               fill="clear" 
               color="danger" 
               slot="end"
+              class="trash-button"
               (click)="removeExercise(exercise); $event.stopPropagation()">
               <ion-icon name="trash-outline"></ion-icon>
             </ion-button>
@@ -58,36 +58,19 @@
             <div slot="end" *ngIf="exercise.isSelected" class="stats-container" (click)="$event.stopPropagation()">
               
               <div class="stat-group">
-                <ion-input 
-                  type="number" 
-                  [(ngModel)]="exercise.sets" 
-                  class="small-input" 
-                  placeholder="0">
-                </ion-input>
+                <ion-input type="number" [(ngModel)]="exercise.sets" class="small-input" placeholder="0"></ion-input>
                 <span class="unit">Sets</span>
               </div>
 
               <span class="separator">x</span>
 
               <div class="stat-group">
-                <ion-input 
-                  type="number" 
-                  [(ngModel)]="exercise.reps" 
-                  class="small-input" 
-                  placeholder="0">
-                </ion-input>
+                <ion-input type="number" [(ngModel)]="exercise.reps" class="small-input" placeholder="0"></ion-input>
                 <span class="unit">Reps</span>
               </div>
 
-              <span class="separator"></span>
-
-              <div class="stat-group weight-group">
-                <ion-input 
-                  type="number" 
-                  [(ngModel)]="exercise.weight" 
-                  class="small-input weight-input" 
-                  placeholder="0">
-                </ion-input>
+              <div class="stat-group">
+                <ion-input type="number" [(ngModel)]="exercise.weight" class="small-input" placeholder="0"></ion-input>
                 <span class="unit">kg</span>
               </div>
               

@@ -1,23 +1,22 @@
 :root {
-  /** * 1. Määritellään keltainen pääväriksi (Primary)
-   * Tämä muuttaa automaattisesti ion-buttonit keltaisiksi, 
-   * kun käytät <ion-button color="primary">.
-   */
+  /** 1. Keltainen pääväri (Primary) **/
   --ion-color-primary: #ffd900;
-  --ion-color-primary-rgb: 255, 206, 0;
-  --ion-color-primary-contrast: #000000; // Musta teksti keltaisen päälle
+  --ion-color-primary-rgb: 255, 217, 0;
+  --ion-color-primary-contrast: #000000;
   --ion-color-primary-contrast-rgb: 0, 0, 0;
-  --ion-color-primary-shade: #eceae4;
-  --ion-color-primary-tint: #efeee9;
+  --ion-color-primary-shade: #e0bf00; // Korjattu shade tummemmaksi keltaiseksi
+  --ion-color-primary-tint: #ffdd1a;  // Korjattu tint vaaleammaksi keltaiseksi
 
-  ion-content {
-    --background: #202020;
-  }
-  /* Jos haluat, että Toolbar (yläpalkki) on myös musta keltaisella tekstillä */
-  ion-toolbar {
-    --background: #111111;
-    color: var(--ion-color-primary);
-  }
+  /** 2. Yleiset taustavärit koko sovellukseen **/
+  --ion-background-color: #202020;      // Tämä vaikuttaa oletuksena ion-contentiin
+  --ion-text-color: #ffffff;            // Valkoinen perusteksti
+  --ion-item-background: #2a2a2a;       // Listojen (ion-item) tausta
+}
+
+/* Globaalit komponenttimääritykset */
+ion-toolbar {
+  --background: #111111;
+  --color: var(--ion-color-primary); // Käytetään muuttujaa
 }
 ion-progress-bar {
   /*--background: #0f0f0f8b;

@@ -48,10 +48,15 @@ interface Category {
   ]
 })
 export class LisaaTreeni {
+  // Haetaan viittaus HTML-puolen 'ion-accordion-group' -elementtiin, 
+  // jotta sitä voidaan ohjata suoraan koodista (esim. avaaminen/sulkeminen).
   @ViewChild('myAccordionGroup', { static: false }) accordionGroup!: IonAccordionGroup;
+  // Muuttuja, johon tallennetaan käyttäjän antama treeniohjelman nimi.
   programName: string = '';
 
   exerciseList: Category[] = [
+    // Kovakoodattu lista treenikategorioista ja niiden sisältämistä liikkeistä.
+  // Jokaisella liikkeellä on 'isSelected'-tila valintoja varten.
     {
       title: 'Rinta & Olkapäät',
       exercises: [
@@ -67,6 +72,8 @@ export class LisaaTreeni {
       ]
     }
   ];
+  // Konstruktorissa injektoidaan reititin (Router) ja hälytysikkunaohjain (AlertController).
+  // Lisäksi alustetaan Ionic-ikonit käyttöä varten.
 
   constructor(private router: Router, private alertCtrl: AlertController) {
     addIcons({ addOutline, trashOutline });
@@ -118,6 +125,11 @@ if (this.accordionGroup) {
     // this.exerciseList = this.exerciseList.filter(c => c.title !== 'Omat liikkeet');
   }
 
+
+
+
+
+
   async openCustomExercise() {
     const alert = await this.alertCtrl.create({
       header: 'Luo uusi liike',
@@ -148,6 +160,13 @@ if (this.accordionGroup) {
       ]
     });
     await alert.present();
+
+
+
+
+
+
+
   }
   addNewExercise(newName: string) {
   let customCat = this.exerciseList.find(c => c.title === 'Omat liikkeet');
@@ -175,14 +194,55 @@ if (this.accordionGroup) {
   customCat.exercises.push({ name: newName, isSelected: false });
 }
 
-  saveProgram() {
+
+
+// BACKEND-MUUTOS: Tuo HttpClient yläreunaan myöhemmin
+// import { HttpClient } from '@angular/common/http';
+
+  saveProgram() { // 1. Kerätään kaikki valitut liikkeet yhteen listaan
     const selectedExercises = this.exerciseList
       .reduce((all: Exercise[], c: Category) => all.concat(c.exercises), [])
       .filter((e: Exercise) => e.isSelected);
 
+      // Tarkistetaan että nimi on annettu ja liikkeitä valittu
     if (this.programName.trim().length > 0 && selectedExercises.length > 0) {
       console.log('Tallennetaan:', this.programName, selectedExercises);
       
+     // 2. Luodaan uusi treeniohjelma-olio
+      const newProgram = { // BACKEND-MUUTOS: Backend yleensä luo ID:n puolestasi, joten Date.now() lähtee pois
+        id: Date.now(), // Uniikki tunniste helpottaa käsittelyä
+        name: this.programName,
+        exercises: selectedExercises,
+        date: new Date().toLocaleDateString('fi-FI')
+      };
+
+
+
+
+      // --- POISTETETTAVA OSA ALKAA (Local Storage) ---
+    // // BACKEND-MUUTOS: Poista nämä rivit kun backend on valmis
+    // const existingPrograms = JSON.parse(localStorage.getItem('treeniohjelmat') || '[]');
+    // existingPrograms.push(newProgram);
+    // localStorage.setItem('treeniohjelmat', JSON.stringify(existingPrograms));
+    // --- POISTETETTAVA OSA PÄÄTTYY ---
+
+    // BACKEND-MUUTOS: Tähän tilalle tulee kutsu palvelimelle:
+    // this.http.post('https://api.sinunpalvelin.fi/programs', newProgram).subscribe();
+      // 3. Haetaan vanhat ohjelmat localStoragesta (jos niitä on)
+      const existingPrograms = JSON.parse(localStorage.getItem('treeniohjelmat') || '[]');
+
+
+
+      // 4. Lisätään uusi ohjelma listaan ja tallennetaan takaisin
+      existingPrograms.push(newProgram);
+      localStorage.setItem('treeniohjelmat', JSON.stringify(existingPrograms));
+
+      console.log('Treeni tallennettu onnistuneesti!');
+
+
+
+
+
       // NOLLAUS ENNEN SIIRTYMISTÄ
       this.resetSelections();
       

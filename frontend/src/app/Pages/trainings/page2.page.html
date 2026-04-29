@@ -10,8 +10,48 @@
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
     <h2>Tervetuloa!</h2>
-    <p class="placeholder">Täällä näkyvät omat treeniohjelmasi.</p>
+    
+    <p class="placeholder" *ngIf="savedPrograms.length === 0">
+      Täällä näkyvät omat treeniohjelmasi. Aloita luomalla uusi ohjelma!
+    </p>
+
+    <ion-accordion-group *ngIf="savedPrograms.length > 0">
+      <ion-accordion *ngFor="let program of savedPrograms" [value]="program.id">
+        
+        <ion-item slot="header">
+          <ion-label>
+            <h3 style="font-weight: bold; color: var(--ion-color-primary);">{{ program.name }}</h3>
+            <p>{{ program.date }}</p>
+          </ion-label>
+
+          <ion-button 
+            slot="end" 
+            fill="clear" 
+            color="danger" 
+            (click)="deleteProgram(program.id, $event)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <div class="ion-padding" slot="content" style="background: transparent;">
+          <ion-list lines="full">
+            <ion-item *ngFor="let ex of program.exercises" style="--background: transparent;">
+              <ion-label>
+                <h3>{{ ex.name }}</h3>
+                <p>
+                  <span *ngIf="ex.sets">{{ ex.sets }} Sets </span>
+                  <span *ngIf="ex.reps">x {{ ex.reps }} Reps </span>
+                  <span *ngIf="ex.weight">({{ ex.weight }} kg)</span>
+                </p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+
+      </ion-accordion>
+    </ion-accordion-group>
   </div>
+
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="primary" (click)="lisaaOhjelma()">
       <ion-icon name="add"></ion-icon>
