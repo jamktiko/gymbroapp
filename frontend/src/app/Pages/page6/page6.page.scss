@@ -1,3 +1,7 @@
+ion-content {
+  --overflow: hidden;
+  overflow: hidden;
+}
 .content-wrapper {
   text-align: center;
   padding: 10px;
