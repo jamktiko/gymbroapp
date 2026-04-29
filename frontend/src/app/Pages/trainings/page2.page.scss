@@ -1,62 +1,80 @@
+// Koko sivun sisällön hallinta
+.content-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%; // Varmistaa, että säiliö täyttää ruudun
+  padding: 0 10px; // Jättää pienet raot reunoille, ettei laatikot osu lasiin
+}
+
+// Pakotetaan ryhmä ja haitarit vakiopituiseksi
+ion-accordion-group {
+  width: 100%; 
+  background: transparent;
+}
+
 // Tervetuloa-otsikko
 h2 {
   color: var(--ion-color-primary);
-  text-align: center; // Valinnainen: keskittää otsikon
+  text-align: center;
   margin-bottom: 20px;
-}
-
-// Haitarivalikon yleinen ryhmittely
-ion-accordion-group {
-  background: transparent;
 }
 
 // Yksittäinen haitari (yksi treeniohjelma)
 ion-accordion {
-  margin-bottom: 8px;
+  width: 100%; // TÄMÄ varmistaa, että laatikko on aina samanpituinen
+  margin-bottom: 12px;
   border: 1px solid #333;
   border-radius: 8px;
-  overflow: hidden; // Varmistaa, että kulman pyöristykset näkyvät
+  overflow: hidden;
 
-  // TÄRKEÄ: Tämä rajoittaa treeniohjelman nimen pituutta
+  // Otsikon tekstien suojaus ja rajoitus
   ion-label h3 {
     white-space: nowrap;      
     overflow: hidden;         
     text-overflow: ellipsis;  
-    max-width: 90%; // Jättää tilaa oikean reunan nuolelle
+    max-width: 80%; // Jätetään tilaa roskakorille ja nuolelle
     display: block;
     margin: 0;
     font-weight: bold;
     color: var(--ion-color-primary);
   }
 
-  // Otsikko-osan tausta (kun haitari on kiinni)
+  // Otsikko-osan tausta
   ion-item[slot="header"] {
     --background: #1a1a1a;
     --color: var(--ion-color-primary);
     --border-width: 0;
     --padding-start: 16px;
+    width: 100%; // Varmistaa, että item täyttää koko haitarin
+
+    // Roskakorin sijoittelu
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      margin-right: 15px; // Tilaa nuolelle
+      z-index: 10;
+    }
   }
 
-  // Sisältö-osan tausta (kun haitari on auki)
+  // Sisältö-osan tausta (auki ollessa)
   div[slot="content"] {
     background: #252525;
     color: #ffffff;
     
-    // Sisällä olevat yksittäiset liikkeet
     ion-item {
       --background: transparent;
       --color: #dddddd;
       --border-color: #333;
 
       h3 {
-        white-space: normal; // Liikkeiden nimet voivat rivittyä, jos haluat
+        white-space: normal;
         color: #ffffff;
       }
     }
   }
 }
 
-// Placeholder-teksti, kun treenejä ei ole
+// Placeholder-teksti
 .placeholder {
   color: #888;
   text-align: center;
@@ -70,7 +88,7 @@ ion-label p {
   font-size: 0.85em;
 }
 
-// Listan väliviivojen väri
+// Listan väliviivat
 ion-list {
   --ion-item-border-color: #333333;
   background: transparent;

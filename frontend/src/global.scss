@@ -46,3 +46,26 @@
   margin: auto;
   margin-top: 2vh;
 }
+
+/* global.scss */
+
+.custom-delete-alert {
+  .alert-button-group {
+    padding: 10px 20px !important; // Lisää tilaa nappien ympärille
+    justify-content: space-between !important; // Työntää napit eri reunoihin
+  }
+
+  // Peruuta-napin tyyli
+  .cancel-button {
+    color: var(--ion-color-medium) !important;
+    font-weight: 500;
+  }
+
+  // Poista-napin tyyli
+  .delete-button {
+    color: var(--ion-color-danger) !important;
+    font-weight: bold;
+    // Voit lisätä marginia jos haluat hienosäätää väliä vielä enemmän
+    margin-left: 20px !important;
+  }
+}

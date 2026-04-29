@@ -23,6 +23,14 @@
             <h3 style="font-weight: bold; color: var(--ion-color-primary);">{{ program.name }}</h3>
             <p>{{ program.date }}</p>
           </ion-label>
+
+          <ion-button 
+            slot="end" 
+            fill="clear" 
+            color="danger" 
+            (click)="deleteProgram(program.id, $event)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
         </ion-item>
 
         <div class="ion-padding" slot="content" style="background: transparent;">
@@ -31,8 +39,8 @@
               <ion-label>
                 <h3>{{ ex.name }}</h3>
                 <p>
-                  <span *ngIf="ex.sets">{{ ex.sets }} Reps </span>
-                  <span *ngIf="ex.reps">{{ ex.reps }} Sets </span>
+                  <span *ngIf="ex.sets">{{ ex.sets }} Sets </span>
+                  <span *ngIf="ex.reps">x {{ ex.reps }} Reps </span>
                   <span *ngIf="ex.weight">({{ ex.weight }} kg)</span>
                 </p>
               </ion-label>
