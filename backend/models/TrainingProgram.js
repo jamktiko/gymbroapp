@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const { EmbeddedMoveSchema } = require('./Move');
+// const { EmbeddedMoveSchema } = require('./Move');
+const ExerciseSchema = require('./Exercise');
 
 // Schema for TrainingProgram data
 const TrainingProgramSchema = new mongoose.Schema({
@@ -12,9 +13,13 @@ const TrainingProgramSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  // moves duplicated fully inside the program:
-  moves: {
-    type: [EmbeddedMoveSchema],
+  // exercises inside the program (duplicates whole embedded move JSON objects here):
+  exercises: {
+    type: [ExerciseSchema],
+    validate: {
+      validator: (exercises) => exercises.length > 0,
+      message: 'Treenissä täytyy olla vähintään yksi liike',
+    },
   },
   // true = adminin luoma -> käyttäjä ei voi poistaa
   isDefault: {

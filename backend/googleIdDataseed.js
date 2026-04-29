@@ -10,8 +10,8 @@
 const mongoose = require('mongoose');
 
 // ── KONFIGURAATIO ──────────────────────────────────────────────
-const GOOGLE_ID = '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com'; // <-- vaihda tähän
-const MONGO_URI = 'mongodb://localhost:27017/your-db'; // <-- vaihda tarvittaessa
+const GOOGLE_ID = '111989313889366950842'; // <-- vaihda tähän
+const MONGO_URI = 'mongodb+srv://lahmakkonen_db_user:ksL7TVsBp31lJY0V@gymbroapp1.mqg1wa1.mongodb.net/gymbrodb?appName=GymBroApp1'; // <-- vaihda tarvittaessa
 // ───────────────────────────────────────────────────────────────
 
 // ── LIIKKEET ───────────────────────────────────────────────────
@@ -92,7 +92,7 @@ function roundWeight(w) {
  * Joka ~8vko pieni deload (-10%).
  */
 function calcWeight(baseWeight, progressionPerWeek, weekIndex) {
-  const deloadCycle = Math.floor(weekIndex / 8);
+  // const deloadCycle = Math.floor(weekIndex / 8);
   const weekInCycle = weekIndex % 8;
 
   // Deload-viikko = syklin viimeinen viikko
@@ -133,7 +133,7 @@ function buildExercise(template, weekIndex) {
   };
 }
 
-function maybeSwap(exercise, weekIndex) {
+function maybeSwap(exercise) {
   const swap = SWAPS[exercise.moveKey];
   if (!swap || Math.random() > 0.2) return exercise;
 
