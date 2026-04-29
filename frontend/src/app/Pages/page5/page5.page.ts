@@ -8,7 +8,6 @@ import {
   IonFooter,
   IonHeader,
   IonMenuButton,
-  IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
 
@@ -87,5 +86,5 @@ export class Page5Page implements OnDestroy {
 
   ngOnDestroy() {
     this.stopInterval();
-  }
+  } //tällä hetkellä timer aika tuhoutuu automaattisesti timerin käytön jälkeen eikä sitä kerätä mihinkään!
 }
