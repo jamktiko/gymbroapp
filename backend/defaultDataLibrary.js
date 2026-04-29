@@ -95,90 +95,188 @@ const defaultTrainingprograms = [
     description:
       'Klassinen 6-päiväinen ohjelma: push, pull ja jalat vuorotellen.',
     isDefault: true,
-    moves: [
+    exercises: [
       {
-        name: 'Penkkipunnerrus',
-        type: 'compound',
-        muscleGroup: 'Rinta',
-        isDefault: true,
+        move: {
+          name: 'Penkkipunnerrus',
+          type: 'compound',
+          muscleGroup: 'Rinta',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Pystypunnerrus',
-        type: 'compound',
-        muscleGroup: 'Hartiat',
-        isDefault: true,
+        move: {
+          name: 'Pystypunnerrus',
+          type: 'compound',
+          muscleGroup: 'Hartiat',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Dippi',
-        type: 'compound',
-        muscleGroup: 'Rinta',
-        isDefault: true,
+        move: {
+          name: 'Dippi',
+          type: 'compound',
+          muscleGroup: 'Rinta',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Käsiprässi',
-        type: 'targeted',
-        muscleGroup: 'Rinta',
-        isDefault: true,
+        move: {
+          name: 'Käsiprässi',
+          type: 'targeted',
+          muscleGroup: 'Rinta',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Kolmikääntö',
-        type: 'targeted',
-        muscleGroup: 'Kolmikärjes',
-        isDefault: true,
+        move: {
+          name: 'Kolmikääntö',
+          type: 'targeted',
+          muscleGroup: 'Kolmikärjes',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Ylätalja',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Ylätalja',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Soutu tangolla',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Soutu tangolla',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Leuanveto',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Leuanveto',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Hauiskääntö',
-        type: 'targeted',
-        muscleGroup: 'Hauis',
-        isDefault: true,
+        move: {
+          name: 'Hauiskääntö',
+          type: 'targeted',
+          muscleGroup: 'Hauis',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Kyykky',
-        type: 'compound',
-        muscleGroup: 'Jalat',
-        isDefault: true,
+        move: {
+          name: 'Kyykky',
+          type: 'compound',
+          muscleGroup: 'Jalat',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Maastanosto',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Maastanosto',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Jalkaprässi',
-        type: 'targeted',
-        muscleGroup: 'Jalat',
-        isDefault: true,
+        move: {
+          name: 'Jalkaprässi',
+          type: 'targeted',
+          muscleGroup: 'Jalat',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Leg curl',
-        type: 'targeted',
-        muscleGroup: 'Takareidet',
-        isDefault: true,
+        move: {
+          name: 'Leg curl',
+          type: 'targeted',
+          muscleGroup: 'Takareidet',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Pohjepunnerrus',
-        type: 'targeted',
-        muscleGroup: 'Pohkeet',
-        isDefault: true,
+        move: {
+          name: 'Pohjepunnerrus',
+          type: 'targeted',
+          muscleGroup: 'Pohkeet',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
     ],
   },
@@ -186,48 +284,97 @@ const defaultTrainingprograms = [
     name: 'Full Body — Aloittelijaohjelma',
     description: '3 kertaa viikossa koko keho. Hyvä lähtökohta aloittelijalle.',
     isDefault: true,
-    moves: [
+    exercises: [
       {
-        name: 'Kyykky',
-        type: 'compound',
-        muscleGroup: 'Jalat',
-        isDefault: true,
+        move: {
+          name: 'Kyykky',
+          type: 'compound',
+          muscleGroup: 'Jalat',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Penkkipunnerrus',
-        type: 'compound',
-        muscleGroup: 'Rinta',
-        isDefault: true,
+        move: {
+          name: 'Penkkipunnerrus',
+          type: 'compound',
+          muscleGroup: 'Rinta',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Soutu tangolla',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Soutu tangolla',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Pystypunnerrus',
-        type: 'compound',
-        muscleGroup: 'Hartiat',
-        isDefault: true,
+        move: {
+          name: 'Pystypunnerrus',
+          type: 'compound',
+          muscleGroup: 'Hartiat',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Maastanosto',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Maastanosto',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Hauiskääntö',
-        type: 'targeted',
-        muscleGroup: 'Hauis',
-        isDefault: true,
+        move: {
+          name: 'Hauiskääntö',
+          type: 'targeted',
+          muscleGroup: 'Hauis',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Kolmikääntö',
-        type: 'targeted',
-        muscleGroup: 'Kolmikärjes',
-        isDefault: true,
+        move: {
+          name: 'Kolmikääntö',
+          type: 'targeted',
+          muscleGroup: 'Kolmikärjes',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
     ],
   },
@@ -235,72 +382,149 @@ const defaultTrainingprograms = [
     name: 'Upper / Lower',
     description: '4-päiväinen ylä- ja alavartalon vuorotteleva ohjelma.',
     isDefault: true,
-    moves: [
+    exercises: [
       {
-        name: 'Penkkipunnerrus',
-        type: 'compound',
-        muscleGroup: 'Rinta',
-        isDefault: true,
+        move: {
+          name: 'Penkkipunnerrus',
+          type: 'compound',
+          muscleGroup: 'Rinta',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Ylätalja',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Ylätalja',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Pystypunnerrus',
-        type: 'compound',
-        muscleGroup: 'Hartiat',
-        isDefault: true,
+        move: {
+          name: 'Pystypunnerrus',
+          type: 'compound',
+          muscleGroup: 'Hartiat',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Soutu tangolla',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Soutu tangolla',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Hauiskääntö',
-        type: 'targeted',
-        muscleGroup: 'Hauis',
-        isDefault: true,
+        move: {
+          name: 'Hauiskääntö',
+          type: 'targeted',
+          muscleGroup: 'Hauis',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Kolmikääntö',
-        type: 'targeted',
-        muscleGroup: 'Kolmikärjes',
-        isDefault: true,
+        move: {
+          name: 'Kolmikääntö',
+          type: 'targeted',
+          muscleGroup: 'Kolmikärjes',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Kyykky',
-        type: 'compound',
-        muscleGroup: 'Jalat',
-        isDefault: true,
+        move: {
+          name: 'Kyykky',
+          type: 'compound',
+          muscleGroup: 'Jalat',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Maastanosto',
-        type: 'compound',
-        muscleGroup: 'Selkä',
-        isDefault: true,
+        move: {
+          name: 'Maastanosto',
+          type: 'compound',
+          muscleGroup: 'Selkä',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Jalkaprässi',
-        type: 'targeted',
-        muscleGroup: 'Jalat',
-        isDefault: true,
+        move: {
+          name: 'Jalkaprässi',
+          type: 'targeted',
+          muscleGroup: 'Jalat',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Leg curl',
-        type: 'targeted',
-        muscleGroup: 'Takareidet',
-        isDefault: true,
+        move: {
+          name: 'Leg curl',
+          type: 'targeted',
+          muscleGroup: 'Takareidet',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
       {
-        name: 'Pohjepunnerrus',
-        type: 'targeted',
-        muscleGroup: 'Pohkeet',
-        isDefault: true,
+        move: {
+          name: 'Pohjepunnerrus',
+          type: 'targeted',
+          muscleGroup: 'Pohkeet',
+          isDefault: true,
+        },
+        sets: [
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+          { reps: 10, weight: 20 },
+        ],
       },
     ],
   },
@@ -322,6 +546,40 @@ const addDefaultData = async () => {
       defaultTrainingprograms,
     );
     console.log(`${Trainingprograms.length} default-treeniohjelmaa lisätty`);
+
+    // Päivitä olemassa olevien käyttäjien treeniohjelmien 'moves'-kenttä 'exercises'-kentäksi uuteen skeemaan
+    const users = await mongoose.connection.db.collection('users').find({}).toArray();
+    let usersUpdated = 0;
+    for (const user of users) {
+      if (user.trainingPrograms && user.trainingPrograms.length > 0) {
+        let updated = false;
+        const newPrograms = user.trainingPrograms.map(tp => {
+          if (tp.moves) {
+            // Transform old flat moves into new ExerciseSchema structure
+            tp.exercises = tp.moves.map(m => ({
+              move: m,
+              sets: [
+                { reps: 10, weight: 20 },
+                { reps: 10, weight: 20 },
+                { reps: 10, weight: 20 }
+              ]
+            }));
+            delete tp.moves;
+            updated = true;
+          }
+          return tp;
+        });
+        if (updated) {
+          await mongoose.connection.db.collection('users').updateOne(
+            { _id: user._id },
+            { $set: { trainingPrograms: newPrograms } }
+          );
+          usersUpdated++;
+        }
+      }
+    }
+    console.log(`${usersUpdated} käyttäjän treeniohjelmat päivitetty uuteen Exercise-skeemaan`);
+
 
     console.log('Datan lisääminen onnistui!');
     process.exit(0);

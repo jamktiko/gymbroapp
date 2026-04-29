@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Base fields mapped without strict indexes spreading.
+// Base fields mapped without strict indexes spreading
 const moveFields = {
   name: {
     type: String,
@@ -38,27 +38,11 @@ const moveFields = {
 
 // Main collection schema (Move)
 const MoveSchema = new mongoose.Schema(moveFields);
-// Unique-indeksi erikseen, jotta upotettava kopio ei peri sitä ja aiheuta ongelmia useamman ohjelman kanssa.
+// Define unique index here instead of the field directly
 MoveSchema.index({ name: 1 }, { unique: true });
 
-// Erillinen schema upotukseen – ei indeksejä eikä omaa kokoelmaa,
-// joten sama liike voi esiintyä useassa ohjelmassa ongelmitta.
-const EmbeddedMoveSchema = new mongoose.Schema({
-  ...moveFields,
-  sets: {
-    type: [
-      {
-        reps: { type: Number, required: true },
-        weight: { type: Number, required: true },
-      },
-    ],
-    default: [
-      { reps: 10, weight: 0 },
-      { reps: 10, weight: 0 },
-      { reps: 10, weight: 0 },
-    ],
-  },
-});
+// Schema duplicate used for embedding safely
+const EmbeddedMoveSchema = new mongoose.Schema(moveFields);
 
 const Move = mongoose.model('Move', MoveSchema);
 

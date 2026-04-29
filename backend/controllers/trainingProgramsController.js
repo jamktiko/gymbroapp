@@ -45,7 +45,7 @@ exports.getProgramById = async (req, res) => {
 };
 
 // POST /api/training-programs — luo uusi ohjelma käyttäjälle
-// when creating a new program we literally put all moves whole JSON-objects inside moves[]
+// when creating a new program we literally put all exercises whole JSON-objects inside exercises[]
 exports.createProgram = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
@@ -145,10 +145,10 @@ exports.fetchDefaultProgramsForUser = async (userId) => {
         existingProg.description = defaultProg.description;
 
         // Putsataan liikkeiden vanhat _id:t jotta ohjelma pysyy siistinä
-        existingProg.moves = defaultProg.moves.map((m) => {
-          const moveObj = m.toObject();
-          delete moveObj._id;
-          return moveObj;
+        existingProg.exercises = defaultProg.exercises.map((e) => {
+          const exerciseObj = e.toObject ? e.toObject() : e;
+          delete exerciseObj._id;
+          return exerciseObj;
         });
         isModified = true;
       } else {
@@ -156,8 +156,8 @@ exports.fetchDefaultProgramsForUser = async (userId) => {
         const progObj = defaultProg.toObject();
         delete progObj._id; // Alkuperäinen root ID pois
 
-        if (progObj.moves) {
-          progObj.moves.forEach((m) => delete m._id); // Liikkeiden ID:t pois
+        if (progObj.exercises) {
+          progObj.exercises.forEach((e) => delete e._id); // Liikkeiden ID:t pois
         }
 
         user.trainingPrograms.push(progObj);
