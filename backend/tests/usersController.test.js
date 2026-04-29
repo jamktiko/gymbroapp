@@ -13,6 +13,7 @@ const DUMMY_USER_ID = 'test-user-123';
 describe('Users Controller', () => {
   beforeAll(async () => {
     await setup.connectDB();
+    await User.init(); // Wait for unique indexes to build to prevent race conditions
   });
 
   afterEach(async () => {
