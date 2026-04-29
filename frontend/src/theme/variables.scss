@@ -19,3 +19,18 @@
     --color: yellow;
   }
 }
+ion-progress-bar {
+  --background: #0f0f0f8b;
+  --progress-background: #ffd900;
+  height: 25px;
+  border-radius: 12px;
+}
+//Demo Frontend puolen xp-bar
+ion-progress-bar::part(progress),
+ion-progress-bar::part(track) {
+  border-radius: 12px;
+  transition: none !important;
+}
+/*.xpbar::part(progress) {
+  transition: transform 1.2s ease-in-out !important;
+} */ //backend:n transition, testattava onko ok
