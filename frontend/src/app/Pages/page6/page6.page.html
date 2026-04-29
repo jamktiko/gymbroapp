@@ -2,14 +2,18 @@
   <div class="xp-container">
     <div class="content-wrapper">
       <h1>Treeni valmis!</h1>
-      <ion-progress-bar class="xpbar" [value]="progress"></ion-progress-bar>
+      <ion-progress-bar
+        class="xpbar"
+        [value]="xpService.progress$ | async"
+      ></ion-progress-bar>
+      <div>
+        <p>You got XP!</p>
+      </div>
     </div>
   </div>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    <ion-button class="next" color="primary" (click)="aloitussivulle()"
-      >next</ion-button
-    >
+    <ion-button class="next" (click)="aloitussivulle()">next</ion-button>
   </ion-toolbar>
 </ion-footer>
