@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import {
@@ -61,15 +61,15 @@ import { LoginEventService } from './login-event.service';
     CommonModule,
   ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public userDisplayName: string = '';
   public userEmail: string = '';
 
   public appPages = [
     { title: 'Treenit', url: '/page2', icon: 'golf' },
     { title: 'Saavutukset', url: '/page3', icon: 'trophy' },
-    { title: 'ohjelma', url: '/page5', icon: 'trophy' },
-    { title: 'valmis', url: '/page6', icon: 'trophy' },
+    { title: 'Ohjelma', url: '/page5', icon: 'trophy' },
+    { title: 'Valmis', url: '/page6', icon: 'trophy' },
   ];
 
   protected router = inject(Router);
@@ -93,9 +93,13 @@ export class AppComponent {
       backspaceOutline,
       backspace,
     });
-    this.loginEventService.loggedIn$.subscribe(() => {
+  }
+
+  ngOnInit() {
+    this.checkUserStatus();
+      this.loginEventService.loggedIn$.subscribe(() => {
       this.checkUserStatus();
-    });
+    });    
   }
 
   checkUserStatus() {
@@ -120,7 +124,7 @@ export class AppComponent {
             next: (data) => {
               this.testData = data as UserData;
               console.log('Test data loaded:', this.testData);
-              // this.loadPrograms();
+              
               const savedName = this.testData?.name;
               const savedEmail = this.testData?.email;
 
@@ -139,10 +143,6 @@ export class AppComponent {
     } catch (error) {
       console.error('Error loading test data:', error);
     }
-  }
-
-  loadPrograms() {
-    // throw new Error('Method not implemented.');
   }
 
   // ---  FUNKTIO: Kirjaudu ulos ---
