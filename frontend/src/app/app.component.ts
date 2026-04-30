@@ -30,6 +30,14 @@ import {
   golf,
   backspaceOutline,
   backspace,
+  barbellOutline,
+  barbell,
+  analyticsOutline,
+  analytics,
+  calendarNumberOutline,
+  calendarNumber,
+  calendarOutline,
+  calendar,
 } from 'ionicons/icons';
 import { AuthService } from './auth.service';
 import { UserData } from './types/userdata';
@@ -66,8 +74,10 @@ export class AppComponent implements OnInit {
   public userEmail: string = '';
 
   public appPages = [
-    { title: 'Treenit', url: '/page2', icon: 'golf' },
-    { title: 'Saavutukset', url: '/page3', icon: 'trophy' },
+    { title: 'Treenit', url: '/page2', icon: 'barbell' },
+    { title: 'Saavutukset', url: '/page8', icon: 'golf' },
+    { title: 'Historia', url: '/page3', icon: 'calendar' },
+    { title: 'Statsit', url: '/page7', icon: 'analytics' },
     { title: 'Ohjelma', url: '/page5', icon: 'trophy' },
     { title: 'Valmis', url: '/page6', icon: 'trophy' },
   ];
@@ -92,14 +102,23 @@ export class AppComponent implements OnInit {
       golf,
       backspaceOutline,
       backspace,
+      barbellOutline,
+      barbell,
+      analyticsOutline,
+      analytics,
+      calendarNumberOutline,
+      calendarNumber,
+      calendarOutline,
+      calendar,
     });
   }
 
   ngOnInit() {
-    this.checkUserStatus();
-      this.loginEventService.loggedIn$.subscribe(() => {
+    this.loginEventService.loggedIn$.subscribe(() => {
       this.checkUserStatus();
-    });    
+      return;
+    });
+    this.checkUserStatus();
   }
 
   checkUserStatus() {
@@ -124,7 +143,7 @@ export class AppComponent implements OnInit {
             next: (data) => {
               this.testData = data as UserData;
               console.log('Test data loaded:', this.testData);
-              
+
               const savedName = this.testData?.name;
               const savedEmail = this.testData?.email;
 
