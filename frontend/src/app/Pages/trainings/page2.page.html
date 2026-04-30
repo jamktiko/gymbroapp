@@ -1,9 +1,21 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <div class="header-full-progress">
+      <!-- Level-teksti vasemmalla -->
+      <div class="level-indicator">
+        <span>LVL 5</span>
+      </div>
+
+      <!-- Palkki tekstin oikealla puolella -->
+      <div class="progress-wrapper">
+        <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async"></ion-progress-bar>
+      </div>
+    </div>
+
+    <!-- Valikkonappi oikeassa reunassa -->
     <ion-buttons slot="end">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Omat treenit</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,24 +24,29 @@
     <h2>Tervetuloa {{testData?.name?.split(' ')[0]}}!</h2>
     <p></p>
 
+    <!-- Ohjeteksti, jos treenejä ei ole -->
     <p class="placeholder" *ngIf="savedPrograms.length === 0">
       Täällä näkyvät omat treeniohjelmasi. Aloita luomalla uusi ohjelma!
     </p>
 
+    <!-- Treeniohjelmien listaus haitareina -->
     <ion-accordion-group *ngIf="savedPrograms.length > 0">
       <ion-accordion *ngFor="let program of savedPrograms" [value]="program.id">
 
+        <!-- Haitarin otsikko-osa -->
         <ion-item slot="header">
           <ion-label>
             <h3 style="font-weight: bold; color: var(--ion-color-primary);">{{ program.name }}</h3>
             <p>{{ program.date }}</p>
           </ion-label>
 
+          <!-- Poistonappi -->
           <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program.id, $event)">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </ion-item>
 
+        <!-- Haitarin sisältö-osa (liikkeet) -->
         <div class="ion-padding" slot="content" style="background: transparent;">
           <ion-list lines="full">
             <ion-item *ngFor="let ex of program.exercises" style="--background: transparent;">
@@ -49,6 +66,7 @@
     </ion-accordion-group>
   </div>
 
+  <!-- Kelluva lisäysnappi -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="primary" (click)="lisaaOhjelma()">
       <ion-icon name="add"></ion-icon>

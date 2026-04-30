@@ -1,62 +1,95 @@
-// Koko sivun sisällön hallinta
+// --- YLÄPALKKI JA PROGRESS BAR ---
+
+.header-full-progress {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  padding-left: 16px;
+}
+
+.level-indicator {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--ion-color-primary);
+  white-space: nowrap;
+  margin-right: 12px; // Väli tekstin ja palkin väliin
+}
+
+.progress-wrapper {
+  flex: 0 0 45%;      // Palkin leveys
+  max-width: 150px; 
+  display: flex;
+  align-items: center;
+}
+
+.xpbar {
+  height: 10px;
+  border-radius: 10px;
+  width: 100%;
+  --progress-background: var(--ion-color-primary);
+  --buffer-background: rgba(var(--ion-color-primary-rgb), 0.1);
+}
+
+ion-toolbar {
+  --min-height: 56px; // Varmistaa, että toolbar on tasakokoinen
+}
+
+// --- SISÄLLÖN HALLINTA (Pidetty ennallaan) ---
+
 .content-container {
   display: flex;
   flex-direction: column;
-  width: 100%; // Varmistaa, että säiliö täyttää ruudun
-  padding: 0 10px; // Jättää pienet raot reunoille, ettei laatikot osu lasiin
+  width: 100%;
+  padding: 0 10px;
 }
 
-// Pakotetaan ryhmä ja haitarit vakiopituiseksi
 ion-accordion-group {
   width: 100%; 
   background: transparent;
 }
 
-// Tervetuloa-otsikko
 h2 {
   color: var(--ion-color-primary);
   text-align: center;
   margin-bottom: 20px;
 }
 
-// Yksittäinen haitari (yksi treeniohjelma)
+// --- HAITARIT JA LISTAT ---
+
 ion-accordion {
-  width: 100%; // TÄMÄ varmistaa, että laatikko on aina samanpituinen
+  width: 100%;
   margin-bottom: 12px;
   border: 1px solid #333;
   border-radius: 8px;
   overflow: hidden;
 
-  // Otsikon tekstien suojaus ja rajoitus
   ion-label h3 {
     white-space: nowrap;      
     overflow: hidden;         
     text-overflow: ellipsis;  
-    max-width: 80%; // Jätetään tilaa roskakorille ja nuolelle
+    max-width: 80%;
     display: block;
     margin: 0;
     font-weight: bold;
     color: var(--ion-color-primary);
   }
 
-  // Otsikko-osan tausta
   ion-item[slot="header"] {
     --background: #1a1a1a;
     --color: var(--ion-color-primary);
     --border-width: 0;
     --padding-start: 16px;
-    width: 100%; // Varmistaa, että item täyttää koko haitarin
+    width: 100%;
 
-    // Roskakorin sijoittelu
     ion-button {
       --padding-start: 8px;
       --padding-end: 8px;
-      margin-right: 15px; // Tilaa nuolelle
+      margin-right: 15px;
       z-index: 10;
     }
   }
 
-  // Sisältö-osan tausta (auki ollessa)
   div[slot="content"] {
     background: #252525;
     color: #ffffff;
@@ -74,7 +107,8 @@ ion-accordion {
   }
 }
 
-// Placeholder-teksti
+// --- APUTYYLIT ---
+
 .placeholder {
   color: #888;
   text-align: center;
@@ -82,13 +116,11 @@ ion-accordion {
   margin-top: 30px;
 }
 
-// Päivämäärän tyyli
 ion-label p {
   color: #aaaaaa; 
   font-size: 0.85em;
 }
 
-// Listan väliviivat
 ion-list {
   --ion-item-border-color: #333333;
   background: transparent;
