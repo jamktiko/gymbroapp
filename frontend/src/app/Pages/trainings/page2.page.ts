@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -60,8 +61,10 @@ interface WorkoutProgram {
   ],
 })
 export class Page2Page implements OnInit {
-  // Lista, johon ladatut treeniohjelmat tallennetaan näkymää varten
+  private http = inject(HttpClient);
   savedPrograms: WorkoutProgram[] = [];
+  testData: any;
+
 
   /**
    * Konstruktori: Ajetaan, kun sivu luodaan.
@@ -77,6 +80,33 @@ export class Page2Page implements OnInit {
 
   ngOnInit() {
     // Perus-Angular alustusmetodi
+    try {
+      // 1. Get the object from sessionStorage
+      const sessionDataStr = sessionStorage.getItem('accesstoken');
+      if (sessionDataStr) {
+        const sessionData = JSON.parse(sessionDataStr);
+        // 2. Use sessionData.googleId for the URL. Added backend port 3000.
+        const url = `http://localhost:3000/api/users/${sessionData.googleId}`; 
+        
+        // 3. Use sessionData.token for the Authorization header
+        this.http.get(url, {
+          headers: {
+            'Authorization': `Bearer ${sessionData.token}`, // Only the raw token string
+            'Content-Type': 'application/json'
+          }
+        }).subscribe({
+          next: (data) => {
+            this.testData = data;
+            console.log('Test data loaded:', this.testData);
+          },
+          error: (err) => {
+            console.error('Failed to load test data', err);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error loading test data:', error);
+    }
   }
 
   /**

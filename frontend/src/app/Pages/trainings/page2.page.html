@@ -9,26 +9,23 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-    <h2>Tervetuloa!</h2>
-    
+    <h2>Tervetuloa {{testData?.name?.split(' ')[0]}}!</h2>
+    <p></p>
+
     <p class="placeholder" *ngIf="savedPrograms.length === 0">
       Täällä näkyvät omat treeniohjelmasi. Aloita luomalla uusi ohjelma!
     </p>
 
     <ion-accordion-group *ngIf="savedPrograms.length > 0">
       <ion-accordion *ngFor="let program of savedPrograms" [value]="program.id">
-        
+
         <ion-item slot="header">
           <ion-label>
             <h3 style="font-weight: bold; color: var(--ion-color-primary);">{{ program.name }}</h3>
             <p>{{ program.date }}</p>
           </ion-label>
 
-          <ion-button 
-            slot="end" 
-            fill="clear" 
-            color="danger" 
-            (click)="deleteProgram(program.id, $event)">
+          <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program.id, $event)">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </ion-item>
