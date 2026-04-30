@@ -1,28 +1,29 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { Router } from "@angular/router";
+import { Component, inject, OnInit, output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
-} from "@ionic/angular/standalone";
+} from '@ionic/angular/standalone';
 
-import { addIcons } from "ionicons";
-import { logoGoogle, logInOutline } from "ionicons/icons";
+import { addIcons } from 'ionicons';
+import { logoGoogle, logInOutline } from 'ionicons/icons';
 import {
   SocialAuthService,
   GoogleSigninButtonModule,
   SocialUser,
   SocialLoginModule,
-} from "@abacritt/angularx-social-login";
-import { AuthService } from "../../auth.service";
+} from '@abacritt/angularx-social-login';
+import { AuthService } from '../../auth.service';
+import { LoginEventService } from '../../login-event.service';
 
 @Component({
-  selector: "app-page1",
-  templateUrl: "./page1.page.html",
-  styleUrls: ["./page1.page.scss"],
+  selector: 'app-page1',
+  templateUrl: './page1.page.html',
+  styleUrls: ['./page1.page.scss'],
   standalone: true,
   imports: [
     IonContent,
@@ -39,9 +40,14 @@ export class Page1Page implements OnInit {
   private socauthService = inject(SocialAuthService);
   private authService = inject(AuthService);
   user!: SocialUser;
-  error = "";
+  error = '';
 
-  constructor(private router: Router) {
+  private router = inject(Router);
+  private loginEventService = inject(LoginEventService);
+
+  loggedInEvent = output<void>();
+
+  constructor() {
     addIcons({ logoGoogle, logInOutline });
   }
 
@@ -52,7 +58,7 @@ export class Page1Page implements OnInit {
     this.socauthService.authState.subscribe((user) => {
       if (user) {
         this.user = user;
-        console.log("Successfully logged in via Google button", user);
+        console.log('Successfully logged in via Google button', user);
 
         /* Lähetetään glogin-metodilla Googlen idToken backendiin josta saadaan JWT
          Myös userin id annetaan authServicelle, jotta sitä voidaan verrata siellä
@@ -65,9 +71,10 @@ export class Page1Page implements OnInit {
             .subscribe((result) => {
               if (result === true) {
                 // this.router.navigate(['/secret']);
-                this.router.navigateByUrl("/page2", { replaceUrl: true });
+                this.loginEventService.emitLoggedIn();
+                this.router.navigateByUrl('/page2', { replaceUrl: true });
               } else {
-                this.error = "Tunnus tai salasana väärä";
+                this.error = 'Tunnus tai salasana väärä';
               }
             });
         }

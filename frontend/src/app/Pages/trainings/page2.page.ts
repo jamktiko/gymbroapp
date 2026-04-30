@@ -26,14 +26,7 @@ import {
 
 import { addIcons } from 'ionicons';
 import { add, trashOutline } from 'ionicons/icons';
-import {
-  Move,
-  Set,
-  Exercise,
-  TrainingProgram,
-  TrainingSession,
-  UserData,
-} from '../../types/userdata';
+import { TrainingProgram, UserData } from '../../types/userdata';
 
 /**
  * Rajapinnat (Interfaces)
@@ -129,9 +122,9 @@ export class Page2Page implements OnInit {
     }
   }
 
-  async loadPrograms() {
+  loadPrograms() {
     // const data = localStorage.getItem('treeniohjelmat');
-    const data = await this.testData?.trainingPrograms;
+    const data = this.testData?.trainingPrograms;
     console.log(data);
     if (data) {
       this.savedPrograms = data;

@@ -32,6 +32,9 @@ import {
   backspace,
 } from 'ionicons/icons';
 import { AuthService } from './auth.service';
+import { UserData } from './types/userdata';
+import { HttpClient } from '@angular/common/http';
+import { LoginEventService } from './login-event.service';
 
 @Component({
   selector: 'app-root',
@@ -59,8 +62,8 @@ import { AuthService } from './auth.service';
   ],
 })
 export class AppComponent {
-  public userDisplayName: string = 'User';
-  public userEmail: string = 'ei kirjautunut';
+  public userDisplayName: string = '';
+  public userEmail: string = '';
 
   public appPages = [
     { title: 'Treenit', url: '/page2', icon: 'golf' },
@@ -72,6 +75,10 @@ export class AppComponent {
   protected router = inject(Router);
   public loadingService = inject(LoadingService);
   public authService = inject(AuthService);
+  private http = inject(HttpClient);
+  testData!: UserData;
+
+  private loginEventService = inject(LoginEventService);
 
   constructor() {
     addIcons({
@@ -86,24 +93,64 @@ export class AppComponent {
       backspaceOutline,
       backspace,
     });
-    this.checkUserStatus();
+    this.loginEventService.loggedIn$.subscribe(() => {
+      this.checkUserStatus();
+    });
   }
 
   checkUserStatus() {
-    const savedName = localStorage.getItem('userName');
-    const savedEmail = localStorage.getItem('userEmail');
+    // fetch userdata from backend:
+    try {
+      // 1. Get the object from sessionStorage
+      const sessionDataStr = sessionStorage.getItem('accesstoken');
+      if (sessionDataStr) {
+        const sessionData = JSON.parse(sessionDataStr);
+        // 2. Use sessionData.googleId for the URL. Added backend port 3000.
+        const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
 
-    if (savedName) {
-      this.userDisplayName = savedName;
+        // 3. Use sessionData.token for the Authorization header
+        this.http
+          .get(url, {
+            headers: {
+              Authorization: `Bearer ${sessionData.token}`, // Only the raw token string
+              'Content-Type': 'application/json',
+            },
+          })
+          .subscribe({
+            next: (data) => {
+              this.testData = data as UserData;
+              console.log('Test data loaded:', this.testData);
+              // this.loadPrograms();
+              const savedName = this.testData?.name;
+              const savedEmail = this.testData?.email;
+
+              if (savedName) {
+                this.userDisplayName = savedName;
+              }
+              if (savedEmail) {
+                this.userEmail = savedEmail;
+              }
+            },
+            error: (err) => {
+              console.error('Failed to load test data', err);
+            },
+          });
+      }
+    } catch (error) {
+      console.error('Error loading test data:', error);
     }
-    if (savedEmail) {
-      this.userEmail = savedEmail;
-    }
+  }
+
+  loadPrograms() {
+    // throw new Error('Method not implemented.');
   }
 
   // ---  FUNKTIO: Kirjaudu ulos ---
   logout() {
     console.log('Kirjaudutaan ulos...');
+
+    this.userDisplayName = '';
+    this.userEmail = '';
 
     this.authService.logout();
 
