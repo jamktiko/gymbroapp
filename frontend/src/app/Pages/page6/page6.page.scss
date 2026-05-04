@@ -1,7 +1,7 @@
 ion-content {
   --overflow: hidden;
   overflow: hidden;
-  --background: radial-gradient(circle at center, #222 0%, #111 100%);
+  /*--background: radial-gradient(circle at center, #222 0%, #111 100%);*/
 }
 .content-wrapper {
   text-align: center;
@@ -20,7 +20,7 @@ ion-content {
 .content-wrapper {
   width: 100%;
 }
-.next {
+/*.next {
   border: 2px solid #ffd900;
   font-size: 30px;
   font-weight: bold;
@@ -35,7 +35,7 @@ ion-content {
   border-radius: 1px;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
+}*/
 .headercolor {
   --background: #202020;
 }
