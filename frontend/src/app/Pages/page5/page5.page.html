@@ -1,24 +1,68 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+
+  <ion-toolbar color="black">
+    <!-- Näytetään treenin nimi ylhäällä -->
+    <ion-title>{{ activeWorkout?.name }}</ion-title>
     <ion-buttons slot="end">
+      <!-- Laskuri: esim. 1 / 5 -->
+      <div class="ion-padding-horizontal" style="color: var(--ion-color-primary); font-weight: bold;">
+        {{ currentIndex + 1 }} / {{ activeWorkout?.exercises?.length }}
+      </div>
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
+
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-    <div class="center-content">
-      <h1 class="main-title">temporary</h1>
-      <p class="sub-title">temporary</p>
+    
+    <!-- NYKYINEN LIIKE -KORTTI -->
+    @if (currentExercise) {
+      <div class="exercise-card">
+        <p class="label">NYKYINEN LIIKE</p>
+        <h1 class="exercise-title">{{ currentExercise.move.name }}</h1>
+        
+        <div class="stats-row">
+          <div class="stat">
+            <span class="stat-label">SETS</span>
+            <span class="stat-value">{{ currentExercise.sets.length }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">REPS</span>
+            <span class="stat-value">{{ currentExercise.sets[0].reps }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">WEIGHT</span>
+            <span class="stat-value">{{ currentExercise.sets[0].weight }}kg</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- TIMER -->
+    <div class="timer-section">
+      <ion-button class="timer-btn" fill="clear" (click)="toggleTimer()" [class.running]="isRunning">
+        <div class="timer-wrapper">
+          <ion-icon name="timer-outline" *ngIf="!isRunning"></ion-icon>
+          <span class="timer-text">{{ timerValue }}</span>
+          <small>{{ isRunning ? 'TAP TO RESET' : 'START REST' }}</small>
+        </div>
+      </ion-button>
     </div>
-    <ion-button class="timer" expand="block" (click)="toggleTimer()">
-      {{ timerValue }}
-    </ion-button>
+
   </div>
 </ion-content>
-<ion-footer class="ion-no-border">
-  <ion-toolbar>
-    <ion-button class="next">next</ion-button>
-  </ion-toolbar>
+
+<ion-footer class="ion-no-border ion-padding">
+  <!-- SEURAAVA / VALMIS PAINIKE -->
+  @if (currentIndex < (activeWorkout?.exercises?.length || 0) - 1) {
+    <ion-button class="next-btn" expand="block" shape="round" color="primary" (click)="seuraavaLiike()">
+      NEXT EXERCISE
+      <ion-icon slot="end" name="arrow-forward"></ion-icon>
+    </ion-button>
+  } @else {
+    <ion-button class="next-btn" expand="block" shape="round" color="success" (click)="lopetaTreeni()">
+      FINISH WORKOUT
+      <ion-icon slot="end" name="checkmark-done"></ion-icon>
+    </ion-button>
+  }
 </ion-footer>

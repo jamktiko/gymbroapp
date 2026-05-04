@@ -1,6 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -9,7 +10,16 @@ import {
   IonHeader,
   IonMenuButton,
   IonToolbar,
+  IonTitle,
+  IonIcon,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { arrowForward, checkmarkDone, timerOutline } from 'ionicons/icons';
+import { TrainingProgram } from '../../types/userdata';
 
 @Component({
   selector: 'app-page5',
@@ -26,16 +36,61 @@ import {
     IonMenuButton,
     IonButton,
     IonFooter,
+    IonTitle,
+    IonIcon,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent
   ],
 })
-export class Page5Page implements OnDestroy {
-  timerValue: string = '00:10:00'; //tällä hetkellä näyttää mikä on tauon pituus
+export class Page5Page implements OnInit, OnDestroy {
+  private router = inject(Router);
+
+  // Treenin tila
+  activeWorkout!: TrainingProgram;
+  currentIndex = 0;
+
+  // Timerin tila
+  timerValue: string = '00:10,00'; 
   isRunning: boolean = false;
+  private timerInterval: number | undefined;
+  private readonly START_SECONDS = 10;
 
-  private timerInterval: any;
-  private readonly START_SECONDS = 10; //vaihtaa ajan
+  constructor() {
+    addIcons({ arrowForward, checkmarkDone, timerOutline });
+    
+    // Luetaan lähetetty data
+    const navigation = this.router.getCurrentNavigation();
+    this.activeWorkout = navigation?.extras.state?.['activeWorkout'];
+  }
 
-  constructor() {}
+  ngOnInit() {
+    if (!this.activeWorkout) {
+      this.router.navigate(['/page2']);
+      return;
+    }
+    this.resetTimer(); // Alustetaan timerValue oikeaan muotoon
+  }
+
+  // Apu-getteri nykyiselle liikkeelle
+  get currentExercise() {
+    return this.activeWorkout?.exercises[this.currentIndex];
+  }
+
+  // Treenilogiikka
+  seuraavaLiike() {
+    if (this.currentIndex < this.activeWorkout.exercises.length - 1) {
+      this.currentIndex++;
+      this.resetTimer(); // Valmistellaan timer seuraavaa taukoa varten
+    }
+  }
+
+  lopetaTreeni() {
+    this.router.navigate(['/page2']);
+  }
+
+  // Timer-logiikka
   toggleTimer() {
     if (this.isRunning) {
       this.resetTimer();
@@ -58,7 +113,6 @@ export class Page5Page implements OnDestroy {
         this.isRunning = false;
         return;
       }
-
       this.timerValue = this.formatTime(diff);
     }, 80);
   }
@@ -74,9 +128,9 @@ export class Page5Page implements OnDestroy {
     const m = Math.floor(totalMs / 60000);
     const s = Math.floor((totalMs % 60000) / 1000);
     const msRemainder = Math.floor((totalMs % 1000) / 10);
-
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')},${msRemainder.toString().padStart(2, '0')}`;
   }
+
   private stopInterval() {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
@@ -86,5 +140,5 @@ export class Page5Page implements OnDestroy {
 
   ngOnDestroy() {
     this.stopInterval();
-  } //tällä hetkellä timer aika tuhoutuu automaattisesti timerin käytön jälkeen eikä sitä kerätä mihinkään!
+  }
 }
