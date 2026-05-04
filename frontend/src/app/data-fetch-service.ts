@@ -61,12 +61,6 @@ export class DataFetchService {
     // actual http request
     return this.http.get<UserData>(
       `${this.apiurlUsers}/${sessionData.googleId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${sessionData.token}`,
-          'Content-Type': 'application/json',
-        },
-      },
     );
   }
 
@@ -89,12 +83,7 @@ export class DataFetchService {
     // actual http request
     return this.http.patch<UserData>(
       `${this.apiurlUsers}/${sessionData.googleId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${sessionData.token}`,
-          'Content-Type': 'application/json',
-        },
-      },
+      {}, // Provide payload data instead of headers here
     );
   }
 }
