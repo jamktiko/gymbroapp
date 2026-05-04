@@ -92,24 +92,16 @@ export class Page2Page implements OnInit {
 
   // Kun Trainings-sivu on tulossa näkyviin haetaan käyttäjän datat backendistä
   ionViewWillEnter() {
-    try {
-      const sessionDataString = sessionStorage.getItem('accesstoken');
-      if (sessionDataString) {
-        const sessionData = JSON.parse(sessionDataString);
-        this.dataFetchService.getUserDataById(sessionData.googleId).subscribe({
-          next: (data) => {
-            this.testData = data as UserData;
-            console.log('Test data loaded:', this.testData);
-            this.loadPrograms();
-          },
-          error: (err) => {
-            console.error('Failed to load test data', err);
-          },
-        });
-      }
-    } catch (error) {
-      console.error('Error loading test data:', error);
-    }
+    this.dataFetchService.getUserDataById().subscribe({
+      next: (data) => {
+        this.testData = data as UserData;
+        console.log('Test data loaded:', this.testData);
+        this.loadPrograms();
+      },
+      error: (err) => {
+        console.error('Failed to load test data', err);
+      },
+    });
   }
 
   loadPrograms() {

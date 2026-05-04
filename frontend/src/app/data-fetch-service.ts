@@ -1,3 +1,7 @@
+// DataFetchService acts as a bridge between the application and backend
+// By injecting this service into a component you can send authorized http requests to backend
+// Backend will then take these requests in and invoke REST API methods accordingly
+
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -14,6 +18,8 @@ export class DataFetchService {
 
   private http = inject(HttpClient);
 
+  // private sessionStorageToken;
+
   // private sessionData = null;
 
   // GET
@@ -21,41 +27,74 @@ export class DataFetchService {
   // PATCH
   // DELETE
 
-  fetchJWTToken() {
-    // try {
-    //   const sessionDataString = sessionStorage.getItem('accesstoken');
-    //   if (sessionDataString) {
-    //     const sessionData = JSON.parse(sessionDataString);
-    //     // const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
-    //   }
-    // } catch (error) {
-    //   console.error(
-    //     'Error while fetching JTW token from sessionStorage:',
-    //     error,
-    //   );
-    // }
-  }
+  // fetchJWTToken() {
+  //   // try {
+  //   //   const sessionDataString = sessionStorage.getItem('accesstoken');
+  //   //   if (sessionDataString) {
+  //   //     const sessionData = JSON.parse(sessionDataString);
+  //   //     // const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
+  //   //   }
+  //   // } catch (error) {
+  //   //   console.error(
+  //   //     'Error while fetching JTW token from sessionStorage:',
+  //   //     error,
+  //   //   );
+  //   // }
+  // }
 
-  // fetches all user data from database
-  getUserDataById(id: string): Observable<UserData> {
+  // [GET] fetches all user data by id from database
+  getUserDataById(): Observable<UserData> {
+    // fetch JWT token from sessionStorage
+    let sessionData;
+
     try {
       const sessionDataString = sessionStorage.getItem('accesstoken');
-      if (sessionDataString) {
-        const sessionData = JSON.parse(sessionDataString);
-
-        return this.http.get<UserData>(`${this.apiurlUsers}/${id}`, {
-          headers: {
-            Authorization: `Bearer ${sessionData.token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+      if (!sessionDataString) {
+        return throwError(() => new Error('No access token found in session.'));
       }
+      sessionData = JSON.parse(sessionDataString);
     } catch (error) {
-      console.error(
-        'Error while fetching JTW token from sessionStorage:',
-        error,
-      );
+      console.error('Error parsing session data:', error);
+      return throwError(() => new Error('Invalid or corrupted session data.'));
     }
-    return throwError(() => new Error('Unable to fetch user data.'));
+
+    // actual http request
+    return this.http.get<UserData>(
+      `${this.apiurlUsers}/${sessionData.googleId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${sessionData.token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+  }
+
+  // [PATCH] modifies currently logged in user's data
+  updateUserDataById() {
+    // fetch JWT token from sessionStorage
+    let sessionData;
+
+    try {
+      const sessionDataString = sessionStorage.getItem('accesstoken');
+      if (!sessionDataString) {
+        return throwError(() => new Error('No access token found in session.'));
+      }
+      sessionData = JSON.parse(sessionDataString);
+    } catch (error) {
+      console.error('Error parsing session data:', error);
+      return throwError(() => new Error('Invalid or corrupted session data.'));
+    }
+
+    // actual http request
+    return this.http.patch<UserData>(
+      `${this.apiurlUsers}/${sessionData.googleId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${sessionData.token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
   }
 }
