@@ -33,7 +33,10 @@
           <ion-label>
             <h3 style="font-weight: bold; color: var(--ion-color-primary);">{{ program?.name }}</h3>
           </ion-label>
-          <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)">
+
+          <!-- Poistonappi -->
+          <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"
+            [disabled]="program.isDefault">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </ion-item>
@@ -53,7 +56,7 @@
             </ion-item>
             }
           </ion-list>
-          
+
           <div style="padding: 10px 0;">
             <ion-button color="primary" expand="block" shape="round" (click)="startProgram(program)">
               <ion-icon slot="start" name="play"></ion-icon>
