@@ -4,6 +4,7 @@ import { CommonModule, AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { XpService } from '../../xp.service';
+import { AccordionGroupCustomEvent } from '@ionic/core';
 
 import {
   IonContent,
@@ -25,26 +26,9 @@ import {
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { add, trashOutline } from 'ionicons/icons';
+// Lisätty 'play' ikoneihin navigointia varten
+import { add, trashOutline, play } from 'ionicons/icons';
 import { TrainingProgram, UserData } from '../../types/userdata';
-
-/**
- * Rajapinnat (Interfaces)
- */
-// interface Exercise {
-//   name: string;
-//   isSelected: boolean;
-//   reps?: number;
-//   sets?: number;
-//   weight?: number;
-// }
-
-// interface WorkoutProgram {
-//   id: number;
-//   name: string;
-//   exercises: Exercise[];
-//   date: string;
-// }
 
 @Component({
   selector: 'app-page2',
@@ -77,32 +61,45 @@ export class Page2Page implements OnInit {
   private router = inject(Router);
   private alertCtrl = inject(AlertController);
   public xpService = inject(XpService);
+  
   savedPrograms: TrainingProgram[] = [];
   testData!: UserData;
+  isAccordionOpen = false;
+  
 
   constructor() {
-    addIcons({ add, trashOutline });
+    // Lisätty play-ikoni, jotta se näkyy HTML-puolella
+    addIcons({ add, trashOutline, play });
   }
 
   ngOnInit() {
     // Perus-Angular alustusmetodi
   }
 
+  /**
+   * Ohjaa käyttäjän treenisivulle ja välittää valitun ohjelman tiedot
+   */
+  startProgram(program: TrainingProgram) {
+    console.log('Aloitetaan treeni:', program.name);
+    
+    // Navigoidaan sivulle, joka hoitaa treenin suorituksen.
+    // Varmista, että reitti (esim. '/page3') on oikein app.routes.ts -tiedostossa.
+    this.router.navigate(['/page5'], { 
+      state: { activeWorkout: program } 
+    });
+  }
+
   ionViewWillEnter() {
-    // fetch userdata from backend:
     try {
-      // 1. Get the object from sessionStorage
       const sessionDataStr = sessionStorage.getItem('accesstoken');
       if (sessionDataStr) {
         const sessionData = JSON.parse(sessionDataStr);
-        // 2. Use sessionData.googleId for the URL. Added backend port 3000.
         const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
 
-        // 3. Use sessionData.token for the Authorization header
         this.http
           .get(url, {
             headers: {
-              Authorization: `Bearer ${sessionData.token}`, // Only the raw token string
+              Authorization: `Bearer ${sessionData.token}`,
               'Content-Type': 'application/json',
             },
           })
@@ -123,9 +120,7 @@ export class Page2Page implements OnInit {
   }
 
   loadPrograms() {
-    // const data = localStorage.getItem('treeniohjelmat');
     const data = this.testData?.trainingPrograms;
-    console.log(data);
     if (data) {
       this.savedPrograms = data;
     }
@@ -145,6 +140,7 @@ export class Page2Page implements OnInit {
             this.savedPrograms = this.savedPrograms.filter(
               (p) => p._id !== programId,
             );
+            // Huom: Tämä päivittää vain localStoragen, muista päivittää backend myöhemmin
             localStorage.setItem(
               'treeniohjelmat',
               JSON.stringify(this.savedPrograms),
@@ -156,7 +152,14 @@ export class Page2Page implements OnInit {
     await alert.present();
   }
 
+  onAccordionChange(event: AccordionGroupCustomEvent) {
+  // Jos event.detail.value on olemassa, jokin haitari on auki
+  this.isAccordionOpen = !!event.detail.value;
+}
+
   lisaaOhjelma() {
     this.router.navigate(['/page4']);
   }
+  
+  
 }

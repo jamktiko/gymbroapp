@@ -1,50 +1,37 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <div class="header-full-progress">
-      <!-- Level-teksti vasemmalla -->
-
       <div class="level-indicator">
         <span>LVL {{testData?.level}}</span>
       </div>
-
-      <!-- Palkki tekstin oikealla puolella -->
       <div class="progress-wrapper">
         <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async"></ion-progress-bar>
       </div>
     </div>
-
-    <!-- Valikkonappi oikeassa reunassa -->
     <ion-buttons slot="end">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<!-- itse content -->
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
     <h2>Tervetuloa {{testData?.name!.split(' ')[0]}}!</h2>
 
-    <!-- Ohjeteksti, jos treenejä ei ole -->
     @if (savedPrograms.length === 0) {
     <p class="placeholder">
       Täällä näkyvät omat treeniohjelmasi. Aloita luomalla uusi ohjelma!
     </p>
     }
 
-
-    <!-- Treeniohjelmien listaus haitareina -->
     @if (savedPrograms.length > 0) {
-    <ion-accordion-group>
+    <!-- LISÄTTY: (ionChange) kuuntelija -->
+    <ion-accordion-group (ionChange)="onAccordionChange($event)">
       @for (program of savedPrograms; track $index) {
       <ion-accordion [value]="program._id">
-
-        <!-- Haitarin otsikko-osa -->
         <ion-item slot="header">
           <ion-label>
             <h3 style="font-weight: bold; color: var(--ion-color-primary);">{{ program?.name }}</h3>
-            <!-- programs dont have date property rn: -->
-            <!-- <p>{{ program.date }}</p> -->
           </ion-label>
 
           <!-- Poistonappi -->
@@ -54,7 +41,6 @@
           </ion-button>
         </ion-item>
 
-        <!-- Haitarin sisältö-osa (liikkeet) -->
         <div class="ion-padding" slot="content" style="background: transparent;">
           <ion-list lines="full">
             @for (ex of program.exercises; track $index) {
@@ -63,29 +49,33 @@
                 <h3>{{ ex.move.name }}</h3>
                 <p>
                   <span>{{ ex.sets.length }} Sets </span>
-                  <!-- use first set reps and weight since they can chance rn in data model: -->
                   <span>x {{ ex.sets[0].reps }} Reps </span>
                   <span>({{ ex.sets[0].weight }} kg)</span>
                 </p>
               </ion-label>
             </ion-item>
             }
-
           </ion-list>
-        </div>
 
+          <div style="padding: 10px 0;">
+            <ion-button color="primary" expand="block" shape="round" (click)="startProgram(program)">
+              <ion-icon slot="start" name="play"></ion-icon>
+              ALOITA TREENI
+            </ion-button>
+          </div>
+        </div>
       </ion-accordion>
       }
-
     </ion-accordion-group>
     }
-
   </div>
 
-  <!-- Kelluva lisäysnappi -->
+  <!-- MUOKATTU: FAB-nappi piilotetaan, jos isAccordionOpen on true -->
+  @if (!isAccordionOpen) {
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="primary" (click)="lisaaOhjelma()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  }
 </ion-content>
