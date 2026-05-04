@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import {
@@ -30,8 +30,19 @@ import {
   golf,
   backspaceOutline,
   backspace,
+  barbellOutline,
+  barbell,
+  analyticsOutline,
+  analytics,
+  calendarNumberOutline,
+  calendarNumber,
+  calendarOutline,
+  calendar,
 } from 'ionicons/icons';
 import { AuthService } from './auth.service';
+import { UserData } from './types/userdata';
+import { HttpClient } from '@angular/common/http';
+import { LoginEventService } from './login-event.service';
 
 @Component({
   selector: 'app-root',
@@ -58,20 +69,26 @@ import { AuthService } from './auth.service';
     CommonModule,
   ],
 })
-export class AppComponent {
-  public userDisplayName: string = 'User';
-  public userEmail: string = 'ei kirjautunut';
+export class AppComponent implements OnInit {
+  public userDisplayName: string = '';
+  public userEmail: string = '';
 
   public appPages = [
-    { title: 'Treenit', url: '/page2', icon: 'golf' },
-    { title: 'Saavutukset', url: '/page3', icon: 'trophy' },
-    { title: 'ohjelma', url: '/page5', icon: 'trophy' },
-    { title: 'valmis', url: '/page6', icon: 'trophy' },
+    { title: 'Treenit', url: '/page2', icon: 'barbell' },
+    { title: 'Saavutukset', url: '/page8', icon: 'golf' },
+    { title: 'Historia', url: '/page3', icon: 'calendar' },
+    { title: 'Statsit', url: '/page7', icon: 'analytics' },
+    { title: 'Ohjelma', url: '/page5', icon: 'trophy' },
+    { title: 'Valmis', url: '/page6', icon: 'trophy' },
   ];
 
   protected router = inject(Router);
   public loadingService = inject(LoadingService);
   public authService = inject(AuthService);
+  private http = inject(HttpClient);
+  testData!: UserData;
+
+  private loginEventService = inject(LoginEventService);
 
   constructor() {
     addIcons({
@@ -85,25 +102,74 @@ export class AppComponent {
       golf,
       backspaceOutline,
       backspace,
+      barbellOutline,
+      barbell,
+      analyticsOutline,
+      analytics,
+      calendarNumberOutline,
+      calendarNumber,
+      calendarOutline,
+      calendar,
+    });
+  }
+
+  ngOnInit() {
+    this.loginEventService.loggedIn$.subscribe(() => {
+      this.checkUserStatus();
+      return;
     });
     this.checkUserStatus();
   }
 
   checkUserStatus() {
-    const savedName = localStorage.getItem('userName');
-    const savedEmail = localStorage.getItem('userEmail');
+    // fetch userdata from backend:
+    try {
+      // 1. Get the object from sessionStorage
+      const sessionDataStr = sessionStorage.getItem('accesstoken');
+      if (sessionDataStr) {
+        const sessionData = JSON.parse(sessionDataStr);
+        // 2. Use sessionData.googleId for the URL. Added backend port 3000.
+        const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
 
-    if (savedName) {
-      this.userDisplayName = savedName;
-    }
-    if (savedEmail) {
-      this.userEmail = savedEmail;
+        // 3. Use sessionData.token for the Authorization header
+        this.http
+          .get(url, {
+            headers: {
+              Authorization: `Bearer ${sessionData.token}`, // Only the raw token string
+              'Content-Type': 'application/json',
+            },
+          })
+          .subscribe({
+            next: (data) => {
+              this.testData = data as UserData;
+              console.log('Test data loaded:', this.testData);
+
+              const savedName = this.testData?.name;
+              const savedEmail = this.testData?.email;
+
+              if (savedName) {
+                this.userDisplayName = savedName;
+              }
+              if (savedEmail) {
+                this.userEmail = savedEmail;
+              }
+            },
+            error: (err) => {
+              console.error('Failed to load test data', err);
+            },
+          });
+      }
+    } catch (error) {
+      console.error('Error loading test data:', error);
     }
   }
 
   // ---  FUNKTIO: Kirjaudu ulos ---
   logout() {
     console.log('Kirjaudutaan ulos...');
+
+    this.userDisplayName = '';
+    this.userEmail = '';
 
     this.authService.logout();
 

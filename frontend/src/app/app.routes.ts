@@ -36,4 +36,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Pages/page6/page6.page').then((m) => m.Page6Page),
   },
+  {
+    path: 'page7',
+    loadComponent: () =>
+      import('./Pages/page7/page7.page').then((m) => m.Page7Page),
+  },
+  {
+    path: 'page8',
+    loadComponent: () =>
+      import('./Pages/page8/page8.page').then((m) => m.Page8Page),
+  },
 ];
