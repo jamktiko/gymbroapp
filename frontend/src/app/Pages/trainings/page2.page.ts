@@ -90,26 +90,12 @@ export class Page2Page implements OnInit {
     });
   }
 
+  // Kun Trainings-sivu on tulossa näkyviin haetaan käyttäjän datat backendistä
   ionViewWillEnter() {
     try {
-      // const sessionDataString = sessionStorage.getItem('accesstoken');
-      // if (sessionDataString) {
-      //   const sessionData = JSON.parse(sessionDataString);
-      //   const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
-
-      //   this.http
-      //     .get(url, {
-      //       headers: {
-      //         Authorization: `Bearer ${sessionData.token}`,
-      //         'Content-Type': 'application/json',
-      //       },
-      //     })
-
       const sessionDataString = sessionStorage.getItem('accesstoken');
       if (sessionDataString) {
         const sessionData = JSON.parse(sessionDataString);
-        // const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
-
         this.dataFetchService.getUserDataById(sessionData.googleId).subscribe({
           next: (data) => {
             this.testData = data as UserData;
