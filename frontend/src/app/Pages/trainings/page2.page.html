@@ -48,7 +48,8 @@
           </ion-label>
 
           <!-- Poistonappi -->
-          <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)">
+          <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"
+            [disabled]="program.isDefault">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </ion-item>
