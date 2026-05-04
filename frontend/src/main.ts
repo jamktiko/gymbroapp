@@ -19,13 +19,14 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { LoadingInterceptor } from './app/interceptors/loading.interceptor';
+import { AuthInterceptor } from './app/interceptors/auth.interceptor';
 // import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
-    provideHttpClient(withInterceptors([LoadingInterceptor])),
+    provideHttpClient(withInterceptors([AuthInterceptor, LoadingInterceptor])),
 
     provideRouter(routes, withPreloading(PreloadAllModules)),
     {

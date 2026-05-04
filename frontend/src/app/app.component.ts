@@ -43,6 +43,7 @@ import { AuthService } from './auth.service';
 import { UserData } from './types/userdata';
 import { HttpClient } from '@angular/common/http';
 import { LoginEventService } from './login-event.service';
+import { DataFetchService } from './data-fetch-service';
 
 @Component({
   selector: 'app-root',
@@ -89,6 +90,7 @@ export class AppComponent implements OnInit {
   testData!: UserData;
 
   private loginEventService = inject(LoginEventService);
+  private dataFetchService = inject(DataFetchService);
 
   constructor() {
     addIcons({
@@ -114,6 +116,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    // loginEventService ja checkUserStatus() yhdessä varmistavat että sivubarin menun käyttäjätiedot ovat ajan tasalla login ja logout tapahtumien jälkeenkin:
     this.loginEventService.loggedIn$.subscribe(() => {
       this.checkUserStatus();
       return;
@@ -172,11 +175,6 @@ export class AppComponent implements OnInit {
     this.userEmail = '';
 
     this.authService.logout();
-
-    // 1. Tyhjennetään selaimen muisti
-    //localStorage.removeItem('isLoggedIn');
-    //localStorage.removeItem('userName');
-    //localStorage.removeItem('userEmail');
 
     // 2. Ohjataan takaisin kirjautumissivulle (page1)
     // replaceUrl: true poistaa historian, jotta ei pääse "takaisin"-napilla sisään

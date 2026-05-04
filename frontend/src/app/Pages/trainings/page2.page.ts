@@ -29,6 +29,7 @@ import { addIcons } from 'ionicons';
 // Lisätty 'play' ikoneihin navigointia varten
 import { add, trashOutline, play } from 'ionicons/icons';
 import { TrainingProgram, UserData } from '../../types/userdata';
+import { DataFetchService } from '../../data-fetch-service';
 
 @Component({
   selector: 'app-page2',
@@ -61,11 +62,11 @@ export class Page2Page implements OnInit {
   private router = inject(Router);
   private alertCtrl = inject(AlertController);
   public xpService = inject(XpService);
-  
+  private dataFetchService = inject(DataFetchService);
+
   savedPrograms: TrainingProgram[] = [];
   testData!: UserData;
   isAccordionOpen = false;
-  
 
   constructor() {
     // Lisätty play-ikoni, jotta se näkyy HTML-puolella
@@ -81,42 +82,26 @@ export class Page2Page implements OnInit {
    */
   startProgram(program: TrainingProgram) {
     console.log('Aloitetaan treeni:', program.name);
-    
+
     // Navigoidaan sivulle, joka hoitaa treenin suorituksen.
     // Varmista, että reitti (esim. '/page3') on oikein app.routes.ts -tiedostossa.
-    this.router.navigate(['/page5'], { 
-      state: { activeWorkout: program } 
+    this.router.navigate(['/page5'], {
+      state: { activeWorkout: program },
     });
   }
 
+  // Kun Trainings-sivu on tulossa näkyviin haetaan käyttäjän datat backendistä
   ionViewWillEnter() {
-    try {
-      const sessionDataStr = sessionStorage.getItem('accesstoken');
-      if (sessionDataStr) {
-        const sessionData = JSON.parse(sessionDataStr);
-        const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
-
-        this.http
-          .get(url, {
-            headers: {
-              Authorization: `Bearer ${sessionData.token}`,
-              'Content-Type': 'application/json',
-            },
-          })
-          .subscribe({
-            next: (data) => {
-              this.testData = data as UserData;
-              console.log('Test data loaded:', this.testData);
-              this.loadPrograms();
-            },
-            error: (err) => {
-              console.error('Failed to load test data', err);
-            },
-          });
-      }
-    } catch (error) {
-      console.error('Error loading test data:', error);
-    }
+    this.dataFetchService.getUserDataById().subscribe({
+      next: (data) => {
+        this.testData = data as UserData;
+        console.log('Test data loaded:', this.testData);
+        this.loadPrograms();
+      },
+      error: (err) => {
+        console.error('Failed to load test data', err);
+      },
+    });
   }
 
   loadPrograms() {
@@ -153,13 +138,11 @@ export class Page2Page implements OnInit {
   }
 
   onAccordionChange(event: AccordionGroupCustomEvent) {
-  // Jos event.detail.value on olemassa, jokin haitari on auki
-  this.isAccordionOpen = !!event.detail.value;
-}
+    // Jos event.detail.value on olemassa, jokin haitari on auki
+    this.isAccordionOpen = !!event.detail.value;
+  }
 
   lisaaOhjelma() {
     this.router.navigate(['/page4']);
   }
-  
-  
 }
