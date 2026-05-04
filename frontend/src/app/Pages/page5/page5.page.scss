@@ -1,7 +1,7 @@
 ion-content {
   --overflow: hidden;
   overflow: hidden;
-  --background: radial-gradient(circle at center, #222 0%, #111 100%);
+  /*--background: radial-gradient(circle at center, #222 0%, #111 100%);*/
 }
 
 .content-container {
@@ -21,9 +21,19 @@ ion-content {
   text-align: center;
   border: 1px solid rgba(255, 217, 0, 0.2);
 
-  .label { color: #ffd900; font-size: 12px; letter-spacing: 2px; margin-bottom: 5px; }
-  .exercise-title { font-size: 35px; color: rgb(255, 255, 255); margin: 0; font-weight: bold; }
-  
+  .label {
+    color: #ffd900;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+  }
+  .exercise-title {
+    font-size: 35px;
+    color: rgb(255, 255, 255);
+    margin: 0;
+    font-weight: bold;
+  }
+
   .stats-grid {
     display: flex;
     justify-content: space-around;
@@ -31,8 +41,15 @@ ion-content {
     .stat {
       display: flex;
       flex-direction: column;
-      small { color: #888; font-size: 10px; }
-      span { color: #ffd900; font-size: 20px; font-weight: bold; }
+      small {
+        color: #888;
+        font-size: 10px;
+      }
+      span {
+        color: #ffd900;
+        font-size: 20px;
+        font-weight: bold;
+      }
     }
   }
 }
@@ -88,12 +105,18 @@ ion-content {
 }
 
 @keyframes pulse {
-  0% { box-shadow: 0 0 5px rgba(255, 217, 0, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(255, 217, 0, 0.4); }
-  100% { box-shadow: 0 0 5px rgba(255, 217, 0, 0.2); }
+  0% {
+    box-shadow: 0 0 5px rgba(255, 217, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 217, 0, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 217, 0, 0.2);
+  }
 }
 
 ion-toolbar {
   --background: #111111; /* Pakotetaan musta tausta */
-  --color: #ffd900;      /* Tekstin väri keltaiseksi */
+  --color: #ffd900; /* Tekstin väri keltaiseksi */
 }
