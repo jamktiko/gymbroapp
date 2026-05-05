@@ -77,6 +77,7 @@ exports.createSession = async (req, res) => {
 
     // Lisätään uusi sessio
     user.trainingSessions.push(req.body);
+    user.xp += 50; // XP:n lisäys uudesta sessiosta
     await user.save();
 
     // Palautetaan juuri luotu uusi sessio (viimeinen alkio taulukossa)
