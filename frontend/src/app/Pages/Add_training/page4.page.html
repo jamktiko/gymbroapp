@@ -19,11 +19,11 @@
     <h3 class="selection-title">VALITSE HARJOITTEET</h3>
 
     <ion-accordion-group #myAccordionGroup>
-      @for (category of exerciseList; track $index) {
-      <ion-accordion [value]="category.title">
+      @for (category of exerciseList2; track $index) {
+      <ion-accordion [value]="category.category">
 
         <ion-item slot="header" color="light">
-          <ion-label><strong>{{ category.title }}</strong></ion-label>
+          <ion-label><strong>{{ category.category }}</strong></ion-label>
         </ion-item>
 
         <div class="ion-no-padding" slot="content">
@@ -33,9 +33,9 @@
             <ion-checkbox [(ngModel)]="exercise.isSelected" slot="start" (click)="$event.stopPropagation()">
             </ion-checkbox>
 
-            <ion-label class="exercise-label">{{ exercise.name }}</ion-label>
+            <ion-label class="exercise-label">{{ exercise.move.name }}</ion-label>
 
-            @if (category.title === 'Omat liikkeet') {
+            @if (category.category === 'Omat liikkeet') {
             <ion-button fill="clear" color="danger" slot="end" class="trash-button"
               (click)="removeExercise(exercise); $event.stopPropagation()">
               <ion-icon name="trash-outline"></ion-icon>
@@ -53,12 +53,14 @@
               <span class="separator">x</span>
 
               <div class="stat-group">
-                <ion-input type="number" [(ngModel)]="exercise.reps" class="small-input" placeholder="0"></ion-input>
+                <ion-input type="number" [(ngModel)]="exercise.sets[0].reps" class="small-input"
+                  placeholder="0"></ion-input>
                 <span class="unit">Reps</span>
               </div>
 
               <div class="stat-group">
-                <ion-input type="number" [(ngModel)]="exercise.weight" class="small-input" placeholder="0"></ion-input>
+                <ion-input type="number" [(ngModel)]="exercise.sets[0].weight" class="small-input"
+                  placeholder="0"></ion-input>
                 <span class="unit">kg</span>
               </div>
 

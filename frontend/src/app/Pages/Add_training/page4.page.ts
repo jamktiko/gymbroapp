@@ -168,16 +168,16 @@ export class LisaaTreeni {
     });
   }
 
-  toggleSelection(item: Exercise) {
+  toggleSelection(item: ExerciseIsSelected) {
     item.isSelected = !item.isSelected;
   }
 
   /**
    * Poistaa yksittäisen harjoituksen "Omat liikkeet" -kategoriasta.
    */
-  removeExercise(exerciseToRemove: Exercise) {
-    const customCat = this.exerciseList.find(
-      (c) => c.title === 'Omat liikkeet',
+  removeExercise(exerciseToRemove: ExerciseIsSelected) {
+    const customCat = this.exerciseList2.find(
+      (c) => c.category === 'Omat liikkeet',
     );
     if (customCat) {
       customCat.exercises = customCat.exercises.filter(
