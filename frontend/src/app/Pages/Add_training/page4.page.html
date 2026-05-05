@@ -3,60 +3,48 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/page2"></ion-back-button>
     </ion-buttons>
-    <ion-title>Uusi treeniohjelma</ion-title>
+    <ion-title>Luo uusi treeniohjelma</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-    
+
     <ion-item lines="full" class="name-input-item">
       <ion-label position="stacked">OHJELMAN NIMI</ion-label>
-      <ion-input 
-        [(ngModel)]="programName" 
-        type="text"
-        maxlength="30"
-        placeholder="esim. Jalkapäivä">
+      <ion-input [(ngModel)]="programName" type="text" maxlength="30" placeholder="esim. Jalkapäivä">
       </ion-input>
     </ion-item>
 
     <h3 class="selection-title">VALITSE HARJOITTEET</h3>
-    
-    <ion-accordion-group #myAccordionGroup>
-      <ion-accordion *ngFor="let category of exerciseList" [value]="category.title">
-        
-        <ion-item slot="header" color="light">
-          <ion-label><strong>{{ category.title }}</strong></ion-label>
-        </ion-item>
-        
-        <div class="ion-no-padding" slot="content">
-          <ion-item 
-            *ngFor="let exercise of category.exercises" 
-            (click)="toggleSelection(exercise)" 
-            lines="full" 
-            button="true"
-            class="exercise-item">
-            
-            <ion-checkbox 
-              [checked]="exercise.isSelected" 
-              slot="start" 
-              (click)="$event.stopPropagation()">
-            </ion-checkbox>
-            
-            <ion-label class="exercise-label">{{ exercise.name }}</ion-label>
 
-            <ion-button 
-              *ngIf="category.title === 'Omat liikkeet'" 
-              fill="clear" 
-              color="danger" 
-              slot="end"
-              class="trash-button"
+    <ion-accordion-group #myAccordionGroup>
+      @for (category of exerciseList2; track $index) {
+      <ion-accordion [value]="category.category">
+
+        <ion-item slot="header" color="light">
+          <ion-label><strong>{{ category.category }}</strong></ion-label>
+        </ion-item>
+
+        <div class="ion-no-padding" slot="content">
+          @for (exercise of category.exercises; track $index) {
+          <ion-item (click)="toggleSelection(exercise)" lines="full" button="true" class="exercise-item">
+
+            <ion-checkbox [(ngModel)]="exercise.isSelected" slot="start" (click)="$event.stopPropagation()">
+            </ion-checkbox>
+
+            <ion-label class="exercise-label">{{ exercise.move.name }}</ion-label>
+
+            @if (category.category === 'Omat liikkeet') {
+            <ion-button fill="clear" color="danger" slot="end" class="trash-button"
               (click)="removeExercise(exercise); $event.stopPropagation()">
               <ion-icon name="trash-outline"></ion-icon>
             </ion-button>
+            }
 
-            <div slot="end" *ngIf="exercise.isSelected" class="stats-container" (click)="$event.stopPropagation()">
-              
+            @if (exercise.isSelected) {
+            <div slot="end" class="stats-container" (click)="$event.stopPropagation()">
+
               <div class="stat-group">
                 <ion-input type="number" [(ngModel)]="exercise.sets" class="small-input" placeholder="0"></ion-input>
                 <span class="unit">Sets</span>
@@ -65,21 +53,26 @@
               <span class="separator">x</span>
 
               <div class="stat-group">
-                <ion-input type="number" [(ngModel)]="exercise.reps" class="small-input" placeholder="0"></ion-input>
+                <ion-input type="number" [(ngModel)]="exercise.sets[0].reps" class="small-input"
+                  placeholder="0"></ion-input>
                 <span class="unit">Reps</span>
               </div>
 
               <div class="stat-group">
-                <ion-input type="number" [(ngModel)]="exercise.weight" class="small-input" placeholder="0"></ion-input>
+                <ion-input type="number" [(ngModel)]="exercise.sets[0].weight" class="small-input"
+                  placeholder="0"></ion-input>
                 <span class="unit">kg</span>
               </div>
-              
+
             </div>
-            
+            }
           </ion-item>
+          }
         </div>
-        
+
       </ion-accordion>
+      }
+
     </ion-accordion-group>
 
     <div class="ion-padding-top action-buttons">
@@ -88,14 +81,10 @@
         Luo uusi liike
       </ion-button>
 
-      <ion-button 
-        expand="block" 
-        color="primary" 
-        (click)="saveProgram()"
-        [disabled]="programName.trim().length === 0">
+      <ion-button expand="block" color="primary" (click)="saveProgram()" [disabled]="programName.trim().length === 0">
         Tallenna ohjelma
       </ion-button>
     </div>
-    
+
   </div>
 </ion-content>
