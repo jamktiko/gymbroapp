@@ -22,7 +22,7 @@ import {
 import { addIcons } from 'ionicons';
 import { addOutline, trashOutline } from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
-import { Move } from '../../types/userdata';
+import { ExerciseIsSelected, Move } from '../../types/userdata';
 
 interface Exercise {
   name: string;
@@ -35,6 +35,11 @@ interface Exercise {
 interface Category {
   title: string;
   exercises: Exercise[];
+}
+
+interface Category2 {
+  category: string;
+  exercises: ExerciseIsSelected[];
 }
 
 @Component({
@@ -88,6 +93,8 @@ export class LisaaTreeni {
     },
   ];
 
+  exerciseList2: Category2[] = [];
+
   private router = inject(Router);
   private alertCtrl = inject(AlertController);
 
@@ -109,10 +116,55 @@ export class LisaaTreeni {
         this.testData = data as Move[];
         console.log('Test data loaded:', this.testData);
         // this.loadPrograms();
+        this.categorizeMoves();
       },
       error: (err) => {
         console.error('Failed to load test data', err);
       },
+    });
+  }
+
+  // takes moves fetched from database and categorizes them by muscleGroup property:
+  categorizeMoves() {
+    console.log('hep!');
+    this.testData.forEach((x) => {
+      const indexOfExistingCategory = this.exerciseList2.findIndex((y) => {
+        return y.category === x.muscleGroup;
+      });
+
+      const exerciseToAdd: ExerciseIsSelected = {
+        move: x,
+        sets: [
+          {
+            reps: 8,
+            weight: 0,
+          },
+          {
+            reps: 8,
+            weight: 0,
+          },
+          {
+            reps: 8,
+            weight: 0,
+          },
+        ],
+        isSelected: false,
+      };
+
+      // if existing not found -> index is -1 -> we create a new Category2 object:
+      if (indexOfExistingCategory === -1) {
+        const categoryName = x.muscleGroup;
+        const newCategory2Obj: Category2 = {
+          category: categoryName,
+          exercises: [exerciseToAdd],
+        };
+        this.exerciseList2.push(newCategory2Obj);
+      } else {
+        // else it got found already, just push it to the found index:
+        this.exerciseList2[indexOfExistingCategory].exercises.push(
+          exerciseToAdd,
+        );
+      }
     });
   }
 
