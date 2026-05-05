@@ -150,13 +150,38 @@ export class LisaaTreeni {
     const currentLength = exercise.sets.length;
 
     if (newLength > currentLength) {
-      // Add new sets with default values
+      // Add new sets with default values, copying from the first set
       for (let i = currentLength; i < newLength; i++) {
-        exercise.sets.push({ reps: 8, weight: 0 }); // Default values
+        exercise.sets.push({
+          reps: exercise.sets[0].reps,
+          weight: exercise.sets[0].weight,
+        }); // Default values
       }
     } else if (newLength < currentLength) {
       // Remove extra sets from the end
       exercise.sets.splice(newLength);
+    }
+  }
+
+  updateAllReps(exercise: ExerciseIsSelected, newRepsVal: string) {
+    const newReps = parseInt(newRepsVal, 10);
+    if (isNaN(newReps) || newReps < 0) return;
+
+    if (exercise.sets) {
+      exercise.sets.forEach((set) => {
+        set.reps = newReps;
+      });
+    }
+  }
+
+  updateAllWeights(exercise: ExerciseIsSelected, newWeightsVal: string) {
+    const newWeight = parseInt(newWeightsVal, 10);
+    if (isNaN(newWeight) || newWeight < 0) return;
+
+    if (exercise.sets) {
+      exercise.sets.forEach((set) => {
+        set.weight = newWeight;
+      });
     }
   }
 
