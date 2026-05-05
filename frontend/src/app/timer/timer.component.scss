@@ -1,0 +1,32 @@
+/* --- LEIJUVA TIMER-NAPPULA --- */
+.timer {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  // Fixed-asettelu: nappi pysyy paikallaan vaikka sisältö rullaisi
+  position: fixed;
+  bottom: 180px;              // Korkeus ruudun alareunasta (Next-napin yläpuolella)
+  left: 50%;
+  transform: translateX(-50%); // Keskitys vaakasuunnassa
+  
+  width: 75%;                 // Kapeampi kuin liikekortti
+  height: 80px;
+  border-radius: 15px;
+  border: 2px solid #ffd900;  // Selkeä keltainen reunus
+  white-space: nowrap;        // Estetään tekstin rivittyminen
+  overflow: hidden;
+  
+  font-size: 50px;
+  // Monospace fontti estää numeroiden "värisemisen" ajan juostessa
+  font-family: monospace; 
+  
+  --color: #ffd900;
+  // !important varmistaa, että Ionicin oletusteemat eivät ylikirjoita mustaa taustaa
+  --background: rgba(0, 0, 0, 0.8) !important;
+  
+  // Keltainen hohde napin ympärillä
+  box-shadow: 0 0 20px rgba(255, 217, 0, 0.2);
+  --ripple-color: #ffd900;    // Napautus-efektin väri
+}
