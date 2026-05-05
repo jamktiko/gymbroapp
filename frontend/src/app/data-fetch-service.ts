@@ -5,7 +5,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { Move, UserData } from './types/userdata';
+import { Move, TrainingProgram, UserData } from './types/userdata';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +13,8 @@ import { Move, UserData } from './types/userdata';
 export class DataFetchService {
   private apiurlMoves = 'http://localhost:3000/api/moves';
   private apiurlUsers = 'http://localhost:3000/api/users';
-  private apiurlPrograms = 'http://localhost:3000/api/trainingPrograms';
-  private apiurlSessions = 'http://localhost:3000/api/trainingSessions';
+  private apiurlPrograms = 'http://localhost:3000/api/training-programs';
+  private apiurlSessions = 'http://localhost:3000/api/training-sessions';
 
   private http = inject(HttpClient);
 
@@ -145,10 +145,15 @@ export class DataFetchService {
   }
 
   /**
-   * [POST] Creates a new trainingprogram and adds it to the database.
+   * [POST] Creates a new trainingprogram document and adds it to the database.
+   * - we dont need to add _id because it is added automatically by mongodb
+   * - isDefault can be omitted because it has a default value of false
+   * - __v is just for mongo's internal logs
    */
-  createProgram() {
-    //
+  createProgram(
+    programData: Omit<TrainingProgram, '_id' | 'isDefault' | '__v'>,
+  ) {
+    return this.http.post<TrainingProgram>(this.apiurlPrograms, programData);
   }
 
   /**

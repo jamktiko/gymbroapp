@@ -22,7 +22,7 @@ import {
 import { addIcons } from 'ionicons';
 import { addOutline, trashOutline } from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
-import { ExerciseIsSelected, Move } from '../../types/userdata';
+import { Exercise, ExerciseIsSelected, Move } from '../../types/userdata';
 
 interface Category2 {
   category: string;
@@ -163,6 +163,7 @@ export class LisaaTreeni {
     }
   }
 
+  // helper method for updating all sets reps at once
   updateAllReps(exercise: ExerciseIsSelected, newRepsVal: string) {
     const newReps = parseInt(newRepsVal, 10);
     if (isNaN(newReps) || newReps < 0) return;
@@ -174,6 +175,7 @@ export class LisaaTreeni {
     }
   }
 
+  // helper method for updating all sets weights at once
   updateAllWeights(exercise: ExerciseIsSelected, newWeightsVal: string) {
     const newWeight = parseInt(newWeightsVal, 10);
     if (isNaN(newWeight) || newWeight < 0) return;
@@ -358,6 +360,60 @@ export class LisaaTreeni {
       this.resetSelections();
 
       this.router.navigate(['/page2']);
+    } else {
+      alert('Täytä nimi ja valitse vähintään yksi liike.');
+    }
+  }
+
+  // new saveProgram method modified to work with backend and database
+  saveProgram2() {
+    // 1. Kerätään kaikki valitut liikkeet yhteen listaan
+    const selectedExercises: Exercise[] = this.exerciseList2
+      .reduce(
+        (all: ExerciseIsSelected[], c: Category2) => all.concat(c.exercises),
+        [],
+      )
+      .filter((e: ExerciseIsSelected) => e.isSelected)
+      .map((e) => ({ move: e.move, sets: e.sets })); // Muutetaan ExerciseIsSelected muodosta Exercise muotoon
+
+    console.log('selectedExercises:', selectedExercises[0]?.move);
+    console.log('selectedExercises:', selectedExercises[0]?.sets.length);
+
+    // Tarkistetaan että nimi on annettu ja liikkeitä valittu
+    if (this.programName.trim().length > 0 && selectedExercises.length > 0) {
+      console.log('Tallennetaan:', this.programName, selectedExercises);
+
+      // 2. Luodaan uusi treeniohjelma-olio
+      // const newProgram = {
+      //   // BACKEND-MUUTOS: Backend yleensä luo ID:n puolestasi, joten Date.now() lähtee pois
+      //   id: Date.now(), // Uniikki tunniste helpottaa käsittelyä
+      //   name: this.programName,
+      //   exercises: selectedExercises,
+      //   date: new Date().toLocaleDateString('fi-FI'),
+      // };
+
+      // 2. Luodaan uusi treeniohjelma-olio
+      const newProgram2 = {
+        name: this.programName,
+        description: '',
+        exercises: selectedExercises,
+      };
+
+      this.dataFetchService.createProgram(newProgram2).subscribe({
+        next: (savedProgram) => {
+          console.log(
+            'Treeni tallennettu onnistuneesti backendille!',
+            savedProgram,
+          );
+
+          this.resetSelections();
+          this.router.navigate(['/page2']);
+        },
+        error: (err) => {
+          console.error('Error saving program:', err);
+          alert('Treeniohjelman tallennus epäonnistui. Yritä uudelleen.');
+        },
+      });
     } else {
       alert('Täytä nimi ja valitse vähintään yksi liike.');
     }
