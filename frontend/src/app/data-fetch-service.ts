@@ -5,7 +5,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { UserData } from './types/userdata';
+import { Move, UserData } from './types/userdata';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +47,7 @@ export class DataFetchService {
   //
   //
 
-  // ------------------------------ USER METHODS: ------------------------------
+  // ---------------------------- USER METHODS: ----------------------------
 
   /**
    * [GET] Fetches all user data by id from database.
@@ -75,36 +75,42 @@ export class DataFetchService {
 
   /**
    * [PATCH] Modifies currently logged in user's data.
+   * - right now not sure if this method is needed at all
    */
-  updateUserDataById(): Observable<UserData> {
-    // fetch JWT token from sessionStorage
-    let sessionData;
-
-    try {
-      const sessionDataString = sessionStorage.getItem('accesstoken');
-      if (!sessionDataString) {
-        return throwError(() => new Error('No access token found in session.'));
-      }
-      sessionData = JSON.parse(sessionDataString);
-    } catch (error) {
-      console.error('Error parsing session data:', error);
-      return throwError(() => new Error('Invalid or corrupted session data.'));
-    }
-
-    // actual http request
-    return this.http.patch<UserData>(
-      `${this.apiurlUsers}/${sessionData.googleId}`,
-      {}, // Provide payload data instead of headers here
-    );
+  updateUserDataById() {
+    //
   }
 
-  // ------------------------------ MOVE METHODS: ------------------------------
+  // ---------------------------- MOVE METHODS: ----------------------------
 
   /**
    * [GET] Fetches all default moves + user's custom created moves from database.
    */
-  getAllMoves() {
-    //
+  getAllMoves(): Observable<Move[]> {
+    // fetch JWT token from sessionStorage
+    // let sessionData;
+
+    // try {
+    //   const sessionDataString = sessionStorage.getItem('accesstoken');
+    //   if (!sessionDataString) {
+    //     return throwError(() => new Error('No access token found in session.'));
+    //   }
+    //   sessionData = JSON.parse(sessionDataString);
+    // } catch (error) {
+    //   console.error('Error parsing session data:', error);
+    //   return throwError(() => new Error('Invalid or corrupted session data.'));
+    // }
+
+    // return this.http.get<Move[]>(this.apiurlMoves, {
+    //   headers: {
+    //     'googleId': sessionData.googleId
+    //   }
+    // });
+
+    // actual http request
+    const test = this.http.get<Move[]>(this.apiurlMoves);
+    console.log(`test: ${test}`);
+    return this.http.get<Move[]>(this.apiurlMoves);
   }
 
   /**
@@ -121,7 +127,7 @@ export class DataFetchService {
     //
   }
 
-  // ------------------------- TRAININGPROGRAM METHODS: -------------------------
+  // ----------------------- TRAININGPROGRAM METHODS: -----------------------
 
   /**
    * [GET] Fetches all trainingprograms for currently logged in user.
@@ -152,7 +158,7 @@ export class DataFetchService {
     //
   }
 
-  // ------------------------- TRAININGSESSION METHODS: -------------------------
+  // ----------------------- TRAININGSESSION METHODS: -----------------------
 
   /**
    * [GET] Fetches all trainingsession for currently logged in user.
