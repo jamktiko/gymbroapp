@@ -50,11 +50,11 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.virtual('level').get(function () {
-  return Math.floor(Math.sqrt(this.xp / 50));
+  return Math.floor(Math.sqrt(this.xp / 50)) + 1;
 });
 
 UserSchema.virtual('xpToNextLevel').get(function () {
-  const next = (this.level + 1) ** 2 * 50;
+  const next = this.level ** 2 * 50;
   return next - this.xp;
 });
 
