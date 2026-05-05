@@ -30,7 +30,7 @@
           @for (exercise of category.exercises; track $index) {
           <ion-item (click)="toggleSelection(exercise)" lines="full" button="true" class="exercise-item">
 
-            <ion-checkbox [checked]="exercise.isSelected" slot="start" (click)="$event.stopPropagation()">
+            <ion-checkbox [(ngModel)]="exercise.isSelected" slot="start" (click)="$event.stopPropagation()">
             </ion-checkbox>
 
             <ion-label class="exercise-label">{{ exercise.name }}</ion-label>
