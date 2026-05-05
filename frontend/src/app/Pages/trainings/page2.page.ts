@@ -122,14 +122,25 @@ export class Page2Page implements OnInit {
           text: 'Poista',
           role: 'destructive',
           handler: () => {
-            this.savedPrograms = this.savedPrograms.filter(
-              (p) => p._id !== programId,
-            );
-            // Huom: Tämä päivittää vain localStoragen, muista päivittää backend myöhemmin
-            localStorage.setItem(
-              'treeniohjelmat',
-              JSON.stringify(this.savedPrograms),
-            );
+            this.dataFetchService.deleteProgram(programId).subscribe({
+              next: (data) => {
+                console.log('Trainingprogram deleted successfully:', data);
+                // after deleting - fetch right away the new data from database
+                this.dataFetchService.getUserDataById().subscribe({
+                  next: (data) => {
+                    this.testData = data as UserData;
+                    console.log('Test data loaded:', this.testData);
+                    this.loadPrograms();
+                  },
+                  error: (err) => {
+                    console.error('Failed to load test data', err);
+                  },
+                });
+              },
+              error: (err) => {
+                console.error('Failed to delete trainingprogram', err);
+              },
+            });
           },
         },
       ],

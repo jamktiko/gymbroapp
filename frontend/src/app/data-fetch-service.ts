@@ -159,8 +159,8 @@ export class DataFetchService {
   /**
    * [DELETE] Deletes a trainingprogram.
    */
-  deleteProgram() {
-    //
+  deleteProgram(id: string): Observable<TrainingProgram> {
+    return this.http.delete<TrainingProgram>(`${this.apiurlPrograms}/${id}`);
   }
 
   // ----------------------- TRAININGSESSION METHODS: -----------------------

@@ -310,95 +310,33 @@ export class LisaaTreeni {
     });
   }
 
-  // BACKEND-MUUTOS: Tuo HttpClient yläreunaan myöhemmin
-  // import { HttpClient } from '@angular/common/http';
-
-  saveProgram() {
-    // 1. Kerätään kaikki valitut liikkeet yhteen listaan
-    const selectedExercises = this.exerciseList2
-      .reduce(
-        (all: ExerciseIsSelected[], c: Category2) => all.concat(c.exercises),
-        [],
-      )
-      .filter((e: ExerciseIsSelected) => e.isSelected)
-      .map((e) => ({ move: e.move, sets: e.sets })); // Muutetaan ExerciseIsSelected muodosta Exercise muotoon
-
-    // Tarkistetaan että nimi on annettu ja liikkeitä valittu
-    if (this.programName.trim().length > 0 && selectedExercises.length > 0) {
-      console.log('Tallennetaan:', this.programName, selectedExercises);
-
-      // 2. Luodaan uusi treeniohjelma-olio
-      const newProgram = {
-        // BACKEND-MUUTOS: Backend yleensä luo ID:n puolestasi, joten Date.now() lähtee pois
-        id: Date.now(), // Uniikki tunniste helpottaa käsittelyä
-        name: this.programName,
-        exercises: selectedExercises,
-        date: new Date().toLocaleDateString('fi-FI'),
-      };
-
-      // --- POISTETETTAVA OSA ALKAA (Local Storage) ---
-      // // BACKEND-MUUTOS: Poista nämä rivit kun backend on valmis
-      // const existingPrograms = JSON.parse(localStorage.getItem('treeniohjelmat') || '[]');
-      // existingPrograms.push(newProgram);
-      // localStorage.setItem('treeniohjelmat', JSON.stringify(existingPrograms));
-      // --- POISTETETTAVA OSA PÄÄTTYY ---
-
-      // BACKEND-MUUTOS: Tähän tilalle tulee kutsu palvelimelle:
-      // this.http.post('https://api.sinunpalvelin.fi/programs', newProgram).subscribe();
-      // 3. Haetaan vanhat ohjelmat localStoragesta (jos niitä on)
-      const existingPrograms = JSON.parse(
-        localStorage.getItem('treeniohjelmat') || '[]',
-      );
-
-      // 4. Lisätään uusi ohjelma listaan ja tallennetaan takaisin
-      existingPrograms.push(newProgram);
-      localStorage.setItem('treeniohjelmat', JSON.stringify(existingPrograms));
-
-      console.log('Treeni tallennettu onnistuneesti!');
-
-      // NOLLAUS ENNEN SIIRTYMISTÄ
-      this.resetSelections();
-
-      this.router.navigate(['/page2']);
-    } else {
-      alert('Täytä nimi ja valitse vähintään yksi liike.');
-    }
-  }
-
   // new saveProgram method modified to work with backend and database
   saveProgram2() {
     // 1. Kerätään kaikki valitut liikkeet yhteen listaan
+    // Muutetaan ExerciseIsSelected objektit Exercise muotoon
     const selectedExercises: Exercise[] = this.exerciseList2
       .reduce(
         (all: ExerciseIsSelected[], c: Category2) => all.concat(c.exercises),
         [],
       )
       .filter((e: ExerciseIsSelected) => e.isSelected)
-      .map((e) => ({ move: e.move, sets: e.sets })); // Muutetaan ExerciseIsSelected muodosta Exercise muotoon
+      .map((e) => ({ move: e.move, sets: e.sets })); //
 
     console.log('selectedExercises:', selectedExercises[0]?.move);
     console.log('selectedExercises:', selectedExercises[0]?.sets.length);
 
-    // Tarkistetaan että nimi on annettu ja liikkeitä valittu
+    // 2. Tarkistetaan että nimi on annettu ja liikkeitä valittu
     if (this.programName.trim().length > 0 && selectedExercises.length > 0) {
       console.log('Tallennetaan:', this.programName, selectedExercises);
 
-      // 2. Luodaan uusi treeniohjelma-olio
-      // const newProgram = {
-      //   // BACKEND-MUUTOS: Backend yleensä luo ID:n puolestasi, joten Date.now() lähtee pois
-      //   id: Date.now(), // Uniikki tunniste helpottaa käsittelyä
-      //   name: this.programName,
-      //   exercises: selectedExercises,
-      //   date: new Date().toLocaleDateString('fi-FI'),
-      // };
-
-      // 2. Luodaan uusi treeniohjelma-olio
+      // 3. Luodaan uusi treeniohjelma-olio
       const newProgram2 = {
         name: this.programName,
         description: '',
         exercises: selectedExercises,
       };
 
+      // kutsutaan dataFetchServicen metodi joka lähettää POST http-requestin backendiin
       this.dataFetchService.createProgram(newProgram2).subscribe({
         next: (savedProgram) => {
           console.log(
