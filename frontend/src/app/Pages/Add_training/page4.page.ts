@@ -24,19 +24,6 @@ import { addOutline, trashOutline } from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
 import { ExerciseIsSelected, Move } from '../../types/userdata';
 
-interface Exercise {
-  name: string;
-  isSelected: boolean;
-  reps?: number;
-  sets?: number;
-  weight?: number;
-}
-
-interface Category {
-  title: string;
-  exercises: Exercise[];
-}
-
 interface Category2 {
   category: string;
   exercises: ExerciseIsSelected[];
@@ -73,25 +60,6 @@ export class LisaaTreeni {
   accordionGroup!: IonAccordionGroup;
   // Muuttuja, johon tallennetaan käyttäjän antama treeniohjelman nimi.
   programName: string = '';
-
-  exerciseList: Category[] = [
-    // Kovakoodattu lista treenikategorioista ja niiden sisältämistä liikkeistä.
-    // Jokaisella liikkeellä on 'isSelected'-tila valintoja varten.
-    {
-      title: 'Rinta & Olkapäät',
-      exercises: [
-        { name: 'Penkkipunnerrus', isSelected: false },
-        { name: 'Pystypunnerrus', isSelected: false },
-      ],
-    },
-    {
-      title: 'Jalat',
-      exercises: [
-        { name: 'Kyykky', isSelected: false },
-        { name: 'Reiden ojennus', isSelected: false },
-      ],
-    },
-  ];
 
   exerciseList2: Category2[] = [];
 
@@ -169,9 +137,14 @@ export class LisaaTreeni {
 
   // helper method to update the amount of Sets
   // this is because whenever a user changes the amount of sets for a move, we need to add also a new object with reps and weights otherwise it will be undefined
-  updateSets(exercise: ExerciseIsSelected, newLength: number) {
+  updateSets(exercise: ExerciseIsSelected, newLengthVal: string) {
     if (!exercise.sets) {
       exercise.sets = [];
+    }
+
+    const newLength = parseInt(newLengthVal, 10);
+    if (isNaN(newLength) || newLength < 0) {
+      return;
     }
 
     const currentLength = exercise.sets.length;
@@ -205,8 +178,8 @@ export class LisaaTreeni {
 
       // Jos viimeinenkin oma liike poistetaan, poistetaan koko kategoria listasta
       if (customCat.exercises.length === 0) {
-        this.exerciseList = this.exerciseList.filter(
-          (c) => c.title !== 'Omat liikkeet',
+        this.exerciseList2 = this.exerciseList2.filter(
+          (c) => c.category !== 'Omat liikkeet',
         );
       }
     }
@@ -222,19 +195,16 @@ export class LisaaTreeni {
       this.accordionGroup.value = undefined; // Suljetaan kaikki accordionit
     }
 
-    this.exerciseList.forEach((category) => {
+    this.exerciseList2.forEach((category) => {
       category.exercises.forEach((exercise) => {
-        //  Poistetaan valinta (piilottaa keltaisen laatikon ja tyhjentää checkboxin)
         exercise.isSelected = false; // Poistetaan valinta
-        exercise.sets = undefined; // Nollataan syötetyt numerot (undefined palauttaa placeholder-tekstin)
-        exercise.reps = undefined;
-        exercise.weight = undefined;
+        exercise.sets = [
+          { reps: 8, weight: 0 },
+          { reps: 8, weight: 0 },
+          { reps: 8, weight: 0 },
+        ]; // Palautetaan oletusarvot
       });
     });
-
-    // Jos haluat poistaa myös käyttäjän luomat liikkeet tallennuksen jälkeen,
-    // poista kommentit alta:
-    // this.exerciseList = this.exerciseList.filter(c => c.title !== 'Omat liikkeet');
   }
 
   async openCustomExercise() {
@@ -268,15 +238,20 @@ export class LisaaTreeni {
   }
 
   addNewExercise(newName: string) {
-    let customCat = this.exerciseList.find((c) => c.title === 'Omat liikkeet');
+    let customCat = this.exerciseList2.find(
+      (c) => c.category === 'Omat liikkeet',
+    );
 
     if (!customCat) {
       // Luodaan uusi kategoria
-      const newCategory: Category = { title: 'Omat liikkeet', exercises: [] };
+      const newCategory: Category2 = {
+        category: 'Omat liikkeet',
+        exercises: [],
+      };
 
       // TÄRKEÄÄ: Päivitetään koko taulukko levitysoperaattorilla,
       // jotta Ionic huomaa uuden Accordion-elementin heti.
-      this.exerciseList = [...this.exerciseList, newCategory];
+      this.exerciseList2 = [...this.exerciseList2, newCategory];
 
       // Pakotetaan valikko auki heti luonnin jälkeen
       setTimeout(() => {
@@ -289,8 +264,23 @@ export class LisaaTreeni {
       customCat = newCategory;
     }
 
-    // Lisätään liike (isSelected: false, kuten halusit)
-    customCat.exercises.push({ name: newName, isSelected: false });
+    // Lisätään liike
+    customCat.exercises.push({
+      isSelected: false,
+      move: {
+        _id: String(Date.now()), // Väliaikainen ID kunnes tallennetaan backendiin
+        name: newName,
+        type: 'custom',
+        muscleGroup: 'Omat liikkeet',
+        isDefault: false,
+        createdBy: null,
+      },
+      sets: [
+        { reps: 8, weight: 0 },
+        { reps: 8, weight: 0 },
+        { reps: 8, weight: 0 },
+      ],
+    });
   }
 
   // BACKEND-MUUTOS: Tuo HttpClient yläreunaan myöhemmin
@@ -298,9 +288,13 @@ export class LisaaTreeni {
 
   saveProgram() {
     // 1. Kerätään kaikki valitut liikkeet yhteen listaan
-    const selectedExercises = this.exerciseList
-      .reduce((all: Exercise[], c: Category) => all.concat(c.exercises), [])
-      .filter((e: Exercise) => e.isSelected);
+    const selectedExercises = this.exerciseList2
+      .reduce(
+        (all: ExerciseIsSelected[], c: Category2) => all.concat(c.exercises),
+        [],
+      )
+      .filter((e: ExerciseIsSelected) => e.isSelected)
+      .map((e) => ({ move: e.move, sets: e.sets })); // Muutetaan ExerciseIsSelected muodosta Exercise muotoon
 
     // Tarkistetaan että nimi on annettu ja liikkeitä valittu
     if (this.programName.trim().length > 0 && selectedExercises.length > 0) {
