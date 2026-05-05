@@ -126,7 +126,6 @@ export class LisaaTreeni {
 
   // takes moves fetched from database and categorizes them by muscleGroup property:
   categorizeMoves() {
-    console.log('hep!');
     this.testData.forEach((x) => {
       const indexOfExistingCategory = this.exerciseList2.findIndex((y) => {
         return y.category === x.muscleGroup;
@@ -166,6 +165,26 @@ export class LisaaTreeni {
         );
       }
     });
+  }
+
+  // helper method to update the amount of Sets
+  // this is because whenever a user changes the amount of sets for a move, we need to add also a new object with reps and weights otherwise it will be undefined
+  updateSets(exercise: ExerciseIsSelected, newLength: number) {
+    if (!exercise.sets) {
+      exercise.sets = [];
+    }
+
+    const currentLength = exercise.sets.length;
+
+    if (newLength > currentLength) {
+      // Add new sets with default values
+      for (let i = currentLength; i < newLength; i++) {
+        exercise.sets.push({ reps: 8, weight: 0 }); // Default values
+      }
+    } else if (newLength < currentLength) {
+      // Remove extra sets from the end
+      exercise.sets.splice(newLength);
+    }
   }
 
   toggleSelection(item: ExerciseIsSelected) {

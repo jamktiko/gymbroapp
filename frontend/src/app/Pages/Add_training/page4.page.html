@@ -46,21 +46,23 @@
             <div slot="end" class="stats-container" (click)="$event.stopPropagation()">
 
               <div class="stat-group">
-                <ion-input type="number" [(ngModel)]="exercise.sets" class="small-input" placeholder="0"></ion-input>
+                <ion-input type="number" [ngModel]="exercise.sets.length" (ngModelChange)="updateSets(exercise, $event)"
+                  class="small-input" placeholder="1" [min]="1">
+                </ion-input>
                 <span class="unit">Sets</span>
               </div>
 
               <span class="separator">x</span>
 
               <div class="stat-group">
-                <ion-input type="number" [(ngModel)]="exercise.sets[0].reps" class="small-input"
-                  placeholder="0"></ion-input>
+                <ion-input type="number" [(ngModel)]="exercise.sets[0].reps" class="small-input" placeholder="1"
+                  [min]="1"></ion-input>
                 <span class="unit">Reps</span>
               </div>
 
               <div class="stat-group">
-                <ion-input type="number" [(ngModel)]="exercise.sets[0].weight" class="small-input"
-                  placeholder="0"></ion-input>
+                <ion-input type="number" [(ngModel)]="exercise.sets[0].weight" class="small-input" placeholder="0"
+                  [min]="0"></ion-input>
                 <span class="unit">kg</span>
               </div>
 
