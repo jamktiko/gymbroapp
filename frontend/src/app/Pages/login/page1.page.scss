@@ -1,4 +1,9 @@
 /* Pääsäiliö, joka jakaa tilan pystysuunnassa */
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
+ion-content {
+  --overflow: hidden;
+  overflow: hidden;
+}
 .login-container {
   display: flex;
   flex-direction: column;
@@ -8,17 +13,28 @@
   text-align: center;
   /*background-color: #202020; /* Varmistetaan musta tausta */
 }
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 20px 0;
+}
 
 h1 {
-  font-size: 35px;
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  padding: 15px;
+  font-size: 45px;
   font-weight: 700;
   color: #ffd900; /* Keltainen otsikko */
   margin-bottom: 8px;
+  text-shadow: 0 0 10px rgba(233, 209, 52, 0.523);
 }
 
 p {
-  font-size: 23px;
-  color: #ffdf3e;
+  font-size: 20px;
+  color: #ffdf3ef5;
   opacity: 0.8; /* Hieman himmeämpi keltainen */
 }
 
