@@ -195,6 +195,7 @@ export class LisaaTreeni {
     });
     await alert.present();
   }
+
   addNewExercise(newName: string) {
     let customCat = this.exerciseList.find((c) => c.title === 'Omat liikkeet');
 
