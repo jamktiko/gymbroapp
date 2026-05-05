@@ -26,6 +26,7 @@ ion-toolbar {
   --background: #000000;
   --color: var(--ion-color-primary); // Käytetään muuttujaa
   --border-style: none; //poistaa ionic omat tyylittelyt
+ 
 }
 ion-header {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.164) !important; //erittaa hieman enemmän headeria taustasta
@@ -71,3 +72,4 @@ ion-button.next-style {
 /*.xpbar::part(progress) {
   transition: transform 1.2s ease-in-out !important;
 } */ //backend:n transition, testattava onko ok
+
