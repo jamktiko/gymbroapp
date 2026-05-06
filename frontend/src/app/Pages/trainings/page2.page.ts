@@ -87,14 +87,9 @@ export class Page2Page implements OnInit {
     ev: CustomEvent<ItemReorderEventDetail>,
     program: TrainingProgram,
   ) {
-    // 1. Suoritetaan siirto
-    const draggedItem = program.exercises.splice(ev.detail.from, 1)[0];
-    program.exercises.splice(ev.detail.to, 0, draggedItem);
-
-    // 2. TÄRKEÄÄ: Pakotetaan Angular huomaamaan muutos luomalla uusi taulukkoviittaus
-    program.exercises = [...program.exercises];
-
-    ev.detail.complete();
+    // Annetaan Ionicin reorder-tapahtuman viitellä ja palauttaa järjestetty taulukko itsellään,
+    // mikä estää Angularin ja Ionicin ristiriidat DOM:n päivittämisessä (ja ns. tuplaliikkeet).
+    program.exercises = ev.detail.complete(program.exercises);
   }
 
   /**
