@@ -13,9 +13,6 @@
   --ion-text-color: #ffffff; // Valkoinen perusteksti
   --ion-item-background: #2a2a2a; // Listojen (ion-item) tausta
   --ion-font-family: "Inter", sans-serif; //fontti
-  //safe area!
-  --ion-safe-area-top: env(safe-area-inset-top, 0px);
-  --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
 }
 ion-content {
   --background: radial-gradient(
@@ -23,14 +20,6 @@ ion-content {
     #222 0%,
     #111 100%
   ) !important; /*taustan gradient */
-  //safe arean varmistus!
-  --padding-top: var(--ion-safe-area-top);
-  --padding-bottom: var(--ion-safe-area-bottom);
-}
-ion-modal {
-  //ylemmät arvot
-  --ion-safe-area-top: env(safe-area-inset-top);
-  --ion-safe-area-bottom: env(safe-area-inset-bottom);
 }
 /* Globaalit komponenttimääritykset */
 ion-toolbar {
@@ -72,7 +61,6 @@ ion-button.next-style {
   --border-width: 2px;
   --border-color: #ffd900;
   --border-radius: 1px;
-  --color: #ffd900;
   --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   font-size: 30px !important;
   font-weight: bold !important;
