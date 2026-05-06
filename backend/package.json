@@ -7,7 +7,7 @@
     "test": "vitest run",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "start": "nodemon ./bin/www -e js,json,css,mjs,hbs",
+    "start": "node ./bin/www -e js,json,css,mjs,hbs",
     "dev": "nodemon ./bin/www -e js,json",
     "defaultDataLibrary": "node defaultDataLibrary.js",
     "build": "echo \"No build step required\""

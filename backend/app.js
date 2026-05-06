@@ -17,6 +17,8 @@ const app = express();
 
 app.use(express.json());
 
+app.set('trust proxy', 1); // trust first proxy (tämä lisättyä + start:nodemon -> node, uri mismatch korjaantui)
+
 app.use(
   session({
     secret: process.env.JWT_SECRET,
