@@ -357,12 +357,13 @@ async function seed() {
   console.log(`📊 Generoitu ${sessions.length} treeni-sessiota`);
 
   // Päivitä käyttäjän trainingSessions
-  const result = await mongoose.connection.db
-    .collection('users')
-    .updateOne(
-      { googleId: GOOGLE_ID },
-      { $push: { trainingSessions: { $each: sessions } } },
-    );
+  const result = await mongoose.connection.db.collection('users').updateOne(
+    { googleId: GOOGLE_ID },
+    {
+      $push: { trainingSessions: { $each: sessions } },
+      $inc: { xp: 50 * sessions.length },
+    },
+  );
 
   if (result.matchedCount === 0) {
     console.error('❌ Käyttäjää ei löytynyt googleId:llä:', GOOGLE_ID);
