@@ -79,8 +79,7 @@ export class AppComponent implements OnInit {
     { title: 'Saavutukset', url: '/page8', icon: 'golf' },
     { title: 'Historia', url: '/page3', icon: 'calendar' },
     { title: 'Statsit', url: '/page7', icon: 'analytics' },
-    { title: 'Ohjelma', url: '/page5', icon: 'trophy' },
-    { title: 'Valmis', url: '/page6', icon: 'trophy' },
+
   ];
 
   protected router = inject(Router);

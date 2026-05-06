@@ -17,6 +17,8 @@ const app = express();
 
 app.use(express.json());
 
+app.set('trust proxy', 1); // trust first proxy (tämä lisättyä + start:nodemon -> node, uri mismatch korjaantui)
+
 app.use(
   session({
     secret: process.env.JWT_SECRET,
@@ -42,6 +44,7 @@ app.use('/api/training-sessions', trainingSessionsRouter);
 
 // connection health check
 app.get('/', (req, res) => res.json({ status: 'ok' }));
+
 
 // 404
 app.use((req, res) => {

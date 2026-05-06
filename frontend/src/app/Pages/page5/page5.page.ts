@@ -1,7 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import {
   IonButton,
   IonButtons,
@@ -38,8 +39,11 @@ import { TimerComponent } from '../../timer/timer.component';
     TimerComponent // Lisätty importteihin
   ],
 })
+
 export class Page5Page implements OnInit {
   private router = inject(Router);
+  private http = inject(HttpClient);
+  @ViewChild('workoutTimer') timer!: TimerComponent;
 
   // --- TREENIN TILA ---
   activeWorkout!: TrainingProgram; 
@@ -63,7 +67,7 @@ export class Page5Page implements OnInit {
   }
 
   /**
-   * Palauttaa aktiivisen liikkeen datan.
+   * Palauttaa  liikkeen datan.
    */
   get currentExercise() {
     return this.activeWorkout?.exercises[this.currentIndex];
@@ -76,16 +80,41 @@ export class Page5Page implements OnInit {
    * Timer nollautuu automaattisesti komponentin sisällä, kun se saa uuden inputin.
    */
   seuraavaLiike() {
-    if (this.currentIndex < this.activeWorkout.exercises.length - 1) {
+    // 1. PYSÄYTETÄÄN JA NOLLATAAN KELLO 
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
+
+    // 2. SIIRRYTÄÄN SEURAAVAAN LIIKKEESEEN
+    if (this.currentIndex < (this.activeWorkout?.exercises?.length || 0) - 1) {
       this.currentIndex++;
     }
   }
-
   /**
    * Päättää treenin ja siirtyy XP-sivulle.
    */
-  lopetaTreeni() {
+   lopetaTreeni() {
+    // Tallennetaan sessio backendiin → XP +50
+    const session = {
+      exercises: this.activeWorkout.exercises,
+    };
+
+    this.http.post('http://localhost:3000/api/training-sessions', session)
+      .subscribe({
+        next: () => {
+          // Pysäytetään kello myös tässä
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
+    
     this.currentIndex = 0;
-    this.router.navigate(['/page6'], { replaceUrl: true });
+          this.router.navigate(['/page6'], { replaceUrl: true });
+        },
+        error: (err) => {
+          console.error('Session tallennus epäonnistui:', err);
+          // Navigoi silti eteenpäin
+          this.router.navigate(['/page6'], { replaceUrl: true });
+        },
+      });
   }
 }

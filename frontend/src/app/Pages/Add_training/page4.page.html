@@ -10,6 +10,7 @@
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
 
+  
     <ion-item lines="full" class="name-input-item">
       <ion-label position="stacked">OHJELMAN NIMI</ion-label>
       <ion-input [(ngModel)]="programName" type="text" maxlength="30" placeholder="esim. Jalkapäivä">
@@ -18,67 +19,60 @@
 
     <h3 class="selection-title">VALITSE HARJOITTEET</h3>
 
+   
     <ion-accordion-group #myAccordionGroup>
       @for (category of exerciseList2; track $index) {
       <ion-accordion [value]="category.category">
-
-        <ion-item slot="header" color="light">
-          <ion-label><strong>{{ category.category }}</strong></ion-label>
+        
+        <ion-item slot="header">
+          <ion-label>
+            <h3 class="category-title">{{ category.category }}</h3>
+          </ion-label>
         </ion-item>
 
-        <div class="ion-no-padding" slot="content">
+        <div class="ion-padding" slot="content" style="background: #252525;">
+          
           @for (exercise of category.exercises; track $index) {
-          <ion-item (click)="toggleSelection(exercise)" lines="full" button="true" class="exercise-item">
-
+          <ion-item (click)="toggleSelection(exercise)" lines="full" button="true" class="exercise-item-shared">
+            
             <ion-checkbox [(ngModel)]="exercise.isSelected" slot="start" (click)="$event.stopPropagation()">
             </ion-checkbox>
 
-            <ion-label class="exercise-label">{{ exercise.move.name }}</ion-label>
+            <ion-label class="exercise-label-shared">{{ exercise.move.name }}</ion-label>
 
+            <!-- Roskakori omille liikkeille -->
             @if (category.category === 'Omat liikkeet') {
-            <ion-button fill="clear" color="danger" slot="end" class="trash-button"
-              (click)="removeExercise(exercise); $event.stopPropagation()">
+            <ion-button fill="clear" color="danger" slot="end" (click)="removeExercise(exercise); $event.stopPropagation()">
               <ion-icon name="trash-outline"></ion-icon>
             </ion-button>
             }
 
+            <!-- Sets, Reps, Kg logiikka -->
             @if (exercise.isSelected) {
             <div slot="end" class="stats-container" (click)="$event.stopPropagation()">
-
               <div class="stat-group">
-                <ion-input type="number" [ngModel]="exercise.sets.length" (ngModelChange)="updateSets(exercise, $event)"
-                  class="small-input" placeholder="1" [min]="1">
-                </ion-input>
+                <ion-input type="number" [ngModel]="exercise.sets.length" (ngModelChange)="updateSets(exercise, $event)" class="small-input"></ion-input>
                 <span class="unit">Sets</span>
               </div>
-
               <span class="separator">x</span>
-
               <div class="stat-group">
-                <ion-input type="number" [ngModel]="exercise.sets[0].reps"
-                  (ngModelChange)="updateAllReps(exercise, $event)" class="small-input" placeholder="1"
-                  [min]="1"></ion-input>
+                <ion-input type="number" [ngModel]="exercise.sets[0].reps" (ngModelChange)="updateAllReps(exercise, $event)" class="small-input"></ion-input>
                 <span class="unit">Reps</span>
               </div>
-
               <div class="stat-group">
-                <ion-input type="number" [ngModel]="exercise.sets[0].weight"
-                  (ngModelChange)="updateAllWeights(exercise, $event)" class="small-input" placeholder="0"
-                  [min]="0"></ion-input>
+                <ion-input type="number" [ngModel]="exercise.sets[0].weight" (ngModelChange)="updateAllWeights(exercise, $event)" class="small-input"></ion-input>
                 <span class="unit">kg</span>
               </div>
-
             </div>
             }
           </ion-item>
           }
         </div>
-
       </ion-accordion>
       }
-
     </ion-accordion-group>
 
+    
     <div class="ion-padding-top action-buttons">
       <ion-button expand="block" fill="outline" (click)="openCustomExercise()">
         <ion-icon name="add-outline" slot="start"></ion-icon>
