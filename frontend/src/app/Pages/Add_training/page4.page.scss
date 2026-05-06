@@ -1,146 +1,155 @@
+/* --- SIVUN YLEINEN RAKENNE --- */
 .content-container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 400px;
-  margin: auto;
+  /* SÄÄDÄ TÄSTÄ LEVEYTTÄ: 
+     - 400px = kapea
+     - 600px = leveämpi 
+     - 95% = melkein koko ruutu */
+  max-width: 500px; 
+  margin: 0 auto; 
   margin-top: 4vh;
+  padding: 0 10px; /* Estää reunoihin osumisen mobiilissa */
 }
 
-ion-item {
+/* --- OHJELMAN NIMEÄMINEN --- */
+.name-input-item {
+  width: 100%;
+  margin-bottom: 3vh !important;
   --background: transparent;
-  --color: white; // Tekstin perusväri (esim. ohjelman nimen syöttö)
-  --highlight-color-focused: var(--ion-color-primary);
-  --padding-start: 0px;
-  --inner-padding-end: 8px;
-  min-height: 70px;
-  cursor: pointer;
-}
-
-/* YLEINEN LABEL (Vakioliikkeet) */
-ion-label {
-  /* Perustyylit pysyvät samana */
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  color: var(--ion-color-primary) !important;
-  text-transform: uppercase;
-  flex: 1;
-  margin: 0 10px !important;
-
-}
-
-/* OMILLE LIIKKEILLE ERITYISSÄÄNNÖT (Mörköpötkö-suoja) */
-.custom-category {
+  --color: white;
+  
   ion-label {
-    word-break: break-all !important; 
-    display: -webkit-box !important; 
-    -webkit-box-orient: vertical;
-    overflow: hidden !important;
+    color: var(--ion-color-medium) !important;
+    text-transform: uppercase;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+
+  ion-input {
+    font-size: 20px;
+    --color: white;
   }
 }
 
-/* PAINIKKEET */
-.action-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 30px;
-
-  ion-button[fill="outline"] {
-    height: 45px;
-    /* Käyttää HTML:ssä määriteltyä väriä (esim. color="medium") */
-  }
-
-  ion-button[color="primary"] {
-    height: 65px;
-    font-weight: bold;
-  margin-top: 160px  }
+.selection-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 15px;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-/* STATS-SÄILIÖ */
+/* --- KATEGORIAT (Kopioitu Page2 tyyli) --- */
+ion-accordion-group {
+  width: 100%;
+  background: transparent;
+}
+
+ion-accordion {
+  width: 100%;
+  margin-bottom: 12px;
+  border: 1px solid #333 !important; /* Page2:n tumma reunus */
+  border-radius: 8px !important;
+  overflow: hidden;
+  background: transparent;
+
+  /* Kategorian nimi-palkki */
+  ion-item[slot="header"] {
+    --background: #1a1a1a !important; /* Page2:n tumma header */
+    --color: var(--ion-color-primary) !important;
+    --padding-start: 16px;
+    min-height: 56px;
+
+    .category-title {
+      margin: 0;
+      font-weight: bold !important;
+      color: var(--ion-color-primary) !important;
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+  }
+
+  /* Sisältöalue (Liikkeet) */
+  div[slot="content"] {
+    background: #252525 !important; /* Page2:n tummempi tausta */
+    
+    .exercise-item-shared {
+      --background: transparent;
+      --color: #ffffff;
+      --border-color: #333;
+      min-height: 65px;
+
+      .exercise-label-shared {
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        color: white !important;
+        margin-left: 10px !important;
+        text-transform: none !important;
+        white-space: normal !important;
+      }
+    }
+  }
+}
+
+/* --- SETS, REPS, KG YKSIKKÖ --- */
 .stats-container {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 17px;
   background: rgba(var(--ion-color-primary-rgb), 0.15);
-  padding: 2px 4px;
+  padding: 4px 8px;
   border-radius: 10px;
   border: 2px solid var(--ion-color-primary);
-  pointer-events: auto;
+  scale: 0.85; /* Pienennetty, jotta mahtuu paremmin riville */
 }
 
 .small-input {
-  --padding-start: 0;
-  --padding-end: 0;
-  width: 25px;
+  width: 30px;
   font-weight: 800;
   text-align: center;
-  font-size: 1rem;
   color: white !important;
-}
-
-.weight-input {
-  width: 40px; 
-  color: var(--ion-color-primary) !important;
+  --padding-start: 0;
 }
 
 .stat-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
 
-.unit {
-  font-size: 0.6rem;
-  color: var(--ion-color-medium);
-  text-transform: uppercase;
-  margin-top: -4px;
+  .unit {
+    font-size: 0.6rem;
+    color: var(--ion-color-medium);
+    text-transform: uppercase;
+    margin-top: -4px;
+  }
 }
 
 .separator {
   color: var(--ion-color-medium);
-  font-size: 0.8rem;
-  padding: 0 2px;
+  font-weight: bold;
 }
 
-/* OHJELMAN NIMI -SYÖTTÖ */
-ion-input[type="text"] {
-  font-size: 20px;
-  --color: white;
-}
-
-.name-input-item {
-  margin-top: -1vh !important; 
-  margin-bottom: 5vh;
+/* --- PAINIKKEET ALAREUNASSA --- */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
   width: 100%;
-  max-width: 300px;
-  align-self: center;
-}
 
-/* ALERT-PAINIKKEET (Luo uusi liike -ikkuna) */
-::ng-deep .alert-button-group {
-  justify-content: space-between !important;
-  padding: 10px 20px !important;
-}
+  ion-button[fill="outline"] {
+    height: 50px;
+    --border-radius: 8px;
+  }
 
-::ng-deep .alert-button-cancel {
-  color: var(--ion-color-medium) !important;
-}
-
-::ng-deep .alert-button-confirm {
-  font-weight: bold !important;
-  color: var(--ion-color-primary) !important;
-}
-
-/* APULUOKAT */
-.reps-wrapper { @extend .stats-container; }
-.reps-input { @extend .small-input; }
-
-exercise-label {
-  /* ... muut tyylit ... */
-  
-  white-space: normal !important;   // Sallii rivinvaihdot
-  word-break: break-all !important;  // PAKOTTAA katkaisun, vaikka välilyöntiä ei olisi
-  overflow-wrap: anywhere !important; // Varmistaa, että se toimii kaikilla selaimilla
+  ion-button[color="primary"] {
+    height: 60px;
+    font-weight: bold;
+    --border-radius: 8px;
+    margin-top: 10px;
+  }
 }
