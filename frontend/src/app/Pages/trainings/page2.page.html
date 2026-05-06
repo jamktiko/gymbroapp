@@ -5,7 +5,7 @@
         <span>LVL {{testData?.level}}</span>
       </div>
       <div class="progress-wrapper">
-        <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async"></ion-progress-bar>
+        <ion-progress-bar class="xpbar" [value]="levelProgress" />
       </div>
     </div>
     <ion-buttons slot="end">

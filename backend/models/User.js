@@ -50,18 +50,18 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.virtual('level').get(function () {
-  return Math.floor(Math.sqrt(this.xp / 50)) + 1;
+  return Math.floor(Math.sqrt(this.xp / 50));
 });
 
 UserSchema.virtual('xpToNextLevel').get(function () {
-  const next = this.level ** 2 * 50;
+  const next = (this.level + 1) ** 2 * 50;
   return next - this.xp;
 });
-
-// Virtuaalikentät level ja xpToNextLevel lasketaan xp:n perusteella, eikä niitä
+//Virtuaalikentät level ja xpToNextLevel lasketaan xp:n perusteella, eikä niitä 
 // tallenneta tietokantaan. Ne näkyvät kuitenkin JSON-muodossa, kun User-objekti muunnetaan JSONiksi.
 UserSchema.set('toJSON', { virtuals: true });
 UserSchema.set('toObject', { virtuals: true });
+
 // create a model out of UserSchema
 const User = mongoose.model('User', UserSchema);
 

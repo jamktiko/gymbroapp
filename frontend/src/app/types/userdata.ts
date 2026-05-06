@@ -45,7 +45,8 @@ export interface UserData {
   name: string;
   email: string;
   level: number;
-  exp: number;
+  xp: number;
+  xpToNextLevel: number; // XP:n määrälle seuraavalle levelille
   weightUnit: string;
   trainingPrograms: TrainingProgram[];
   trainingSessions: TrainingSession[];
