@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -43,6 +43,8 @@ import { TimerComponent } from '../../timer/timer.component';
 export class Page5Page implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
+  @ViewChild('workoutTimer') timer!: TimerComponent;
+
   // --- TREENIN TILA ---
   activeWorkout!: TrainingProgram; 
   currentIndex = 0;               
@@ -65,7 +67,7 @@ export class Page5Page implements OnInit {
   }
 
   /**
-   * Palauttaa aktiivisen liikkeen datan.
+   * Palauttaa  liikkeen datan.
    */
   get currentExercise() {
     return this.activeWorkout?.exercises[this.currentIndex];
@@ -78,11 +80,16 @@ export class Page5Page implements OnInit {
    * Timer nollautuu automaattisesti komponentin sisällä, kun se saa uuden inputin.
    */
   seuraavaLiike() {
-    if (this.currentIndex < this.activeWorkout.exercises.length - 1) {
+    // 1. PYSÄYTETÄÄN JA NOLLATAAN KELLO 
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
+
+    // 2. SIIRRYTÄÄN SEURAAVAAN LIIKKEESEEN
+    if (this.currentIndex < (this.activeWorkout?.exercises?.length || 0) - 1) {
       this.currentIndex++;
     }
   }
-
   /**
    * Päättää treenin ja siirtyy XP-sivulle.
    */
@@ -95,7 +102,12 @@ export class Page5Page implements OnInit {
     this.http.post('http://localhost:3000/api/training-sessions', session)
       .subscribe({
         next: () => {
-          this.currentIndex = 0;
+          // Pysäytetään kello myös tässä
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
+    
+    this.currentIndex = 0;
           this.router.navigate(['/page6'], { replaceUrl: true });
         },
         error: (err) => {
