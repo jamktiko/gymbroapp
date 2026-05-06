@@ -53,7 +53,7 @@ export class Page5Page implements OnInit {
     addIcons({ arrowForward, checkmarkDone, timerOutline });
     
     // Luetaan navigoinnin mukana tullut treenidata
-    const navigation = this.router.getCurrentNavigation();
+   const navigation = this.router.getCurrentNavigation();
     this.activeWorkout = navigation?.extras.state?.['activeWorkout'];
   }
 
