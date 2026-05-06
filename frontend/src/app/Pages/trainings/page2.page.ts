@@ -58,6 +58,8 @@ import { DataFetchService } from '../../data-fetch-service';
     IonReorderGroup,
     IonReorder,
     AsyncPipe,
+    IonFooter,
+    IonTitle,
   ],
 })
 export class Page2Page implements OnInit {
