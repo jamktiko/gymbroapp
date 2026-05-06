@@ -17,6 +17,9 @@ import {
   IonAccordion,
   IonCheckbox,
   IonIcon,
+  IonModal,
+  IonSegment,
+  IonSegmentButton,
   AlertController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -49,6 +52,9 @@ interface Category2 {
     IonAccordion,
     IonCheckbox,
     IonIcon,
+    IonModal,
+    IonSegment,
+    IonSegmentButton,
     CommonModule,
     FormsModule,
   ],
@@ -60,6 +66,11 @@ export class LisaaTreeni {
   accordionGroup!: IonAccordionGroup;
   // Muuttuja, johon tallennetaan käyttäjän antama treeniohjelman nimi.
   programName: string = '';
+
+  isCustomMoveModalOpen: boolean = false;
+  newMoveName: string = '';
+  newMoveMuscle: string = '';
+  newMoveType: 'compound' | 'targeted' = 'compound';
 
   exerciseList2: Category2[] = [];
 
@@ -82,12 +93,12 @@ export class LisaaTreeni {
     this.dataFetchService.getAllMoves().subscribe({
       next: (data) => {
         this.testData = data as Move[];
-        console.log('Test data loaded:', this.testData);
+        console.log('Moves fetched successfully:', this.testData);
         // this.loadPrograms();
         this.categorizeMoves();
       },
       error: (err) => {
-        console.error('Failed to load test data', err);
+        console.error('Failed to fetch moves', err);
       },
     });
   }
@@ -234,37 +245,53 @@ export class LisaaTreeni {
     });
   }
 
-  async openCustomExercise() {
-    const alert = await this.alertCtrl.create({
-      header: 'Luo uusi liike',
-      inputs: [
-        {
-          name: 'inputValue',
-          type: 'text',
-          placeholder: 'Liikkeen nimi',
-          attributes: {
-            maxlength: 30,
-          },
-        },
-      ],
-      buttons: [
-        { text: 'Peruuta', role: 'cancel', cssClass: 'alert-button-cancel' },
-        {
-          text: 'Lisää',
-          cssClass: 'alert-button-confirm',
-          handler: (data) => {
-            const trimmedName = data.inputValue.trim();
-            if (trimmedName.length > 0 && trimmedName.length <= 30) {
-              this.addNewExercise(trimmedName);
-            }
-          },
-        },
-      ],
-    });
-    await alert.present();
+  openCustomExercise() {
+    this.newMoveName = '';
+    this.newMoveMuscle = '';
+    this.newMoveType = 'compound';
+    this.isCustomMoveModalOpen = true;
   }
 
-  addNewExercise(newName: string) {
+  cancelCustomMove() {
+    this.isCustomMoveModalOpen = false;
+  }
+
+  confirmCustomMove() {
+    const trimmedName = this.newMoveName.trim();
+    if (trimmedName.length > 0 && trimmedName.length <= 30) {
+      const newMove = {
+        name: this.newMoveName,
+        type: this.newMoveType,
+        muscleGroup: this.newMoveMuscle,
+      };
+
+      this.dataFetchService.createMove(newMove).subscribe({
+        next: (data) => {
+          console.log('New move created:', data);
+          // fetch all new moves afterwards:
+          this.dataFetchService.getAllMoves().subscribe({
+            next: (data) => {
+              this.testData = data as Move[];
+              console.log('Moves fetched successfully:', this.testData);
+              // this.loadPrograms();
+              this.categorizeMoves();
+            },
+            error: (err) => {
+              console.error('Failed to fetch moves', err);
+            },
+          });
+        },
+        error: (err) => {
+          console.error('Failed to create new move', err);
+        },
+      });
+
+      this.addNewExercise(trimmedName, this.newMoveType);
+      this.isCustomMoveModalOpen = false;
+    }
+  }
+
+  addNewExercise(newName: string, newType: string) {
     let customCat = this.exerciseList2.find(
       (c) => c.category === 'Omat liikkeet',
     );
@@ -297,7 +324,7 @@ export class LisaaTreeni {
       move: {
         _id: String(Date.now()), // Väliaikainen ID kunnes tallennetaan backendiin
         name: newName,
-        type: 'custom',
+        type: newType,
         muscleGroup: 'Omat liikkeet',
         isDefault: false,
         createdBy: null,

@@ -123,8 +123,27 @@ export class DataFetchService {
   /**
    * [POST] Creates a new move and adds it to the database.
    */
-  createMove() {
-    //
+  createMove(
+    moveData: Omit<Move, '_id' | 'isDefault' | 'createdBy'>,
+  ): Observable<Move> {
+    let googleId = null;
+    try {
+      const sessionDataString = sessionStorage.getItem('accesstoken');
+      if (sessionDataString) {
+        const sessionData = JSON.parse(sessionDataString);
+        googleId = sessionData.googleId;
+      }
+    } catch (error) {
+      console.error('Error parsing session data for googleId:', error);
+    }
+
+    // actual http request
+    const moveData2 = {
+      ...moveData,
+      createdBy: googleId,
+    };
+
+    return this.http.post<Move>(this.apiurlMoves, moveData2);
   }
 
   // ----------------------- TRAININGPROGRAM METHODS: -----------------------
