@@ -2,6 +2,7 @@ import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import {
   IonButton,
   IonButtons,
@@ -38,8 +39,10 @@ import { TimerComponent } from '../../timer/timer.component';
     TimerComponent // Lisätty importteihin
   ],
 })
+
 export class Page5Page implements OnInit {
   private router = inject(Router);
+  private http = inject(HttpClient);
   @ViewChild('workoutTimer') timer!: TimerComponent;
 
   // --- TREENIN TILA ---
@@ -90,13 +93,28 @@ export class Page5Page implements OnInit {
   /**
    * Päättää treenin ja siirtyy XP-sivulle.
    */
-  lopetaTreeni() {
-    // Pysäytetään kello myös tässä
+   lopetaTreeni() {
+    // Tallennetaan sessio backendiin → XP +50
+    const session = {
+      exercises: this.activeWorkout.exercises,
+    };
+
+    this.http.post('http://localhost:3000/api/training-sessions', session)
+      .subscribe({
+        next: () => {
+          // Pysäytetään kello myös tässä
     if (this.timer) {
       this.timer.forceStopAndReset();
     }
     
     this.currentIndex = 0;
-    this.router.navigate(['/page6'], { replaceUrl: true });
+          this.router.navigate(['/page6'], { replaceUrl: true });
+        },
+        error: (err) => {
+          console.error('Session tallennus epäonnistui:', err);
+          // Navigoi silti eteenpäin
+          this.router.navigate(['/page6'], { replaceUrl: true });
+        },
+      });
   }
 }
