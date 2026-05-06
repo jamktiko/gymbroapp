@@ -105,6 +105,8 @@ export class LisaaTreeni {
 
   // takes moves fetched from database and categorizes them by muscleGroup property:
   categorizeMoves() {
+    this.exerciseList2 = []; // Clear previous categories before re-categorizing
+
     this.testData.forEach((x) => {
       const exerciseToAdd: ExerciseIsSelected = {
         move: x,
@@ -231,18 +233,54 @@ export class LisaaTreeni {
    * Poistaa yksittäisen harjoituksen kaikista kategorioista.
    */
   removeExercise(exerciseToRemove: ExerciseIsSelected) {
-    const moveIdToRemove = exerciseToRemove.move._id;
+    // this.exerciseList2.forEach((cat) => {
+    //   cat.exercises = cat.exercises.filter(
+    //     (e) => e.move._id !== moveIdToRemove,
+    //   );
+    // });
 
-    this.exerciseList2.forEach((cat) => {
-      cat.exercises = cat.exercises.filter(
-        (e) => e.move._id !== moveIdToRemove,
-      );
+    // // Poistetaan kategoriat, jotka jäivät tyhjiksi
+    // this.exerciseList2 = this.exerciseList2.filter(
+    //   (c) => c.exercises.length > 0,
+    // );
+
+    this.dataFetchService.deleteMove(exerciseToRemove.move._id).subscribe({
+      next: (data) => {
+        console.log('Custom move deleted successfully:', data);
+        // this.loadPrograms();
+        // this.categorizeMoves();
+
+        // fetch all new moves afterwards:
+        this.dataFetchService.getAllMoves().subscribe({
+          next: (data) => {
+            // this.testData = [];
+            this.testData = data as Move[];
+            console.log('Moves fetched successfully:', this.testData);
+            // this.loadPrograms();
+            this.categorizeMoves();
+          },
+          error: (err) => {
+            console.error('Failed to fetch moves', err);
+          },
+        });
+      },
+      error: (err) => {
+        console.error('Failed to delete custom move', err);
+      },
     });
 
-    // Poistetaan kategoriat, jotka jäivät tyhjiksi
-    this.exerciseList2 = this.exerciseList2.filter(
-      (c) => c.exercises.length > 0,
-    );
+    // update new moves right away afterwards:
+    // this.dataFetchService.getAllMoves().subscribe({
+    //   next: (data) => {
+    //     this.testData = data as Move[];
+    //     console.log('Moves fetched successfully:', this.testData);
+    //     // this.loadPrograms();
+    //     this.categorizeMoves();
+    //   },
+    //   error: (err) => {
+    //     console.error('Failed to fetch moves', err);
+    //   },
+    // });
   }
 
   /**
@@ -293,25 +331,25 @@ export class LisaaTreeni {
         next: (data) => {
           console.log('New move created:', data);
           // fetch all new moves afterwards:
-          //   this.dataFetchService.getAllMoves().subscribe({
-          //     next: (data) => {
-          //       this.testData = [];
-          //       this.testData = data as Move[];
-          //       console.log('Moves fetched successfully:', this.testData);
-          //       // this.loadPrograms();
-          //       this.categorizeMoves();
-          //     },
-          //     error: (err) => {
-          //       console.error('Failed to fetch moves', err);
-          //     },
-          //   });
+          this.dataFetchService.getAllMoves().subscribe({
+            next: (data) => {
+              // this.testData = [];
+              this.testData = data as Move[];
+              console.log('Moves fetched successfully:', this.testData);
+              // this.loadPrograms();
+              this.categorizeMoves();
+            },
+            error: (err) => {
+              console.error('Failed to fetch moves', err);
+            },
+          });
         },
         error: (err) => {
           console.error('Failed to create new move', err);
         },
       });
 
-      this.addNewExercise(trimmedName, this.newMoveType);
+      // this.addNewExercise(trimmedName, this.newMoveType);
       this.isCustomMoveModalOpen = false;
     }
   }
