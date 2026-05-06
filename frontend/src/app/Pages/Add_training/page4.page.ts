@@ -230,9 +230,50 @@ export class LisaaTreeni {
   }
 
   /**
-   * Poistaa yksittäisen harjoituksen kaikista kategorioista.
+   * Poistaa yksittäisen harjoituksen.
    */
-  removeExercise(exerciseToRemove: ExerciseIsSelected) {
+  async removeExercise(exerciseToRemove: ExerciseIsSelected) {
+    // event.stopPropagation();
+    const alert = await this.alertCtrl.create({
+      header: 'Poistetaanko liike?',
+      message: 'Haluatko varmasti poistaa tämän liikkeen?',
+      buttons: [
+        { text: 'Peruuta', role: 'cancel' },
+        {
+          text: 'Poista',
+          role: 'destructive',
+          handler: () => {
+            this.dataFetchService
+              .deleteMove(exerciseToRemove.move._id)
+              .subscribe({
+                next: (data) => {
+                  console.log('Custom move deleted successfully:', data);
+                  // this.loadPrograms();
+                  // this.categorizeMoves();
+
+                  // fetch all new moves afterwards:
+                  this.dataFetchService.getAllMoves().subscribe({
+                    next: (data) => {
+                      // this.testData = [];
+                      this.testData = data as Move[];
+                      console.log('Moves fetched successfully:', this.testData);
+                      // this.loadPrograms();
+                      this.categorizeMoves();
+                    },
+                    error: (err) => {
+                      console.error('Failed to fetch moves', err);
+                    },
+                  });
+                },
+                error: (err) => {
+                  console.error('Failed to delete custom move', err);
+                },
+              });
+          },
+        },
+      ],
+    });
+    await alert.present();
     // this.exerciseList2.forEach((cat) => {
     //   cat.exercises = cat.exercises.filter(
     //     (e) => e.move._id !== moveIdToRemove,
