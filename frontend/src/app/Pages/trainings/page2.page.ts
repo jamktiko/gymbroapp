@@ -23,6 +23,8 @@ import {
   IonButton,
   IonProgressBar,
   AlertController,
+  IonFooter,
+  IonTitle,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -55,6 +57,8 @@ import { DataFetchService } from '../../data-fetch-service';
     IonButton,
     IonProgressBar,
     AsyncPipe,
+    IonFooter,
+    IonTitle,
   ],
 })
 export class Page2Page implements OnInit {

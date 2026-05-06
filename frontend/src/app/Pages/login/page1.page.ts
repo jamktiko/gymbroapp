@@ -7,6 +7,7 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
+  IonFooter,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -34,6 +35,7 @@ import { LoginEventService } from '../../login-event.service';
     FormsModule,
     GoogleSigninButtonModule,
     SocialLoginModule,
+    IonFooter,
   ],
 })
 export class Page1Page implements OnInit {

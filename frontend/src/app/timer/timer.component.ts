@@ -1,6 +1,5 @@
-
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { IonButton } from '@ionic/angular/standalone';
 
 @Component({
@@ -11,80 +10,69 @@ import { IonButton } from '@ionic/angular/standalone';
   imports: [CommonModule, IonButton]
 })
 export class TimerComponent implements OnDestroy, OnChanges {
-  // --- INPUTIT JA OUTPUTIT ---
-  
-  // Mahdollistaa lepoajan asettamisen sivulta: <app-timer [duration]="30"></app-timer>
   @Input() duration: number = 10; 
-
-  // Ilmoittaa sivulle, kun aika on loppunut (jos haluat esim. soittaa äänen)
   @Output() timerFinished = new EventEmitter<void>();
 
-  // --- KELLON SISÄINEN TILA ---
-  timerValue: string = '00:10,00'; // Alustetaan oletusarvolla
+  timerValue: string = '00:10,00';
   isRunning: boolean = false;
-  private timerInterval: number | undefined;
+  private timerInterval: ReturnType<typeof setInterval> | undefined; // Käytetään any, jotta toimii ympäristöstä riippumatta
 
   constructor() {}
 
   /**
-   * Angular kutsuu tätä, kun @Input-arvo muuttuu. 
-   * Varmistaa, että kello päivittyy, jos liike vaihtuu ja siinä on eri lepoaika.
+   * MUOKATTU: Tarkistetaan muutokset tarkemmin.
    */
-  ngOnChanges() {
-    this.resetTimer();
-  }
-
-  /**
-   * Käynnistää tai nollaa timerin.
-   */
-  toggleTimer() {
-    if (this.isRunning) {
-      this.resetTimer();
-    } else {
-      this.startCountdown(this.duration);
+  ngOnChanges(changes: SimpleChanges) {
+    // Jos duration-arvo muuttuu, pysäytetään ja nollataan kello välittömästi
+    if (changes['duration']) {
+      this.forceStopAndReset();
     }
   }
 
   /**
-   * Laskentalogiikka sadasosien tarkkuudella.
+   * Pysäyttää ajastimen ja pakottaa tilan falseksi.
    */
+  forceStopAndReset() {
+    this.stopInterval();
+    this.isRunning = false;
+    this.timerValue = this.formatTime(this.duration * 1000);
+  }
+
+  toggleTimer() {
+    if (this.isRunning) {
+      // Jos kello käy, nappi pysäyttää ja nollaa sen
+      this.forceStopAndReset();
+    } else {
+      // Jos kello on pysähdyksissä, käynnistetään se
+      this.startCountdown(this.duration);
+    }
+  }
+
   private startCountdown(seconds: number) {
     this.isRunning = true;
     const endTime = Date.now() + seconds * 1000;
+
+    // Varmistetaan, ettei päällekkäisiä intervalleja ole
+    this.stopInterval();
 
     this.timerInterval = setInterval(() => {
       const now = Date.now();
       const diff = endTime - now;
 
       if (diff <= 0) {
-        this.stopInterval();
-        this.resetTimer();
-        this.isRunning = false;
-        this.timerFinished.emit(); // Lähetetään tieto ajan loppumisesta
+        this.forceStopAndReset();
+        this.timerFinished.emit();
         return;
       }
       this.timerValue = this.formatTime(diff);
     }, 80);
   }
 
-  /**
-   * Nollaa kellon alkuperäiseen kestoon (duration).
-   */
-  resetTimer() {
-    this.stopInterval();
-    this.isRunning = false;
-    this.timerValue = this.formatTime(this.duration * 1000);
-  }
-
-  /**
-   * Muuntaa millisekunnit muotoon MM:SS,ms
-   */
   private formatTime(ms: number): string {
     const totalMs = Math.max(0, ms);
     const m = Math.floor(totalMs / 60000);
     const s = Math.floor((totalMs % 60000) / 1000);
     const msRemainder = Math.floor((totalMs % 1000) / 10);
-    
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')},${msRemainder.toString().padStart(2, '0')}`;
   }
 
@@ -95,9 +83,6 @@ export class TimerComponent implements OnDestroy, OnChanges {
     }
   }
 
-  /**
-   * Huolehtii muistinhallinnasta: pysäyttää ajastimen, kun komponentti poistetaan.
-   */
   ngOnDestroy() {
     this.stopInterval();
   }
