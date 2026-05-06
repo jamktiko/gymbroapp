@@ -13,20 +13,30 @@
   --ion-text-color: #ffffff; // Valkoinen perusteksti
   --ion-item-background: #2a2a2a; // Listojen (ion-item) tausta
   --ion-font-family: "Inter", sans-serif; //fontti
+  //safe area!
+  --ion-safe-area-top: env(safe-area-inset-top, 0px);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
 }
 ion-content {
   --background: radial-gradient(
     circle at center,
     #222 0%,
     #111 100%
-  ) !important;
-} /*taustan gradient */
+  ) !important; /*taustan gradient */
+  //safe arean varmistus!
+  --padding-top: var(--ion-safe-area-top);
+  --padding-bottom: var(--ion-safe-area-bottom);
+}
+ion-modal {
+  //ylemmät arvot
+  --ion-safe-area-top: env(safe-area-inset-top);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+}
 /* Globaalit komponenttimääritykset */
 ion-toolbar {
   --background: #000000;
   --color: var(--ion-color-primary); // Käytetään muuttujaa
   --border-style: none; //poistaa ionic omat tyylittelyt
- 
 }
 ion-header {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.164) !important; //erittaa hieman enemmän headeria taustasta
@@ -72,4 +82,3 @@ ion-button.next-style {
 /*.xpbar::part(progress) {
   transition: transform 1.2s ease-in-out !important;
 } */ //backend:n transition, testattava onko ok
-
