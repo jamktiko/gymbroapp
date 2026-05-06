@@ -106,44 +106,69 @@ export class LisaaTreeni {
   // takes moves fetched from database and categorizes them by muscleGroup property:
   categorizeMoves() {
     this.testData.forEach((x) => {
-      const indexOfExistingCategory = this.exerciseList2.findIndex((y) => {
-        return y.category === x.muscleGroup;
-      });
-
       const exerciseToAdd: ExerciseIsSelected = {
         move: x,
         sets: [
-          {
-            reps: 8,
-            weight: 0,
-          },
-          {
-            reps: 8,
-            weight: 0,
-          },
-          {
-            reps: 8,
-            weight: 0,
-          },
+          { reps: 8, weight: 0 },
+          { reps: 8, weight: 0 },
+          { reps: 8, weight: 0 },
         ],
         isSelected: false,
       };
 
-      // if existing not found -> index is -1 -> we create a new Category2 object:
-      if (indexOfExistingCategory === -1) {
-        const categoryName = x.muscleGroup;
-        const newCategory2Obj: Category2 = {
-          category: categoryName,
-          exercises: [exerciseToAdd],
+      // 1. Add to its original muscleGroup
+      let originalCategory = this.exerciseList2.find(
+        (y) => y.category === x.muscleGroup,
+      );
+
+      if (!originalCategory) {
+        originalCategory = {
+          category: x.muscleGroup,
+          exercises: [],
         };
-        this.exerciseList2.push(newCategory2Obj);
-      } else {
-        // else it got found already, just push it to the found index:
-        this.exerciseList2[indexOfExistingCategory].exercises.push(
-          exerciseToAdd,
+        this.exerciseList2.push(originalCategory);
+      }
+
+      // Need a deep copy of the sets so the two references do not modify each other if added to both
+      const exerciseForOriginal = {
+        ...exerciseToAdd,
+        sets: exerciseToAdd.sets.map((set) => ({ ...set })),
+      };
+      originalCategory.exercises.push(exerciseForOriginal);
+
+      // 2. If it's a custom move (not default), also add to "Omat liikkeet"
+      if (!x.isDefault) {
+        let customCat = this.exerciseList2.find(
+          (y) => y.category === 'Omat liikkeet',
         );
+
+        if (!customCat) {
+          customCat = {
+            category: 'Omat liikkeet',
+            exercises: [],
+          };
+          this.exerciseList2.push(customCat);
+        }
+
+        const exerciseForCustom = {
+          ...exerciseToAdd,
+          sets: exerciseToAdd.sets.map((set) => ({ ...set })),
+        };
+        customCat.exercises.push(exerciseForCustom);
       }
     });
+
+    // Move 'Omat liikkeet' to be the very last category in the list
+    const customIndex = this.exerciseList2.findIndex(
+      (c) => c.category === 'Omat liikkeet',
+    );
+    if (customIndex !== -1) {
+      const [customCat] = this.exerciseList2.splice(customIndex, 1);
+      this.exerciseList2.push(customCat);
+    }
+
+    // Update the array reference so Ionic change detection picks up new categories immediately
+    this.exerciseList2 = [...this.exerciseList2];
   }
 
   // helper method to update the amount of Sets
@@ -203,24 +228,21 @@ export class LisaaTreeni {
   }
 
   /**
-   * Poistaa yksittäisen harjoituksen "Omat liikkeet" -kategoriasta.
+   * Poistaa yksittäisen harjoituksen kaikista kategorioista.
    */
   removeExercise(exerciseToRemove: ExerciseIsSelected) {
-    const customCat = this.exerciseList2.find(
-      (c) => c.category === 'Omat liikkeet',
-    );
-    if (customCat) {
-      customCat.exercises = customCat.exercises.filter(
-        (e) => e !== exerciseToRemove,
-      );
+    const moveIdToRemove = exerciseToRemove.move._id;
 
-      // Jos viimeinenkin oma liike poistetaan, poistetaan koko kategoria listasta
-      if (customCat.exercises.length === 0) {
-        this.exerciseList2 = this.exerciseList2.filter(
-          (c) => c.category !== 'Omat liikkeet',
-        );
-      }
-    }
+    this.exerciseList2.forEach((cat) => {
+      cat.exercises = cat.exercises.filter(
+        (e) => e.move._id !== moveIdToRemove,
+      );
+    });
+
+    // Poistetaan kategoriat, jotka jäivät tyhjiksi
+    this.exerciseList2 = this.exerciseList2.filter(
+      (c) => c.exercises.length > 0,
+    );
   }
 
   /**
@@ -245,18 +267,20 @@ export class LisaaTreeni {
     });
   }
 
-  openCustomExercise() {
+  openCustomMoveModal() {
     this.newMoveName = '';
     this.newMoveMuscle = '';
     this.newMoveType = 'compound';
     this.isCustomMoveModalOpen = true;
   }
 
-  cancelCustomMove() {
+  // when pressing 'cancel' when inside create custom move modal
+  cancelCreateCustomMove() {
     this.isCustomMoveModalOpen = false;
   }
 
-  confirmCustomMove() {
+  // when pressing 'ok' when inside create custom move modal
+  confirmCreateCustomMove() {
     const trimmedName = this.newMoveName.trim();
     if (trimmedName.length > 0 && trimmedName.length <= 30) {
       const newMove = {
@@ -269,17 +293,18 @@ export class LisaaTreeni {
         next: (data) => {
           console.log('New move created:', data);
           // fetch all new moves afterwards:
-          this.dataFetchService.getAllMoves().subscribe({
-            next: (data) => {
-              this.testData = data as Move[];
-              console.log('Moves fetched successfully:', this.testData);
-              // this.loadPrograms();
-              this.categorizeMoves();
-            },
-            error: (err) => {
-              console.error('Failed to fetch moves', err);
-            },
-          });
+          //   this.dataFetchService.getAllMoves().subscribe({
+          //     next: (data) => {
+          //       this.testData = [];
+          //       this.testData = data as Move[];
+          //       console.log('Moves fetched successfully:', this.testData);
+          //       // this.loadPrograms();
+          //       this.categorizeMoves();
+          //     },
+          //     error: (err) => {
+          //       console.error('Failed to fetch moves', err);
+          //     },
+          //   });
         },
         error: (err) => {
           console.error('Failed to create new move', err);

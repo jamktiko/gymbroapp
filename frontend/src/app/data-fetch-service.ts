@@ -146,6 +146,13 @@ export class DataFetchService {
     return this.http.post<Move>(this.apiurlMoves, moveData2);
   }
 
+  /**
+   * [DELETE] Removes a move from database.
+   */
+  deleteMove(id: string): Observable<Move> {
+    return this.http.delete<Move>(`${this.apiurlMoves}/${id}`);
+  }
+
   // ----------------------- TRAININGPROGRAM METHODS: -----------------------
 
   /**
@@ -171,7 +178,7 @@ export class DataFetchService {
    */
   createProgram(
     programData: Omit<TrainingProgram, '_id' | 'isDefault' | '__v'>,
-  ) {
+  ): Observable<TrainingProgram> {
     return this.http.post<TrainingProgram>(this.apiurlPrograms, programData);
   }
 

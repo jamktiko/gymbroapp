@@ -35,7 +35,7 @@
 
             <ion-label class="exercise-label">{{ exercise.move.name }}</ion-label>
 
-            @if (category.category === 'Omat liikkeet') {
+            @if (!exercise.move.isDefault) {
             <ion-button fill="clear" color="danger" slot="end" class="trash-button"
               (click)="removeExercise(exercise); $event.stopPropagation()">
               <ion-icon name="trash-outline"></ion-icon>
@@ -80,7 +80,7 @@
     </ion-accordion-group>
 
     <div class="ion-padding-top action-buttons">
-      <ion-button expand="block" fill="outline" (click)="openCustomExercise()">
+      <ion-button expand="block" fill="outline" (click)="openCustomMoveModal()">
         <ion-icon name="add-outline" slot="start"></ion-icon>
         Luo uusi liike
       </ion-button>
@@ -92,13 +92,13 @@
 
   </div>
 
-  <ion-modal [isOpen]="isCustomMoveModalOpen" (didDismiss)="cancelCustomMove()">
+  <ion-modal [isOpen]="isCustomMoveModalOpen" (didDismiss)="cancelCreateCustomMove()">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-title>Luo uusi liike</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="cancelCustomMove()">Sulje</ion-button>
+            <ion-button (click)="cancelCreateCustomMove()">Sulje</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -124,7 +124,7 @@
           </ion-segment>
         </div>
 
-        <ion-button expand="block" class="ion-margin-top" (click)="confirmCustomMove()"
+        <ion-button expand="block" class="ion-margin-top" (click)="confirmCreateCustomMove()"
           [disabled]="newMoveName.trim().length === 0">
           Lisää
         </ion-button>
