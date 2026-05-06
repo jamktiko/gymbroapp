@@ -1,5 +1,7 @@
 // --- YLÄPALKKI JA PROGRESS BAR ---
-
+ion-content {
+  --ion-safe-area-bottom: 60px !important;
+}
 .header-full-progress {
   display: flex;
   align-items: center;
@@ -17,8 +19,8 @@
 }
 
 .progress-wrapper {
-  flex: 0 0 45%;      // Palkin leveys
-  max-width: 150px; 
+  flex: 0 0 45%; // Palkin leveys
+  max-width: 150px;
   display: flex;
   align-items: center;
 }
@@ -45,7 +47,7 @@ ion-toolbar {
 }
 
 ion-accordion-group {
-  width: 100%; 
+  width: 100%;
   background: transparent;
 }
 
@@ -65,9 +67,9 @@ ion-accordion {
   overflow: hidden;
 
   ion-label h3 {
-    white-space: nowrap;      
-    overflow: hidden;         
-    text-overflow: ellipsis;  
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     max-width: 80%;
     display: block;
     margin: 0;
@@ -93,7 +95,7 @@ ion-accordion {
   div[slot="content"] {
     background: #252525;
     color: #ffffff;
-    
+
     ion-item {
       --background: transparent;
       --color: #dddddd;
@@ -117,11 +119,14 @@ ion-accordion {
 }
 
 ion-label p {
-  color: #aaaaaa; 
+  color: #aaaaaa;
   font-size: 0.85em;
 }
 
 ion-list {
   --ion-item-border-color: #333333;
   background: transparent;
+}
+ion-fab {
+  margin-bottom: calc(env(safe-area-inset-bottom) + 16px);
 }

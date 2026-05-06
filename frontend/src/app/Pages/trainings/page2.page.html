@@ -5,7 +5,10 @@
         <span>LVL {{testData?.level}}</span>
       </div>
       <div class="progress-wrapper">
-        <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async"></ion-progress-bar>
+        <ion-progress-bar
+          class="xpbar"
+          [value]="xpService.progress$ | async"
+        ></ion-progress-bar>
       </div>
     </div>
     <ion-buttons slot="end">
@@ -22,29 +25,34 @@
     <p class="placeholder">
       Täällä näkyvät omat treeniohjelmasi. Aloita luomalla uusi ohjelma!
     </p>
-    }
-
-    @if (savedPrograms.length > 0) {
+    } @if (savedPrograms.length > 0) {
     <!-- LISÄTTY: (ionChange) kuuntelija -->
     <ion-accordion-group (ionChange)="onAccordionChange($event)">
       @for (program of savedPrograms; track $index) {
       <ion-accordion [value]="program._id">
         <ion-item slot="header">
           <ion-label>
-            <h3 style="font-weight: bold; color: var(--ion-color-primary);">{{ program?.name }}</h3>
+            <h3 style="font-weight: bold; color: var(--ion-color-primary)">
+              {{ program?.name }}
+            </h3>
           </ion-label>
 
           <!-- Poistonappi -->
-          <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"
-            [disabled]="program.isDefault">
+          <ion-button
+            slot="end"
+            fill="clear"
+            color="danger"
+            (click)="deleteProgram(program._id, $event)"
+            [disabled]="program.isDefault"
+          >
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </ion-item>
 
-        <div class="ion-padding" slot="content" style="background: transparent;">
+        <div class="ion-padding" slot="content" style="background: transparent">
           <ion-list lines="full">
             @for (ex of program.exercises; track $index) {
-            <ion-item style="--background: transparent;">
+            <ion-item style="--background: transparent">
               <ion-label>
                 <h3>{{ ex.move.name }}</h3>
                 <p>
@@ -57,8 +65,13 @@
             }
           </ion-list>
 
-          <div style="padding: 10px 0;">
-            <ion-button color="primary" expand="block" shape="round" (click)="startProgram(program)">
+          <div style="padding: 10px 0">
+            <ion-button
+              color="primary"
+              expand="block"
+              shape="round"
+              (click)="startProgram(program)"
+            >
               <ion-icon slot="start" name="play"></ion-icon>
               ALOITA TREENI
             </ion-button>
