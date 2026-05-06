@@ -24,7 +24,7 @@ import {
   IonProgressBar,
   AlertController,
   IonReorderGroup,
-  IonReorder
+  IonReorder,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -58,8 +58,6 @@ import { DataFetchService } from '../../data-fetch-service';
     IonReorderGroup,
     IonReorder,
     AsyncPipe,
-    IonFooter,
-    IonTitle,
   ],
 })
 export class Page2Page implements OnInit {
@@ -85,28 +83,31 @@ export class Page2Page implements OnInit {
    * @param ev Ionicin reorder-tapahtuma
    * @param program Ohjelma, jonka liikkeitä järjestellään
    */
-  handleReorder(ev: CustomEvent<ItemReorderEventDetail>, program: TrainingProgram) {
-  // 1. Suoritetaan siirto
-  const draggedItem = program.exercises.splice(ev.detail.from, 1)[0];
-  program.exercises.splice(ev.detail.to, 0, draggedItem);
+  handleReorder(
+    ev: CustomEvent<ItemReorderEventDetail>,
+    program: TrainingProgram,
+  ) {
+    // 1. Suoritetaan siirto
+    const draggedItem = program.exercises.splice(ev.detail.from, 1)[0];
+    program.exercises.splice(ev.detail.to, 0, draggedItem);
 
-  // 2. TÄRKEÄÄ: Pakotetaan Angular huomaamaan muutos luomalla uusi taulukkoviittaus
-  program.exercises = [...program.exercises];
+    // 2. TÄRKEÄÄ: Pakotetaan Angular huomaamaan muutos luomalla uusi taulukkoviittaus
+    program.exercises = [...program.exercises];
 
-  ev.detail.complete();
-}
+    ev.detail.complete();
+  }
 
   /**
    * Ohjaa käyttäjän treenisivulle ja välittää valitun ohjelman tiedot
    */
   startProgram(program: TrainingProgram) {
-  // 3. TÄRKEÄÄ: Lähetetään syväkopio (JSON-kikka on varmin tapa poistaa vanhat viittaukset)
-  const programToLaunch = JSON.parse(JSON.stringify(program));
+    // 3. TÄRKEÄÄ: Lähetetään syväkopio (JSON-kikka on varmin tapa poistaa vanhat viittaukset)
+    const programToLaunch = JSON.parse(JSON.stringify(program));
 
-  this.router.navigate(['/page5'], {
-    state: { activeWorkout: programToLaunch },
-  });
-}
+    this.router.navigate(['/page5'], {
+      state: { activeWorkout: programToLaunch },
+    });
+  }
 
   /**
    * Haetaan käyttäjän tiedot backendistä aina kun sivu tulee näkyviin
