@@ -232,8 +232,8 @@ export class LisaaTreeni {
   /**
    * Poistaa yksittäisen harjoituksen.
    */
-  async removeExercise(exerciseToRemove: ExerciseIsSelected) {
-    // event.stopPropagation();
+  async removeExercise(exerciseToRemove: ExerciseIsSelected, event: Event) {
+    event.stopPropagation();
     const alert = await this.alertCtrl.create({
       header: 'Poistetaanko liike?',
       message: 'Haluatko varmasti poistaa tämän liikkeen?',
@@ -285,30 +285,30 @@ export class LisaaTreeni {
     //   (c) => c.exercises.length > 0,
     // );
 
-    this.dataFetchService.deleteMove(exerciseToRemove.move._id).subscribe({
-      next: (data) => {
-        console.log('Custom move deleted successfully:', data);
-        // this.loadPrograms();
-        // this.categorizeMoves();
+    // this.dataFetchService.deleteMove(exerciseToRemove.move._id).subscribe({
+    //   next: (data) => {
+    //     console.log('Custom move deleted successfully:', data);
+    //     // this.loadPrograms();
+    //     // this.categorizeMoves();
 
-        // fetch all new moves afterwards:
-        this.dataFetchService.getAllMoves().subscribe({
-          next: (data) => {
-            // this.testData = [];
-            this.testData = data as Move[];
-            console.log('Moves fetched successfully:', this.testData);
-            // this.loadPrograms();
-            this.categorizeMoves();
-          },
-          error: (err) => {
-            console.error('Failed to fetch moves', err);
-          },
-        });
-      },
-      error: (err) => {
-        console.error('Failed to delete custom move', err);
-      },
-    });
+    //     // fetch all new moves afterwards:
+    //     this.dataFetchService.getAllMoves().subscribe({
+    //       next: (data) => {
+    //         // this.testData = [];
+    //         this.testData = data as Move[];
+    //         console.log('Moves fetched successfully:', this.testData);
+    //         // this.loadPrograms();
+    //         this.categorizeMoves();
+    //       },
+    //       error: (err) => {
+    //         console.error('Failed to fetch moves', err);
+    //       },
+    //     });
+    //   },
+    //   error: (err) => {
+    //     console.error('Failed to delete custom move', err);
+    //   },
+    // });
 
     // update new moves right away afterwards:
     // this.dataFetchService.getAllMoves().subscribe({

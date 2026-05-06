@@ -42,7 +42,7 @@
 
             @if (!exercise.move.isDefault) {
             <ion-button fill="clear" color="danger" slot="end" class="trash-button"
-              (click)="removeExercise(exercise); $event.stopPropagation()">
+              (click)="removeExercise(exercise, $event); $event.stopPropagation()">
               <ion-icon name="trash-outline"></ion-icon>
             </ion-button>
             }
