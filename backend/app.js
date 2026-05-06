@@ -43,6 +43,7 @@ app.use('/api/training-sessions', trainingSessionsRouter);
 // connection health check
 app.get('/', (req, res) => res.json({ status: 'ok' }));
 
+
 // 404
 app.use((req, res) => {
   res.status(404).json({ error: 'Reitti ei löydy' });
