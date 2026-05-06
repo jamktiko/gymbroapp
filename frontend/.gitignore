@@ -71,3 +71,7 @@ Thumbs.db
 
 # Ignore temporary text files
 todo.txt
+
+# android studio juttuja
+/www
+/android
