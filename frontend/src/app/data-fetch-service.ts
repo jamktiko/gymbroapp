@@ -5,7 +5,12 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { Move, TrainingProgram, UserData } from './types/userdata';
+import {
+  Move,
+  TrainingProgram,
+  TrainingSession,
+  UserData,
+} from './types/userdata';
 
 @Injectable({
   providedIn: 'root',
@@ -165,7 +170,12 @@ export class DataFetchService {
   /**
    * [POST] Creates a new trainingsession and adds it to the database.
    */
-  createSession() {
-    //
+  createSession(
+    sessionData: Omit<
+      TrainingSession,
+      '_id' | 'createdAt' | 'updatedAt' | 'datetime'
+    >,
+  ) {
+    return this.http.post<TrainingSession>(this.apiurlSessions, sessionData);
   }
 }

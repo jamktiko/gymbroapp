@@ -18,6 +18,7 @@ import { addIcons } from 'ionicons';
 import { arrowForward, checkmarkDone, timerOutline } from 'ionicons/icons';
 import { TrainingProgram } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
+import { DataFetchService } from '../../data-fetch-service';
 
 @Component({
   selector: 'app-page5',
@@ -45,8 +46,9 @@ export class Page5Page implements OnInit {
   @ViewChild('workoutTimer') timer!: TimerComponent;
   // --- TREENIN TILA ---
   public activeWorkoutReordered!: TrainingProgram;
-  public activeWorkoutOriginal!: TrainingProgram;
   public currentIndex = 0;
+  public workoutTimerDuration = 120;
+  private dataFetchService = inject(DataFetchService);
 
   constructor() {
     addIcons({ arrowForward, checkmarkDone, timerOutline });
@@ -98,27 +100,27 @@ export class Page5Page implements OnInit {
    */
   lopetaTreeni() {
     // Tallennetaan sessio backendiin → XP +50
-    const session = {
+    const newSession = {
       exercises: this.activeWorkoutReordered.exercises,
+      breakTimeSeconds: this.workoutTimerDuration,
     };
 
-    this.http
-      .post('http://localhost:3000/api/training-sessions', session)
-      .subscribe({
-        next: () => {
-          // Pysäytetään kello myös tässä
-          if (this.timer) {
-            this.timer.forceStopAndReset();
-          }
+    this.dataFetchService.createSession(newSession).subscribe({
+      next: (data) => {
+        console.log('Uusi treenisessio tallennettu onnistuneesti\n' + data);
+        // Pysäytetään kello myös tässä
+        if (this.timer) {
+          this.timer.forceStopAndReset();
+        }
 
-          this.currentIndex = 0;
-          this.router.navigate(['/page6'], { replaceUrl: true });
-        },
-        error: (err) => {
-          console.error('Session tallennus epäonnistui:', err);
-          // Navigoi silti eteenpäin
-          this.router.navigate(['/page6'], { replaceUrl: true });
-        },
-      });
+        this.currentIndex = 0;
+        this.router.navigate(['/page6'], { replaceUrl: true });
+      },
+      error: (err) => {
+        console.error('Session tallennus epäonnistui:', err);
+        // Navigoi silti eteenpäin
+        this.router.navigate(['/page6'], { replaceUrl: true });
+      },
+    });
   }
 }
