@@ -1,0 +1,8 @@
+TODO:
+
+[PROBLEM] Oman liikkeen voi lisätä kahdesti (sama liike) koska se löytyy sekä "Omat liikkeet" ja "muscleGroup" kategorian alta
+[IDEA] Saavutukset näkymään suoritettujen treenisessioiden lukumäärä tähän menneessä, ansaittu xp yhteensä, pvm milloin loggautunut sisään ensimmäisen kerran
+
+- transitio treeni tekemis näkymään vois olla sulavampi
+- treenin teko näkymän sivumenun värit häviää jostain syystä
+- 

@@ -70,7 +70,7 @@ testem.log
 Thumbs.db
 
 # Ignore temporary text files
-todo.txt
+*/todo.txt
 
 # android studio juttuja
 /www
