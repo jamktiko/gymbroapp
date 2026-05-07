@@ -46,7 +46,9 @@ export class Page6Page implements OnInit {
   }
 
   ngOnInit() {
-    this.xpService.testaaProgress();
+    // Haetaan nykyinen XP ja animoidaan siihen 50 XP lisää,
+    // koska treenin suorittaminen antaa oletuksena 50 XP.
+    this.xpService.animateXpGain(50);
   }
 
   /**
@@ -57,13 +59,15 @@ export class Page6Page implements OnInit {
     this.dataFetchService.createSession(this.finishedSession).subscribe({
       next: () => {
         console.log('Uusi treenisessio tallennettu onnistuneesti');
+        // Päivitetään käyttäjän XP backendistä, jotta page2 näyttää oikean arvon
+        this.xpService.lataaXpProgress();
+        this.router.navigate(['/page2']);
       },
       error: (err) => {
         console.error('Uuden treenisession tallennus epäonnistui:', err);
         this.router.navigate(['/page2']);
       },
     });
-    this.router.navigate(['/page2']);
   }
 
   ionViewWillEnter() {

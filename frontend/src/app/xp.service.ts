@@ -1,23 +1,74 @@
-// import { HttpClient } from '@angular/common/http';
-// import { inject, Injectable } from '@angular/core';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, interval, map, takeWhile } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, interval } from 'rxjs';
+import { DataFetchService } from './data-fetch-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class XpService {
-  private progressSubject = new BehaviorSubject<number>(0.5); //sivun alkuarvo 100%
+  private progressSubject = new BehaviorSubject<number>(0); //sivun alkuarvo
   public progress$: Observable<number> = this.progressSubject.asObservable();
-  // private http = inject(HttpClient);
-  // private readonly API_URL =
-  // Tarvitsee APIN?
+  private dataFetchService = inject(DataFetchService);
 
-  constructor() {}
+  constructor() {
+    this.lataaXpProgress();
+  }
+
+  lataaXpProgress() {
+    this.dataFetchService.getUserDataById().subscribe({
+      next: (userData) => {
+        const xp = userData.xp;
+        const xpToNextLevel = userData.xpToNextLevel;
+        const totalXp = xpToNextLevel + xp;
+
+        const progress = totalXp > 0 ? xp / totalXp : 0;
+        this.progressSubject.next(progress);
+      },
+      error: (err: unknown) => {
+        console.error('Backend ei vastannut:', err);
+      },
+    });
+  }
+
+  // Frontend-testaus ja animaatio page6:een
+  animateXpGain(xpGain: number = 50) {
+    this.dataFetchService.getUserDataById().subscribe({
+      next: (userData) => {
+        const startXp = userData.xp;
+        const targetXp = startXp + xpGain;
+
+        let currentXp = startXp;
+        const steps = 40;
+        const stepAmount = xpGain / steps;
+
+        const sub = interval(30).subscribe({
+          next: () => {
+            currentXp += stepAmount;
+
+            if (currentXp >= targetXp) {
+              currentXp = targetXp; // varmistetaan että ei mennä yli
+              sub.unsubscribe();
+            }
+
+            const currentLevel = Math.floor(Math.sqrt(currentXp / 50)) + 1;
+            const currentTotalXp = currentLevel ** 2 * 50;
+            const progress =
+              currentTotalXp > 0 ? currentXp / currentTotalXp : 0;
+
+            this.progressSubject.next(progress);
+          },
+        });
+      },
+      error: (err: unknown) => {
+        console.error('Animaatio epäonnistui (backend ei vastannut):', err);
+      },
+    });
+  }
 
   // Backend-juttu, kannattaa varmistaa toimiiko oikeesti jossain vaiheessa, hyvin mahdollista että tehty väärin
 
   /*
+
   lataaBackend() {
     this.http.get<{ progressPercentage: number }>(this.API_URL).subscribe({
       next: (res) => {
@@ -30,17 +81,6 @@ export class XpService {
       },
     });
   } 
-  */
-  // Frontend-testaus
-  testaaProgress() {
-    this.progressSubject.next(0); // Nollataan alkuun
-    const demoCall = interval(40).pipe(
-      map((i) => (i + 1) / 100), // Kasvattaa 0.01 välein
-      takeWhile((val) => val <= 1.0), // Lopettaa 100 prosenttiin
-    );
 
-    demoCall.subscribe((val) => {
-      this.progressSubject.next(val);
-    });
-  }
+  */
 }

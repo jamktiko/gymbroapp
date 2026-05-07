@@ -39,7 +39,8 @@ export interface UserData {
   name: string;
   email: string;
   level: number;
-  exp: number;
+  xp: number;
+  xpToNextLevel: number;
   weightUnit: string;
   trainingPrograms: TrainingProgram[];
   trainingSessions: TrainingSession[];
