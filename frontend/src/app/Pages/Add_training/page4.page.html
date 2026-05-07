@@ -10,7 +10,6 @@
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
 
-
     <ion-item lines="full" class="name-input-item">
       <ion-label position="stacked">OHJELMAN NIMI</ion-label>
       <ion-input [(ngModel)]="programName" type="text" maxlength="30" placeholder="esim. Jalkapäivä">
@@ -18,7 +17,6 @@
     </ion-item>
 
     <h3 class="selection-title">VALITSE HARJOITTEET</h3>
-
 
     <ion-accordion-group #myAccordionGroup>
       @for (category of exerciseList2; track $index) {

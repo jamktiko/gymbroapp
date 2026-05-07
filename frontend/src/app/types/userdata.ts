@@ -53,3 +53,8 @@ export interface UserData {
   updatedAt: string;
   __v: number;
 }
+
+export interface Category2 {
+  category: string;
+  exercises: ExerciseIsSelected[];
+}

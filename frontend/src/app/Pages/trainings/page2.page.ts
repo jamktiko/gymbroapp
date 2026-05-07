@@ -12,7 +12,6 @@ import { addIcons } from 'ionicons';
 import { add, trashOutline, play, reorderTwoOutline } from 'ionicons/icons';
 import { TrainingProgram, UserData } from '../../types/userdata';
 import { DataFetchService } from '../../data-fetch-service';
-
 import {
   IonContent,
   IonHeader,
