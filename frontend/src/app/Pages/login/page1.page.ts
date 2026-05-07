@@ -46,6 +46,9 @@ export class Page1Page implements OnInit {
   ionViewWillEnter() {
     this.menu.enable(false); //menu disabled
   }
+  ionViewWillLeave() {
+    this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+  }
   ngOnInit() {
     this.socauthService.signOut();
     this.authService.logout();
@@ -65,7 +68,6 @@ export class Page1Page implements OnInit {
             .glogin(this.user.idToken!, this.user.id!)
             .subscribe((result) => {
               if (result === true) {
-                this.menu.enable(true); //tuo menun takaisin kirjautuessa
                 this.loginEventService.emitLoggedIn();
                 this.router.navigateByUrl('/page2', { replaceUrl: true });
               } else {

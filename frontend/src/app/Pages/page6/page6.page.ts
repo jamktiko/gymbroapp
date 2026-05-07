@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { XpService } from '../../xp.service';
+import { MenuController } from '@ionic/angular/standalone';
 import {
   IonButton,
   IonContent,
@@ -27,6 +28,7 @@ import {
   ],
 })
 export class Page6Page implements OnInit {
+  private menu = inject(MenuController);
   constructor(
     public xpService: XpService,
     private router: Router,
@@ -35,7 +37,12 @@ export class Page6Page implements OnInit {
   ngOnInit() {
     this.xpService.testaaProgress();
   }
-
+  ionViewWillEnter() {
+    this.menu.enable(false); //menu disabled
+  }
+  ionViewWillLeave() {
+    this.menu.enable(true); //varmistaa että menu seuraavassa
+  }
   aloitussivulle() {
     this.router.navigate(['/page2']);
   }
