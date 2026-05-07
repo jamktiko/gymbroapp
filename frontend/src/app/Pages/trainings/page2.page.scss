@@ -19,18 +19,32 @@ ion-content {
 }
 
 .progress-wrapper {
-  flex: 0 0 45%; // Palkin leveys
+  flex: 0 0 45%; 
   max-width: 150px;
   display: flex;
   align-items: center;
+
+  // TIUKKA REUNUS
+  border: 1px solid rgba(255, 255, 255, 0.3); // Ohut mutta selkeä raja
+  border-radius: 20px;
+  height: 10px;        // Kavennetaan korkeus samaksi kuin palkilla
+  padding: 0;          // Ei tyhjää tilaa sivuilla
+  overflow: hidden;    // Leikkaa palkin reunat siististi raamin sisään
 }
 
 .xpbar {
-  height: 10px;
-  border-radius: 10px;
+  height: 100%;        // Täyttää kavennetun wrapperin kokonaan
   width: 100%;
+  margin: 0;
+  
   --progress-background: var(--ion-color-primary);
-  --buffer-background: rgba(var(--ion-color-primary-rgb), 0.1);
+  
+  // MUOKATTU: Lisätty !important varmistamaan värin päivitys
+  
+  
+  &::part(track) {
+    background: #605454 !important;
+  }
 }
 
 ion-toolbar {
@@ -99,7 +113,7 @@ ion-accordion {
     ion-item {
       --background: transparent;
       --color: #dddddd;
-      --border-color: #333;
+      --border-color: #000000;
 
       h3 {
         white-space: normal;
