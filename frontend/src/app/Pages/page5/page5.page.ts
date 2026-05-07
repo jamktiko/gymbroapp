@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { MenuController } from '@ionic/angular/standalone';
 import {
   IonButton,
   IonButtons,
@@ -43,6 +44,7 @@ import { DataFetchService } from '../../data-fetch-service';
 export class Page5Page implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
+  private menu = inject(MenuController);
   @ViewChild('workoutTimer') timer!: TimerComponent;
   // --- TREENIN TILA ---
   public activeWorkoutReordered!: TrainingProgram;
@@ -67,7 +69,12 @@ export class Page5Page implements OnInit {
       this.router.navigate(['/page2']);
     }
   }
-
+  ionViewWillEnter() {
+    this.menu.enable(false); //menu disabled
+  }
+  ionViewWillLeave() {
+    this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+  }
   /**
    * Palauttaa  liikkeen datan.
    */

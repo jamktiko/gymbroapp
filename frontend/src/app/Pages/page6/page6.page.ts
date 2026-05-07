@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { XpService } from '../../xp.service';
+import { MenuController } from '@ionic/angular/standalone';
 import {
   IonButton,
   IonContent,
@@ -36,6 +37,7 @@ export class Page6Page implements OnInit {
   public xpService = inject(XpService);
   private router = inject(Router);
   private dataFetchService = inject(DataFetchService);
+  private menu = inject(MenuController);
 
   constructor() {
     // Luetaan navigoinnin mukana tullut treenidata
@@ -63,5 +65,13 @@ export class Page6Page implements OnInit {
       },
     });
     this.router.navigate(['/page2']);
+  }
+
+  ionViewWillEnter() {
+    this.menu.enable(false); // menu disabled tällä sivulla
+  }
+
+  ionViewWillLeave() {
+    this.menu.enable(true); // varmistaa että menu seuraavassa
   }
 }

@@ -6,6 +6,7 @@ import { Component, inject, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular/standalone'; //tuodaan menucontroller jotta voidaan disable menu
 import { IonContent } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
@@ -17,7 +18,6 @@ import {
 } from '@abacritt/angularx-social-login';
 import { AuthService } from '../../auth.service';
 import { LoginEventService } from '../../login-event.service';
-
 @Component({
   selector: 'app-page1',
   templateUrl: './page1.page.html',
@@ -34,6 +34,7 @@ import { LoginEventService } from '../../login-event.service';
 export class Page1Page implements OnInit {
   private socauthService = inject(SocialAuthService);
   private authService = inject(AuthService);
+  private menu = inject(MenuController);
   private user!: SocialUser;
   private router = inject(Router);
   private loginEventService = inject(LoginEventService);
@@ -42,7 +43,12 @@ export class Page1Page implements OnInit {
   constructor() {
     addIcons({ logoGoogle, logInOutline });
   }
-
+  ionViewWillEnter() {
+    this.menu.enable(false); //menu disabled
+  }
+  ionViewWillLeave() {
+    this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+  }
   ngOnInit() {
     this.socauthService.signOut();
     this.authService.logout();
