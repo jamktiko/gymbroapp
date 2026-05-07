@@ -1,5 +1,5 @@
 /**
- * Trainings-näkymä
+ * Trainings näkymä
  */
 
 import { Component, OnInit, inject } from '@angular/core';

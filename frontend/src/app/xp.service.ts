@@ -1,5 +1,6 @@
+// import { HttpClient } from '@angular/common/http';
+// import { inject, Injectable } from '@angular/core';
 import { Injectable } from '@angular/core';
-//import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, interval, map, takeWhile } from 'rxjs';
 
 @Injectable({
@@ -8,14 +9,16 @@ import { BehaviorSubject, Observable, interval, map, takeWhile } from 'rxjs';
 export class XpService {
   private progressSubject = new BehaviorSubject<number>(1); //sivun alkuarvo 100%
   public progress$: Observable<number> = this.progressSubject.asObservable();
+  // private http = inject(HttpClient);
+  // private readonly API_URL =
+  // Tarvitsee APIN?
 
-  //private readonly API_URL =
-  //Tarvitsee APIN?
-  constructor(/*private http: HttpClient*/) {}
+  constructor() {}
 
   // Backend-juttu, kannattaa varmistaa toimiiko oikeesti jossain vaiheessa, hyvin mahdollista että tehty väärin
 
-  /*lataaBackend() {
+  /*
+  lataaBackend() {
     this.http.get<{ progressPercentage: number }>(this.API_URL).subscribe({
       next: (res) => {
         // palkki pitää päivittää backend puolelta, varmistus miten oikeasti toimii
@@ -26,7 +29,8 @@ export class XpService {
         // haku epäonnistu, error
       },
     });
-  } */
+  } 
+  */
   // Frontend-testaus
   testaaProgress() {
     this.progressSubject.next(0); // Nollataan alkuun
