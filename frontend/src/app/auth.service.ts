@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class AuthService {
   private googleLoginUrl = 'http://localhost:3000/api/auth/google';
-  public token: string;
+  private token: string;
   private jwtHelp = new JwtHelperService();
   private http = inject(HttpClient);
 

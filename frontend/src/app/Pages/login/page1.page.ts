@@ -1,14 +1,12 @@
+/**
+ * Login näkymä
+ */
+
 import { Component, inject, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/angular/standalone';
-
+import { IonContent } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
 import {
@@ -27,9 +25,6 @@ import { LoginEventService } from '../../login-event.service';
   standalone: true,
   imports: [
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     CommonModule,
     FormsModule,
     GoogleSigninButtonModule,
@@ -39,13 +34,10 @@ import { LoginEventService } from '../../login-event.service';
 export class Page1Page implements OnInit {
   private socauthService = inject(SocialAuthService);
   private authService = inject(AuthService);
-  user!: SocialUser;
-  error = '';
-
+  private user!: SocialUser;
   private router = inject(Router);
   private loginEventService = inject(LoginEventService);
-
-  loggedInEvent = output<void>();
+  public loggedInEvent = output<void>();
 
   constructor() {
     addIcons({ logoGoogle, logInOutline });
@@ -70,11 +62,10 @@ export class Page1Page implements OnInit {
             .glogin(this.user.idToken!, this.user.id!)
             .subscribe((result) => {
               if (result === true) {
-                // this.router.navigate(['/secret']);
                 this.loginEventService.emitLoggedIn();
                 this.router.navigateByUrl('/page2', { replaceUrl: true });
               } else {
-                this.error = 'Tunnus tai salasana väärä';
+                console.log('Väärä tunnus tai salasana');
               }
             });
         }

@@ -12,7 +12,7 @@ import {
   IonMenuButton,
   IonToolbar,
   IonTitle,
-  IonIcon
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowForward, checkmarkDone, timerOutline } from 'ionicons/icons';
@@ -36,22 +36,20 @@ import { TimerComponent } from '../../timer/timer.component';
     IonFooter,
     IonTitle,
     IonIcon,
-    TimerComponent // Lisätty importteihin
+    TimerComponent, // Lisätty importteihin
   ],
 })
-
 export class Page5Page implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
   @ViewChild('workoutTimer') timer!: TimerComponent;
-
   // --- TREENIN TILA ---
-  activeWorkout!: TrainingProgram; 
-  currentIndex = 0;               
+  public activeWorkout!: TrainingProgram;
+  public currentIndex = 0;
 
   constructor() {
     addIcons({ arrowForward, checkmarkDone, timerOutline });
-    
+
     // Luetaan navigoinnin mukana tullut treenidata
     const navigation = this.router.getCurrentNavigation();
     this.activeWorkout = navigation?.extras.state?.['activeWorkout'];
@@ -80,7 +78,7 @@ export class Page5Page implements OnInit {
    * Timer nollautuu automaattisesti komponentin sisällä, kun se saa uuden inputin.
    */
   seuraavaLiike() {
-    // 1. PYSÄYTETÄÄN JA NOLLATAAN KELLO 
+    // 1. PYSÄYTETÄÄN JA NOLLATAAN KELLO
     if (this.timer) {
       this.timer.forceStopAndReset();
     }
@@ -93,21 +91,22 @@ export class Page5Page implements OnInit {
   /**
    * Päättää treenin ja siirtyy XP-sivulle.
    */
-   lopetaTreeni() {
+  lopetaTreeni() {
     // Tallennetaan sessio backendiin → XP +50
     const session = {
       exercises: this.activeWorkout.exercises,
     };
 
-    this.http.post('http://localhost:3000/api/training-sessions', session)
+    this.http
+      .post('http://localhost:3000/api/training-sessions', session)
       .subscribe({
         next: () => {
           // Pysäytetään kello myös tässä
-    if (this.timer) {
-      this.timer.forceStopAndReset();
-    }
-    
-    this.currentIndex = 0;
+          if (this.timer) {
+            this.timer.forceStopAndReset();
+          }
+
+          this.currentIndex = 0;
           this.router.navigate(['/page6'], { replaceUrl: true });
         },
         error: (err) => {

@@ -25,7 +25,7 @@
     </ion-menu>
 
 
-    <!-- if a http request is loading -> show this -->
+    <!-- if a http request is waiting for a response - show this -->
     @if (loadingService.loading$ | async) {
     <div id="loading-spinner-container">
       <app-loading-spinner></app-loading-spinner>

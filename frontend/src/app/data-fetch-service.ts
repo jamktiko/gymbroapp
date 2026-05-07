@@ -15,37 +15,12 @@ export class DataFetchService {
   private apiurlUsers = 'http://localhost:3000/api/users';
   private apiurlPrograms = 'http://localhost:3000/api/training-programs';
   private apiurlSessions = 'http://localhost:3000/api/training-sessions';
-
   private http = inject(HttpClient);
-
-  // private sessionStorageToken;
-
-  // private sessionData = null;
 
   // GET
   // POST
   // PATCH
   // DELETE
-
-  // fetchJWTToken() {
-  //   // try {
-  //   //   const sessionDataString = sessionStorage.getItem('accesstoken');
-  //   //   if (sessionDataString) {
-  //   //     const sessionData = JSON.parse(sessionDataString);
-  //   //     // const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
-  //   //   }
-  //   // } catch (error) {
-  //   //   console.error(
-  //   //     'Error while fetching JTW token from sessionStorage:',
-  //   //     error,
-  //   //   );
-  //   // }
-  // }
-
-  //
-  //
-  //
-  //
 
   // ---------------------------- USER METHODS: ----------------------------
 
@@ -87,26 +62,6 @@ export class DataFetchService {
    * [GET] Fetches all default moves + user's custom created moves from database.
    */
   getAllMoves(): Observable<Move[]> {
-    // fetch JWT token from sessionStorage
-    // let sessionData;
-
-    // try {
-    //   const sessionDataString = sessionStorage.getItem('accesstoken');
-    //   if (!sessionDataString) {
-    //     return throwError(() => new Error('No access token found in session.'));
-    //   }
-    //   sessionData = JSON.parse(sessionDataString);
-    // } catch (error) {
-    //   console.error('Error parsing session data:', error);
-    //   return throwError(() => new Error('Invalid or corrupted session data.'));
-    // }
-
-    // return this.http.get<Move[]>(this.apiurlMoves, {
-    //   headers: {
-    //     'googleId': sessionData.googleId
-    //   }
-    // });
-
     // actual http request
     const test = this.http.get<Move[]>(this.apiurlMoves);
     console.log(`test: ${test}`);
@@ -123,8 +78,34 @@ export class DataFetchService {
   /**
    * [POST] Creates a new move and adds it to the database.
    */
-  createMove() {
-    //
+  createMove(
+    moveData: Omit<Move, '_id' | 'isDefault' | 'createdBy'>,
+  ): Observable<Move> {
+    let googleId = null;
+    try {
+      const sessionDataString = sessionStorage.getItem('accesstoken');
+      if (sessionDataString) {
+        const sessionData = JSON.parse(sessionDataString);
+        googleId = sessionData.googleId;
+      }
+    } catch (error) {
+      console.error('Error parsing session data for googleId:', error);
+    }
+
+    // actual http request
+    const moveData2 = {
+      ...moveData,
+      createdBy: googleId,
+    };
+
+    return this.http.post<Move>(this.apiurlMoves, moveData2);
+  }
+
+  /**
+   * [DELETE] Removes a move from database.
+   */
+  deleteMove(id: string): Observable<Move> {
+    return this.http.delete<Move>(`${this.apiurlMoves}/${id}`);
   }
 
   // ----------------------- TRAININGPROGRAM METHODS: -----------------------
@@ -152,7 +133,7 @@ export class DataFetchService {
    */
   createProgram(
     programData: Omit<TrainingProgram, '_id' | 'isDefault' | '__v'>,
-  ) {
+  ): Observable<TrainingProgram> {
     return this.http.post<TrainingProgram>(this.apiurlPrograms, programData);
   }
 

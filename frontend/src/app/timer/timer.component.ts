@@ -1,5 +1,13 @@
-import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  OnDestroy,
+  OnChanges,
+  Input,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 import { IonButton } from '@ionic/angular/standalone';
 
 @Component({
@@ -7,10 +15,10 @@ import { IonButton } from '@ionic/angular/standalone';
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonButton]
+  imports: [CommonModule, IonButton],
 })
 export class TimerComponent implements OnDestroy, OnChanges {
-  @Input() duration: number = 10; 
+  @Input() duration: number = 10;
   @Output() timerFinished = new EventEmitter<void>();
 
   timerValue: string = '00:10,00';
