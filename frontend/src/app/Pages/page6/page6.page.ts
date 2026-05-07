@@ -11,6 +11,8 @@ import {
   IonProgressBar,
   IonToolbar,
 } from '@ionic/angular/standalone';
+import { TrainingSession } from '../../types/userdata';
+import { DataFetchService } from '../../data-fetch-service';
 
 @Component({
   selector: 'app-page6',
@@ -28,22 +30,47 @@ import {
   ],
 })
 export class Page6Page implements OnInit {
+  private finishedSession: Omit<
+    TrainingSession,
+    '_id' | 'createdAt' | 'updatedAt' | 'datetime'
+  >;
+  public xpService = inject(XpService);
+  private router = inject(Router);
+  private dataFetchService = inject(DataFetchService);
   private menu = inject(MenuController);
-  constructor(
-    public xpService: XpService,
-    private router: Router,
-  ) {}
+
+  constructor() {
+    // Luetaan navigoinnin mukana tullut treenidata
+    const navigation = this.router.currentNavigation();
+    this.finishedSession = navigation?.extras.state?.['finishedSession'];
+  }
 
   ngOnInit() {
     this.xpService.testaaProgress();
   }
-  ionViewWillEnter() {
-    this.menu.enable(false); //menu disabled
-  }
-  ionViewWillLeave() {
-    this.menu.enable(true); //varmistaa että menu seuraavassa
-  }
-  aloitussivulle() {
+
+  /**
+   * Tallennetaan sessio tietokantaan → XP +50
+   * Sitten siirrytään takaisin pääsivulle (page2)
+   */
+  saveTrainingSession() {
+    this.dataFetchService.createSession(this.finishedSession).subscribe({
+      next: () => {
+        console.log('Uusi treenisessio tallennettu onnistuneesti');
+      },
+      error: (err) => {
+        console.error('Uuden treenisession tallennus epäonnistui:', err);
+        this.router.navigate(['/page2']);
+      },
+    });
     this.router.navigate(['/page2']);
+  }
+
+  ionViewWillEnter() {
+    this.menu.enable(false); // menu disabled tällä sivulla
+  }
+
+  ionViewWillLeave() {
+    this.menu.enable(true); // varmistaa että menu seuraavassa
   }
 }

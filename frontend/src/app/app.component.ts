@@ -41,7 +41,6 @@ import {
 } from 'ionicons/icons';
 import { AuthService } from './auth.service';
 import { UserData } from './types/userdata';
-import { HttpClient } from '@angular/common/http';
 import { LoginEventService } from './login-event.service';
 import { DataFetchService } from './data-fetch-service';
 
@@ -82,8 +81,7 @@ export class AppComponent implements OnInit {
   private router = inject(Router);
   public loadingService = inject(LoadingService);
   private authService = inject(AuthService);
-  private http = inject(HttpClient);
-  private testData!: UserData;
+  private userData!: UserData;
   private loginEventService = inject(LoginEventService);
   private dataFetchService = inject(DataFetchService);
 
@@ -113,56 +111,34 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     // loginEventService ja checkUserStatus() yhdessä varmistavat että sivubarin menun käyttäjätiedot ovat ajan tasalla login ja logout tapahtumien jälkeenkin:
     this.loginEventService.loggedIn$.subscribe(() => {
-      this.checkUserStatus();
+      this.fetchUserData();
       return;
     });
-    this.checkUserStatus();
+    this.fetchUserData();
   }
 
-  checkUserStatus() {
-    // fetch userdata from backend:
-    try {
-      // 1. Get the object from sessionStorage
-      const sessionDataStr = sessionStorage.getItem('accesstoken');
-      if (sessionDataStr) {
-        const sessionData = JSON.parse(sessionDataStr);
-        // 2. Use sessionData.googleId for the URL. Added backend port 3000.
-        const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
+  fetchUserData() {
+    this.dataFetchService.getUserDataById().subscribe({
+      next: (data) => {
+        this.userData = data as UserData;
+        console.log('User data loaded:', this.userData);
 
-        // 3. Use sessionData.token for the Authorization header
-        this.http
-          .get(url, {
-            headers: {
-              Authorization: `Bearer ${sessionData.token}`, // Only the raw token string
-              'Content-Type': 'application/json',
-            },
-          })
-          .subscribe({
-            next: (data) => {
-              this.testData = data as UserData;
-              console.log('Test data loaded:', this.testData);
+        const savedName = this.userData?.name;
+        const savedEmail = this.userData?.email;
 
-              const savedName = this.testData?.name;
-              const savedEmail = this.testData?.email;
-
-              if (savedName) {
-                this.userDisplayName = savedName;
-              }
-              if (savedEmail) {
-                this.userEmail = savedEmail;
-              }
-            },
-            error: (err) => {
-              console.error('Failed to load test data', err);
-            },
-          });
-      }
-    } catch (error) {
-      console.error('Error loading test data:', error);
-    }
+        if (savedName) {
+          this.userDisplayName = savedName;
+        }
+        if (savedEmail) {
+          this.userEmail = savedEmail;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load user data', err);
+      },
+    });
   }
 
-  // ---  FUNKTIO: Kirjaudu ulos ---
   logout() {
     console.log('Kirjaudutaan ulos...');
 

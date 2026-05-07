@@ -18,7 +18,7 @@ import { IonButton } from '@ionic/angular/standalone';
   imports: [CommonModule, IonButton],
 })
 export class TimerComponent implements OnDestroy, OnChanges {
-  @Input() duration: number = 10;
+  @Input() duration: number = 120;
   @Output() timerFinished = new EventEmitter<void>();
 
   timerValue: string = '00:10,00';

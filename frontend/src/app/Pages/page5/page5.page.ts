@@ -17,8 +17,9 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowForward, checkmarkDone, timerOutline } from 'ionicons/icons';
-import { TrainingProgram } from '../../types/userdata';
+import { TrainingProgram, TrainingSession } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
+import { DataFetchService } from '../../data-fetch-service';
 
 @Component({
   selector: 'app-page5',
@@ -47,22 +48,25 @@ export class Page5Page implements OnInit {
   private alertController = inject(AlertController);
   @ViewChild('workoutTimer') timer!: TimerComponent;
   // --- TREENIN TILA ---
-  public activeWorkout!: TrainingProgram;
+  public activeWorkoutReordered!: TrainingProgram;
   public currentIndex = 0;
+  public workoutTimerDuration = 120;
+  private dataFetchService = inject(DataFetchService);
 
   constructor() {
     addIcons({ arrowForward, checkmarkDone, timerOutline });
 
     // Luetaan navigoinnin mukana tullut treenidata
-    const navigation = this.router.getCurrentNavigation();
-    this.activeWorkout = navigation?.extras.state?.['activeWorkout'];
+    const navigation = this.router.currentNavigation();
+    this.activeWorkoutReordered =
+      navigation?.extras.state?.['activeWorkoutReordered'];
   }
 
   ngOnInit() {
     // Aloitetaan aina alusta ja varmistetaan datan löytyminen
     this.currentIndex = 0;
 
-    if (!this.activeWorkout) {
+    if (!this.activeWorkoutReordered) {
       this.router.navigate(['/page2']);
     }
   }
@@ -115,7 +119,7 @@ export class Page5Page implements OnInit {
    * Palauttaa  liikkeen datan.
    */
   get currentExercise() {
-    return this.activeWorkout?.exercises[this.currentIndex];
+    return this.activeWorkoutReordered?.exercises[this.currentIndex];
   }
 
   // --- TREENILOGIIKKA ---
@@ -131,7 +135,10 @@ export class Page5Page implements OnInit {
     }
 
     // 2. SIIRRYTÄÄN SEURAAVAAN LIIKKEESEEN
-    if (this.currentIndex < (this.activeWorkout?.exercises?.length || 0) - 1) {
+    if (
+      this.currentIndex <
+      (this.activeWorkoutReordered?.exercises?.length || 0) - 1
+    ) {
       this.currentIndex++;
     }
   }
@@ -139,28 +146,37 @@ export class Page5Page implements OnInit {
    * Päättää treenin ja siirtyy XP-sivulle.
    */
   lopetaTreeni() {
-    // Tallennetaan sessio backendiin → XP +50
-    const session = {
-      exercises: this.activeWorkout.exercises,
+    const finishedSession: Omit<
+      TrainingSession,
+      '_id' | 'createdAt' | 'updatedAt' | 'datetime'
+    > = {
+      exercises: this.activeWorkoutReordered.exercises,
+      breakTimeSeconds: this.workoutTimerDuration,
     };
 
-    this.http
-      .post('http://localhost:3000/api/training-sessions', session)
-      .subscribe({
-        next: () => {
-          // Pysäytetään kello myös tässä
-          if (this.timer) {
-            this.timer.forceStopAndReset();
-          }
+    // Pysäytetään kello myös tässä
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
 
-          this.currentIndex = 0;
-          this.router.navigate(['/page6'], { replaceUrl: true });
-        },
-        error: (err) => {
-          console.error('Session tallennus epäonnistui:', err);
-          // Navigoi silti eteenpäin
-          this.router.navigate(['/page6'], { replaceUrl: true });
-        },
-      });
+    this.currentIndex = 0;
+
+    // navigoi xp-näkymään:
+    this.router.navigate(['/page6'], {
+      replaceUrl: true,
+      state: { finishedSession: finishedSession },
+    });
   }
 }
+
+/**
+ * Ohjaa käyttäjän treenisivulle ja välittää valitun ohjelman tiedot
+ */
+// startProgram(finishedTrainingProgram: TrainingProgram) {
+//   // 3. TÄRKEÄÄ: Lähetetään syväkopio (JSON-kikka on varmin tapa poistaa vanhat viittaukset)
+//   const programToLaunch = JSON.parse(JSON.stringify(this.activeWorkoutReordered));
+
+//   this.router.navigate(['/page5'], {
+//     state: { activeWorkoutReordered: programToLaunch },
+//   })
+// }

@@ -1,11 +1,18 @@
-// DataFetchService acts as a bridge between the application and backend
-// By injecting this service into a component you can send authorized http requests to backend
-// Backend will then take these requests in and invoke REST API methods accordingly
+/**
+ * DataFetchService acts as a bridge between the application and backend
+ * By injecting this service into a component you can send authorized http requests to backend
+ * Backend will then take these requests in and invoke REST API methods accordingly
+ */
 
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { Move, TrainingProgram, UserData } from './types/userdata';
+import {
+  Move,
+  TrainingProgram,
+  TrainingSession,
+  UserData,
+} from './types/userdata';
 
 @Injectable({
   providedIn: 'root',
@@ -62,9 +69,6 @@ export class DataFetchService {
    * [GET] Fetches all default moves + user's custom created moves from database.
    */
   getAllMoves(): Observable<Move[]> {
-    // actual http request
-    const test = this.http.get<Move[]>(this.apiurlMoves);
-    console.log(`test: ${test}`);
     return this.http.get<Move[]>(this.apiurlMoves);
   }
 
@@ -165,7 +169,12 @@ export class DataFetchService {
   /**
    * [POST] Creates a new trainingsession and adds it to the database.
    */
-  createSession() {
-    //
+  createSession(
+    sessionData: Omit<
+      TrainingSession,
+      '_id' | 'createdAt' | 'updatedAt' | 'datetime'
+    >,
+  ): Observable<TrainingSession> {
+    return this.http.post<TrainingSession>(this.apiurlSessions, sessionData);
   }
 }
