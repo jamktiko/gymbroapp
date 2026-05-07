@@ -16,7 +16,7 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowForward, checkmarkDone, timerOutline } from 'ionicons/icons';
-import { TrainingProgram } from '../../types/userdata';
+import { TrainingProgram, TrainingSession } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
 import { DataFetchService } from '../../data-fetch-service';
 
@@ -99,28 +99,37 @@ export class Page5Page implements OnInit {
    * Päättää treenin ja siirtyy XP-sivulle.
    */
   lopetaTreeni() {
-    // Tallennetaan sessio backendiin → XP +50
-    const newSession = {
+    const finishedSession: Omit<
+      TrainingSession,
+      '_id' | 'createdAt' | 'updatedAt' | 'datetime'
+    > = {
       exercises: this.activeWorkoutReordered.exercises,
       breakTimeSeconds: this.workoutTimerDuration,
     };
 
-    this.dataFetchService.createSession(newSession).subscribe({
-      next: (data) => {
-        console.log('Uusi treenisessio tallennettu onnistuneesti\n' + data);
-        // Pysäytetään kello myös tässä
-        if (this.timer) {
-          this.timer.forceStopAndReset();
-        }
+    // Pysäytetään kello myös tässä
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
 
-        this.currentIndex = 0;
-        this.router.navigate(['/page6'], { replaceUrl: true });
-      },
-      error: (err) => {
-        console.error('Session tallennus epäonnistui:', err);
-        // Navigoi silti eteenpäin
-        this.router.navigate(['/page6'], { replaceUrl: true });
-      },
+    this.currentIndex = 0;
+
+    // navigoi xp-näkymään:
+    this.router.navigate(['/page6'], {
+      replaceUrl: true,
+      state: { finishedSession: finishedSession },
     });
   }
 }
+
+/**
+ * Ohjaa käyttäjän treenisivulle ja välittää valitun ohjelman tiedot
+ */
+// startProgram(finishedTrainingProgram: TrainingProgram) {
+//   // 3. TÄRKEÄÄ: Lähetetään syväkopio (JSON-kikka on varmin tapa poistaa vanhat viittaukset)
+//   const programToLaunch = JSON.parse(JSON.stringify(this.activeWorkoutReordered));
+
+//   this.router.navigate(['/page5'], {
+//     state: { activeWorkoutReordered: programToLaunch },
+//   })
+// }
