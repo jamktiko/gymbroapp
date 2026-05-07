@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { MenuController } from '@ionic/angular/standalone';
+import { MenuController, AlertController } from '@ionic/angular/standalone';
 import {
   IonButton,
   IonButtons,
@@ -44,6 +44,7 @@ export class Page5Page implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
   private menu = inject(MenuController);
+  private alertController = inject(AlertController);
   @ViewChild('workoutTimer') timer!: TimerComponent;
   // --- TREENIN TILA ---
   public activeWorkout!: TrainingProgram;
@@ -70,6 +71,45 @@ export class Page5Page implements OnInit {
   }
   ionViewWillLeave() {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+  }
+  async keskeytaTreeniVahvistus() {
+    //keskeyttää treenin
+    const alert = await this.alertController.create({
+      header: 'Keskeytetäänkö treeni?',
+      message: 'Haluatko varmasti poistua? Edistymistäsi ei tallenneta.',
+      cssClass: 'treeni-alert',
+      buttons: [
+        {
+          text: 'Jatka treeniä',
+          role: 'cancel',
+          handler: () => {
+            console.log('Palataan treeniin');
+          },
+        },
+        {
+          text: 'Lopeta tallentamatta',
+          role: 'destructive',
+          handler: () => {
+            this.poistuTreenista();
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  private poistuTreenista() {
+    // Pysäytetään kello
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
+
+    // Tyhjennetään indeksi
+    this.currentIndex = 0;
+
+    // takasin etusivulle
+    this.router.navigate(['/page2'], { replaceUrl: true });
   }
   /**
    * Palauttaa  liikkeen datan.

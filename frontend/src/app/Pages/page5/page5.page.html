@@ -1,8 +1,18 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-button
+      class="keskeyta"
+      slot="start"
+      (click)="keskeytaTreeniVahvistus()"
+    >
+      <b>X</b>
+    </ion-button>
     <ion-title>{{ activeWorkout?.name }}</ion-title>
     <ion-buttons slot="end">
-      <div class="ion-padding-horizontal" style="color: var(--ion-color-primary); font-weight: bold">
+      <div
+        class="ion-padding-horizontal"
+        style="color: var(--ion-color-primary); font-weight: bold"
+      >
         {{ currentIndex + 1 }} / {{ activeWorkout?.exercises?.length }}
       </div>
       <ion-menu-button></ion-menu-button>
@@ -12,7 +22,6 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-
     @if (currentExercise) {
     <div class="exercise-card">
       <p class="label">NYKYINEN LIIKE</p>
@@ -40,20 +49,31 @@
     <!-- timerFinished: voit halutessasi kutsua funktiota kun aika loppuu -->
     <!-- Lisää #workoutTimer -->
     <app-timer #workoutTimer [duration]="10"></app-timer>
-
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border ion-padding">
-  @if (currentIndex < (activeWorkout?.exercises?.length || 0) - 1) { <ion-button class="next-btn" expand="block"
-    shape="round" color="primary" (click)="seuraavaLiike()">
+  @if (currentIndex < (activeWorkout?.exercises?.length || 0) - 1) {
+  <ion-button
+    class="next-btn"
+    expand="block"
+    shape="round"
+    color="primary"
+    (click)="seuraavaLiike()"
+  >
     NEXT EXERCISE
     <ion-icon slot="end" name="arrow-forward"></ion-icon>
-    </ion-button>
-    } @else {
-    <ion-button class="next-btn" expand="block" shape="round" color="primary" (click)="lopetaTreeni()">
-      FINISH WORKOUT
-      <ion-icon slot="end" name="checkmark-done"></ion-icon>
-    </ion-button>
-    }
+  </ion-button>
+  } @else {
+  <ion-button
+    class="next-btn"
+    expand="block"
+    shape="round"
+    color="primary"
+    (click)="lopetaTreeni()"
+  >
+    FINISH WORKOUT
+    <ion-icon slot="end" name="checkmark-done"></ion-icon>
+  </ion-button>
+  }
 </ion-footer>
