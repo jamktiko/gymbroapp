@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
+import { MenuController } from '@ionic/angular/standalone'; //tuodaan menucontroller jotta voidaan disable menu
 import { addOutline, trashOutline } from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
 import {
@@ -73,6 +74,7 @@ export class LisaaTreeni {
   public isCustomMoveModalOpen: boolean = false;
   public newMoveName: string = '';
   public newMoveMuscle: string = '';
+  private menu = inject(MenuController);
   public newMoveType: 'compound' | 'targeted' = 'compound';
   public exerciseList2: Category2[] = [];
   private router = inject(Router);
@@ -84,12 +86,12 @@ export class LisaaTreeni {
   constructor() {
     addIcons({ addOutline, trashOutline });
   }
-
   /**
    * Kun page4-sivu on tulossa näkyviin haetaan kaikki käyttäjän movet databasesta
    * Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
    */
   ionViewWillEnter() {
+    this.menu.enable(false);
     this.dataFetchService.getAllMoves().subscribe({
       next: (data) => {
         this.usersMoves = data as Move[];
@@ -101,7 +103,9 @@ export class LisaaTreeni {
       },
     });
   }
-
+  ionViewWillLeave() {
+    this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+  }
   /**
    * Takes moves fetched from database and categorizes them by muscleGroup property
    */
