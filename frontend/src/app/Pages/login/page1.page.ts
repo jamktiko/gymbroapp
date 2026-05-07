@@ -1,86 +1,18 @@
-import { Component, inject, OnInit, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+﻿import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonFooter,
-} from '@ionic/angular/standalone';
-
-import { addIcons } from 'ionicons';
-import { logoGoogle, logInOutline } from 'ionicons/icons';
-import {
-  SocialAuthService,
-  GoogleSigninButtonModule,
-  SocialUser,
-  SocialLoginModule,
-} from '@abacritt/angularx-social-login';
-import { AuthService } from '../../auth.service';
-import { LoginEventService } from '../../login-event.service';
+import { IonButton, IonContent, IonIcon } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-page1',
   templateUrl: './page1.page.html',
   styleUrls: ['./page1.page.scss'],
   standalone: true,
-  imports: [
-    IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    CommonModule,
-    FormsModule,
-    GoogleSigninButtonModule,
-    SocialLoginModule,
-    IonFooter,
-  ],
+  imports: [IonContent, IonButton, IonIcon],
 })
-export class Page1Page implements OnInit {
-  private socauthService = inject(SocialAuthService);
-  private authService = inject(AuthService);
-  user!: SocialUser;
-  error = '';
-
+export class Page1Page {
   private router = inject(Router);
-  private loginEventService = inject(LoginEventService);
 
-  loggedInEvent = output<void>();
-
-  constructor() {
-    addIcons({ logoGoogle, logInOutline });
-  }
-
-  ngOnInit() {
-    this.socauthService.signOut();
-    this.authService.logout();
-
-    this.socauthService.authState.subscribe((user) => {
-      if (user) {
-        this.user = user;
-        console.log('Successfully logged in via Google button', user);
-
-        /* Lähetetään glogin-metodilla Googlen idToken backendiin josta saadaan JWT
-         Myös userin id annetaan authServicelle, jotta sitä voidaan verrata siellä
-         backendistä saatuun userin id:hen.
-        */
-
-        if (this.user != null) {
-          this.authService
-            .glogin(this.user.idToken!, this.user.id!)
-            .subscribe((result) => {
-              if (result === true) {
-                // this.router.navigate(['/secret']);
-                this.loginEventService.emitLoggedIn();
-                this.router.navigateByUrl('/page2', { replaceUrl: true });
-              } else {
-                this.error = 'Tunnus tai salasana väärä';
-              }
-            });
-        }
-      }
-    });
+  loginWithGoogle(): void {
+    this.router.navigate(['/page2']);
   }
 }
