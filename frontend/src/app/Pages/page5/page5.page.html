@@ -1,9 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>{{ activeWorkout?.name }}</ion-title>
+    <ion-title>{{ activeWorkoutReordered?.name }}</ion-title>
     <ion-buttons slot="end">
       <div class="ion-padding-horizontal" style="color: var(--ion-color-primary); font-weight: bold">
-        {{ currentIndex + 1 }} / {{ activeWorkout?.exercises?.length }}
+        {{ currentIndex + 1 }} / {{ activeWorkoutReordered?.exercises?.length }}
       </div>
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -45,8 +45,8 @@
 </ion-content>
 
 <ion-footer class="ion-no-border ion-padding">
-  @if (currentIndex < (activeWorkout?.exercises?.length || 0) - 1) { <ion-button class="next-btn" expand="block"
-    shape="round" color="primary" (click)="seuraavaLiike()">
+  @if (currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1) { <ion-button class="next-btn"
+    expand="block" shape="round" color="primary" (click)="seuraavaLiike()">
     NEXT EXERCISE
     <ion-icon slot="end" name="arrow-forward"></ion-icon>
     </ion-button>

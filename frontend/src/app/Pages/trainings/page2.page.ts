@@ -97,7 +97,7 @@ export class Page2Page implements OnInit {
     const programToLaunch = JSON.parse(JSON.stringify(program));
 
     this.router.navigate(['/page5'], {
-      state: { activeWorkout: programToLaunch },
+      state: { activeWorkoutReordered: programToLaunch },
     });
   }
 

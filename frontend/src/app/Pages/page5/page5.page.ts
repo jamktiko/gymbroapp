@@ -44,22 +44,24 @@ export class Page5Page implements OnInit {
   private http = inject(HttpClient);
   @ViewChild('workoutTimer') timer!: TimerComponent;
   // --- TREENIN TILA ---
-  public activeWorkout!: TrainingProgram;
+  public activeWorkoutReordered!: TrainingProgram;
+  public activeWorkoutOriginal!: TrainingProgram;
   public currentIndex = 0;
 
   constructor() {
     addIcons({ arrowForward, checkmarkDone, timerOutline });
 
     // Luetaan navigoinnin mukana tullut treenidata
-    const navigation = this.router.getCurrentNavigation();
-    this.activeWorkout = navigation?.extras.state?.['activeWorkout'];
+    const navigation = this.router.currentNavigation();
+    this.activeWorkoutReordered =
+      navigation?.extras.state?.['activeWorkoutReordered'];
   }
 
   ngOnInit() {
     // Aloitetaan aina alusta ja varmistetaan datan löytyminen
     this.currentIndex = 0;
 
-    if (!this.activeWorkout) {
+    if (!this.activeWorkoutReordered) {
       this.router.navigate(['/page2']);
     }
   }
@@ -68,7 +70,7 @@ export class Page5Page implements OnInit {
    * Palauttaa  liikkeen datan.
    */
   get currentExercise() {
-    return this.activeWorkout?.exercises[this.currentIndex];
+    return this.activeWorkoutReordered?.exercises[this.currentIndex];
   }
 
   // --- TREENILOGIIKKA ---
@@ -84,7 +86,10 @@ export class Page5Page implements OnInit {
     }
 
     // 2. SIIRRYTÄÄN SEURAAVAAN LIIKKEESEEN
-    if (this.currentIndex < (this.activeWorkout?.exercises?.length || 0) - 1) {
+    if (
+      this.currentIndex <
+      (this.activeWorkoutReordered?.exercises?.length || 0) - 1
+    ) {
       this.currentIndex++;
     }
   }
@@ -94,7 +99,7 @@ export class Page5Page implements OnInit {
   lopetaTreeni() {
     // Tallennetaan sessio backendiin → XP +50
     const session = {
-      exercises: this.activeWorkout.exercises,
+      exercises: this.activeWorkoutReordered.exercises,
     };
 
     this.http

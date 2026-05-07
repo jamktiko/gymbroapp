@@ -11,8 +11,8 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 // ── KONFIGURAATIO ──────────────────────────────────────────────
-const GOOGLE_ID = process.env.GOOGLE_ID // <-- vaihda tähän
-const MONGODB_ATLAS_URL = process.env.MONGODB_ATLAS_URL 
+const GOOGLE_ID = process.env.GOOGLE_ID; // <-- vaihda tähän
+const MONGODB_ATLAS_URL = process.env.MONGODB_ATLAS_URL;
 // ───────────────────────────────────────────────────────────────
 
 // ── LIIKKEET ───────────────────────────────────────────────────
@@ -350,7 +350,7 @@ async function seed() {
     process.exit(1);
   }
 
-  await mongoose.connect(MONGO_URI);
+  await mongoose.connect(MONGODB_ATLAS_URL);
   console.log('✅ MongoDB yhdistetty');
 
   const sessions = generateSessions();
