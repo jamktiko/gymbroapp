@@ -92,7 +92,8 @@ ion-content {
   --height: 60px; /* Määritä sama korkeus */
   --border-radius: 50%; /* Tämä tekee siitä ympyrän */
   margin: 10px;
-  font-size: 30px;
+  --background: #e7e7e7ec;
+  font-size: 13px;
 }
 /* --- YLÄPALKKI (HEADER) --- */
 ion-header {

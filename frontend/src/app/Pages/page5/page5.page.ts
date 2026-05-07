@@ -77,7 +77,7 @@ export class Page5Page implements OnInit {
     const alert = await this.alertController.create({
       header: 'Keskeytetäänkö treeni?',
       message: 'Haluatko varmasti poistua? Edistymistäsi ei tallenneta.',
-      cssClass: 'custom-alert',
+      cssClass: 'treeni-alert',
       buttons: [
         {
           text: 'Jatka treeniä',
