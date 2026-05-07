@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, interval, map, takeWhile } from 'rxjs';
   providedIn: 'root',
 })
 export class XpService {
-  private progressSubject = new BehaviorSubject<number>(1); //sivun alkuarvo 100%
+  private progressSubject = new BehaviorSubject<number>(0.5); //sivun alkuarvo 100%
   public progress$: Observable<number> = this.progressSubject.asObservable();
   // private http = inject(HttpClient);
   // private readonly API_URL =
