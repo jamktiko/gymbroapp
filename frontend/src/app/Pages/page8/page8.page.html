@@ -3,13 +3,60 @@
     <ion-buttons slot="end">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Page 8</ion-title>
+    <ion-title>Saavutukset</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen]="true">
+<ion-content [fullscreen]="true">
   <div class="content-container">
-    <p class="placeholder">page 8 content comes here</p>
+    
+    <!-- Yhteenveto-osio -->
+    <div class="header-stats ion-text-center ion-padding">
+      <ion-icon name="trophy" color="warning" style="font-size: 48px;"></ion-icon>
+      <h2 style="margin-top: 5px;">Sinun edistymisesi</h2>
+     <p>Olet avannut {{ unlockedCount }} / {{ achievements.length }} saavutusta</p>
+    </div>
+
+    <!-- Saavutusruudukko -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-sm="6" *ngFor="let item of achievements">
+          <ion-card [style.opacity]="item.unlocked ? '1' : '0.7'">
+            <ion-grid>
+              <ion-row class="ion-align-items-center">
+                <ion-col size="3" class="ion-text-center">
+                  <ion-icon 
+                    [name]="item.unlocked ? item.icon : 'lock-closed'" 
+                    [color]="item.unlocked ? item.color : 'medium'"
+                    style="font-size: 32px;">
+                  </ion-icon>
+                </ion-col>
+                <ion-col size="9">
+                  <ion-card-header class="ion-no-padding">
+                    <ion-card-title style="font-size: 1.1rem;">{{ item.title }}</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content class="ion-no-padding ion-margin-top">
+                    <p>{{ item.description }}</p>
+                    
+                    <div *ngIf="!item.unlocked" class="ion-margin-top">
+                      <ion-progress-bar [value]="item.progress" [color]="item.color"></ion-progress-bar>
+                      <ion-text color="medium">
+                        <small>{{ (item.progress * 100).toFixed(0) }}% suoritettu</small>
+                      </ion-text>
+                    </div>
+
+                    <ion-text color="success" *ngIf="item.unlocked">
+                      <small><b>Saavutettu!</b></small>
+                    </ion-text>
+                  </ion-card-content>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
   </div>
 </ion-content>
 
