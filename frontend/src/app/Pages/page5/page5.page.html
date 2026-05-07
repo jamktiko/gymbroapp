@@ -12,7 +12,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-    
+
     @if (currentExercise) {
     <div class="exercise-card">
       <p class="label">NYKYINEN LIIKE</p>
@@ -39,21 +39,21 @@
     <!-- duration: kuinka monta sekuntia lasketaan (nyt vakio 10) -->
     <!-- timerFinished: voit halutessasi kutsua funktiota kun aika loppuu -->
     <!-- Lisää #workoutTimer -->
-<app-timer #workoutTimer [duration]="10"></app-timer>
+    <app-timer #workoutTimer [duration]="10"></app-timer>
 
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border ion-padding">
-  @if (currentIndex < (activeWorkout?.exercises?.length || 0) - 1) {
-  <ion-button class="next-btn" expand="block" shape="round" color="primary" (click)="seuraavaLiike()">
+  @if (currentIndex < (activeWorkout?.exercises?.length || 0) - 1) { <ion-button class="next-btn" expand="block"
+    shape="round" color="primary" (click)="seuraavaLiike()">
     NEXT EXERCISE
     <ion-icon slot="end" name="arrow-forward"></ion-icon>
-  </ion-button>
-  } @else {
-  <ion-button class="next-btn" expand="block" shape="round" color="primary" (click)="lopetaTreeni()">
-    FINISH WORKOUT
-    <ion-icon slot="end" name="checkmark-done"></ion-icon>
-  </ion-button>
-  }
+    </ion-button>
+    } @else {
+    <ion-button class="next-btn" expand="block" shape="round" color="primary" (click)="lopetaTreeni()">
+      FINISH WORKOUT
+      <ion-icon slot="end" name="checkmark-done"></ion-icon>
+    </ion-button>
+    }
 </ion-footer>

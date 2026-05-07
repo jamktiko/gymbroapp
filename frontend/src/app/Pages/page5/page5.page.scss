@@ -3,7 +3,7 @@ ion-content {
   // Estetään sivun turha rullaus (hyödyllinen, kun käytetään fixed-elementtejä)
   --overflow: hidden;
   overflow: hidden;
-  
+
   // Luodaan syvyysvaikutelma: keskeltä harmaa (#222), reunoilta musta (#111)
   --background: radial-gradient(circle at center, #222 0%, #111 100%);
 }
@@ -11,25 +11,25 @@ ion-content {
 /* --- SISÄLLÖN ASETTELU --- */
 .content-container {
   display: flex;
-  flex-direction: column;    // Pinotaan elementit päällekkäin
-  align-items: center;        // Keskiteään elementit vaakasuunnassa
+  flex-direction: column; // Pinotaan elementit päällekkäin
+  align-items: center; // Keskiteään elementit vaakasuunnassa
   justify-content: flex-start; // Aloitetaan sijoittelu ylhäältä
   height: 100%;
-  padding-top: 40px;          // Jätetään tilaa yläpalkin ja kortin väliin
+  padding-top: 40px; // Jätetään tilaa yläpalkin ja kortin väliin
 }
 
 /* --- LIIKEKORTTI (KESKELLÄ RUUTUA) --- */
 .exercise-card {
-  width: 90%;                 // Kortti täyttää lähes koko leveyssuunnan
+  width: 90%; // Kortti täyttää lähes koko leveyssuunnan
   background: rgba(0, 0, 0, 0.7); // Puoliläpinäkyvä musta
   border: 1px solid rgba(255, 217, 0, 0.4); // Ohut himmeä keltainen reunus
   border-radius: 20px;
-  padding: 40px 20px;         // Sisäpuolen tyhjä tila (pysty, vaaka)
+  padding: 40px 20px; // Sisäpuolen tyhjä tila (pysty, vaaka)
   text-align: center;
-  
+
   // "Frosted glass" -efekti: sumentaa kortin takana olevan taustan
-  backdrop-filter: blur(15px); 
-  
+  backdrop-filter: blur(15px);
+
   // Ulkopuolinen varjo tuo korttia lähemmäs käyttäjää
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
 
@@ -37,7 +37,7 @@ ion-content {
   .label {
     color: #ffd900;
     font-size: 11px;
-    letter-spacing: 3px;      // Harvennettu teksti on helpompi lukea nopeasti
+    letter-spacing: 3px; // Harvennettu teksti on helpompi lukea nopeasti
     text-transform: uppercase; // Pakotetaan isot kirjaimet
     margin-bottom: 8px;
     opacity: 0.9;
@@ -47,8 +47,8 @@ ion-content {
   .exercise-title {
     font-size: 30px;
     color: #ffffff;
-    font-weight: 800;         // Erittäin lihavoitu
-    margin: 0 0 25px 0;       // Tilaa vain alapuolelle
+    font-weight: 800; // Erittäin lihavoitu
+    margin: 0 0 25px 0; // Tilaa vain alapuolelle
     // Keltainen hohde tekstin ympärillä
     text-shadow: 0 0 15px rgba(255, 217, 0, 0.3);
   }
@@ -60,49 +60,48 @@ ion-content {
   justify-content: space-around; // Jakaa kolme tietoa tasaisesti koko leveydelle
   margin-top: 20px;
   // Ohut keltainen viiva erottamaan nimen ja speksit toisistaan
-  border-top: 1px solid rgba(255, 217, 0, 0.2); 
+  border-top: 1px solid rgba(255, 217, 0, 0.2);
   padding-top: 20px;
 
   .stat {
     display: flex;
-    flex-direction: column;   // Otsikko (small) ja arvo (span) päällekkäin
+    flex-direction: column; // Otsikko (small) ja arvo (span) päällekkäin
     align-items: center;
 
     /* Otsikot: SETS, REPS, WEIGHT */
-    small { 
-      color: #aaa;            // Hillitty harmaa väri
-      font-size: 10px; 
+    small {
+      color: #aaa; // Hillitty harmaa väri
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 5px;
     }
 
     /* Arvot */
-    span { 
-      color: #ffd900;         // Korostusväri keltainen
-      font-size: 24px; 
+    span {
+      color: #ffd900; // Korostusväri keltainen
+      font-size: 24px;
       font-weight: 800;
       // Kiinteälevyinen fontti varmistaa, etteivät arvot hypi
-      font-family: 'Inter', sans-serif;
+      font-family: "Inter", sans-serif;
     }
   }
 }
 
-
-
 /* --- YLÄPALKKI (HEADER) --- */
 ion-header {
-  background: #000;           // Varmistetaan musta tausta koko yläosalle
+  background: #000; // Varmistetaan musta tausta koko yläosalle
   ion-toolbar {
     --background: #000;
     --color: #ffd900;
-    --border-style: none;     // Poistetaan Ionicin oletusviiva palkin alta
+    --border-style: none; // Poistetaan Ionicin oletusviiva palkin alta
     box-shadow: none;
   }
 }
 
 // Yläpalkin tekstit ja valikkonappi
-ion-title, ion-menu-button {
+ion-title,
+ion-menu-button {
   color: #ffd900;
   font-weight: bold;
 }
@@ -110,14 +109,13 @@ ion-title, ion-menu-button {
 /* --- FOOTERIN NEXT/FINISH-NAPPI --- */
 .next-btn {
   // Keltainen tausta mustalla tekstillä erottuu parhaiten toimintanappina
-  --background: #ffd900; 
+  --background: #ffd900;
   --color: #000;
   --border-radius: 22px;
   font-weight: 800;
-  height: 60px;               // Korkea nappi on helppo osua sormella
+  height: 60px; // Korkea nappi on helppo osua sormella
   margin-top: 2px;
   font-size: 18px;
-  text-transform: uppercase;  // Lisää auktoriteettia painikkeeseen
+  text-transform: uppercase; // Lisää auktoriteettia painikkeeseen
   margin-bottom: 60px;
-
 }

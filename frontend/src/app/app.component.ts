@@ -73,21 +73,17 @@ import { DataFetchService } from './data-fetch-service';
 export class AppComponent implements OnInit {
   public userDisplayName: string = '';
   public userEmail: string = '';
-
   public appPages = [
     { title: 'Treenit', url: '/page2', icon: 'barbell' },
     { title: 'Saavutukset', url: '/page8', icon: 'golf' },
     { title: 'Historia', url: '/page3', icon: 'calendar' },
     { title: 'Statsit', url: '/page7', icon: 'analytics' },
-
   ];
-
-  protected router = inject(Router);
+  private router = inject(Router);
   public loadingService = inject(LoadingService);
-  public authService = inject(AuthService);
+  private authService = inject(AuthService);
   private http = inject(HttpClient);
-  testData!: UserData;
-
+  private testData!: UserData;
   private loginEventService = inject(LoginEventService);
   private dataFetchService = inject(DataFetchService);
 
@@ -179,7 +175,6 @@ export class AppComponent implements OnInit {
     // replaceUrl: true poistaa historian, jotta ei pääse "takaisin"-napilla sisään
     this.router.navigateByUrl('/page1', { replaceUrl: true }).then(() => {
       // 3. Päivitetään sivu, jotta AppComponent nollautuu (nimet ja tilat)
-      // window.location.reload();
     });
   }
 }

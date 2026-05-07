@@ -1,7 +1,20 @@
+/**
+ * Add_training näkymä
+ */
+
 import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { addOutline, trashOutline } from 'ionicons/icons';
+import { DataFetchService } from '../../data-fetch-service';
+import {
+  Exercise,
+  ExerciseIsSelected,
+  Move,
+  Category2,
+} from '../../types/userdata';
 import {
   IonContent,
   IonHeader,
@@ -22,15 +35,6 @@ import {
   IonSegmentButton,
   AlertController,
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { addOutline, trashOutline } from 'ionicons/icons';
-import { DataFetchService } from '../../data-fetch-service';
-import { Exercise, ExerciseIsSelected, Move } from '../../types/userdata';
-
-interface Category2 {
-  category: string;
-  exercises: ExerciseIsSelected[];
-}
 
 @Component({
   selector: 'app-page4',
@@ -63,38 +67,33 @@ export class LisaaTreeni {
   // Haetaan viittaus HTML-puolen 'ion-accordion-group' -elementtiin,
   // jotta sitä voidaan ohjata suoraan koodista (esim. avaaminen/sulkeminen).
   @ViewChild('myAccordionGroup', { static: false })
-  accordionGroup!: IonAccordionGroup;
+  private accordionGroup!: IonAccordionGroup;
   // Muuttuja, johon tallennetaan käyttäjän antama treeniohjelman nimi.
-  programName: string = '';
-
-  isCustomMoveModalOpen: boolean = false;
-  newMoveName: string = '';
-  newMoveMuscle: string = '';
-  newMoveType: 'compound' | 'targeted' = 'compound';
-
-  exerciseList2: Category2[] = [];
-
+  public programName: string = '';
+  public isCustomMoveModalOpen: boolean = false;
+  public newMoveName: string = '';
+  public newMoveMuscle: string = '';
+  public newMoveType: 'compound' | 'targeted' = 'compound';
+  public exerciseList2: Category2[] = [];
   private router = inject(Router);
   private alertCtrl = inject(AlertController);
-
   private dataFetchService = inject(DataFetchService);
-
   // backendistä haetut movet laitetaan tänne taulukkoon josta ne voidaan näyttää käyttöliittmässä
-  private testData!: Move[];
+  private usersMoves!: Move[];
 
-  // Konstruktorissa alustetaan Ionic-ikonit käyttöä varten.
   constructor() {
     addIcons({ addOutline, trashOutline });
   }
 
-  // Kun page4-sivu on tulossa näkyviin haetaan kaikki käyttäjän movet databasesta
-  // Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
+  /**
+   * Kun page4-sivu on tulossa näkyviin haetaan kaikki käyttäjän movet databasesta
+   * Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
+   */
   ionViewWillEnter() {
     this.dataFetchService.getAllMoves().subscribe({
       next: (data) => {
-        this.testData = data as Move[];
-        console.log('Moves fetched successfully:', this.testData);
-        // this.loadPrograms();
+        this.usersMoves = data as Move[];
+        console.log('Moves fetched successfully:', this.usersMoves);
         this.categorizeMoves();
       },
       error: (err) => {
@@ -103,11 +102,13 @@ export class LisaaTreeni {
     });
   }
 
-  // takes moves fetched from database and categorizes them by muscleGroup property:
+  /**
+   * Takes moves fetched from database and categorizes them by muscleGroup property
+   */
   categorizeMoves() {
     this.exerciseList2 = []; // Clear previous categories before re-categorizing
 
-    this.testData.forEach((x) => {
+    this.usersMoves.forEach((x) => {
       const exerciseToAdd: ExerciseIsSelected = {
         move: x,
         sets: [
@@ -173,8 +174,10 @@ export class LisaaTreeni {
     this.exerciseList2 = [...this.exerciseList2];
   }
 
-  // helper method to update the amount of Sets
-  // this is because whenever a user changes the amount of sets for a move, we need to add also a new object with reps and weights otherwise it will be undefined
+  /**
+   * Helper method to update the amount of Sets
+   * this is because whenever a user changes the amount of sets for a move, we need to add also a new object with reps and weights otherwise it will be undefined
+   */
   updateSets(exercise: ExerciseIsSelected, newLengthVal: string) {
     if (!exercise.sets) {
       exercise.sets = [];
@@ -201,7 +204,9 @@ export class LisaaTreeni {
     }
   }
 
-  // helper method for updating all sets reps at once
+  /**
+   * Helper method for updating all sets reps at once
+   */
   updateAllReps(exercise: ExerciseIsSelected, newRepsVal: string) {
     const newReps = parseInt(newRepsVal, 10);
     if (isNaN(newReps) || newReps < 0) return;
@@ -213,7 +218,9 @@ export class LisaaTreeni {
     }
   }
 
-  // helper method for updating all sets weights at once
+  /**
+   * Helper method for updating all sets weights at once
+   */
   updateAllWeights(exercise: ExerciseIsSelected, newWeightsVal: string) {
     const newWeight = parseInt(newWeightsVal, 10);
     if (isNaN(newWeight) || newWeight < 0) return;
@@ -232,8 +239,8 @@ export class LisaaTreeni {
   /**
    * Poistaa yksittäisen harjoituksen.
    */
-  async removeExercise(exerciseToRemove: ExerciseIsSelected) {
-    // event.stopPropagation();
+  async removeExercise(exerciseToRemove: ExerciseIsSelected, event: Event) {
+    event.stopPropagation();
     const alert = await this.alertCtrl.create({
       header: 'Poistetaanko liike?',
       message: 'Haluatko varmasti poistaa tämän liikkeen?',
@@ -248,16 +255,15 @@ export class LisaaTreeni {
               .subscribe({
                 next: (data) => {
                   console.log('Custom move deleted successfully:', data);
-                  // this.loadPrograms();
-                  // this.categorizeMoves();
 
-                  // fetch all new moves afterwards:
+                  // update all new moves afterwards:
                   this.dataFetchService.getAllMoves().subscribe({
                     next: (data) => {
-                      // this.testData = [];
-                      this.testData = data as Move[];
-                      console.log('Moves fetched successfully:', this.testData);
-                      // this.loadPrograms();
+                      this.usersMoves = data as Move[];
+                      console.log(
+                        'Moves fetched successfully:',
+                        this.usersMoves,
+                      );
                       this.categorizeMoves();
                     },
                     error: (err) => {
@@ -274,54 +280,6 @@ export class LisaaTreeni {
       ],
     });
     await alert.present();
-    // this.exerciseList2.forEach((cat) => {
-    //   cat.exercises = cat.exercises.filter(
-    //     (e) => e.move._id !== moveIdToRemove,
-    //   );
-    // });
-
-    // // Poistetaan kategoriat, jotka jäivät tyhjiksi
-    // this.exerciseList2 = this.exerciseList2.filter(
-    //   (c) => c.exercises.length > 0,
-    // );
-
-    this.dataFetchService.deleteMove(exerciseToRemove.move._id).subscribe({
-      next: (data) => {
-        console.log('Custom move deleted successfully:', data);
-        // this.loadPrograms();
-        // this.categorizeMoves();
-
-        // fetch all new moves afterwards:
-        this.dataFetchService.getAllMoves().subscribe({
-          next: (data) => {
-            // this.testData = [];
-            this.testData = data as Move[];
-            console.log('Moves fetched successfully:', this.testData);
-            // this.loadPrograms();
-            this.categorizeMoves();
-          },
-          error: (err) => {
-            console.error('Failed to fetch moves', err);
-          },
-        });
-      },
-      error: (err) => {
-        console.error('Failed to delete custom move', err);
-      },
-    });
-
-    // update new moves right away afterwards:
-    // this.dataFetchService.getAllMoves().subscribe({
-    //   next: (data) => {
-    //     this.testData = data as Move[];
-    //     console.log('Moves fetched successfully:', this.testData);
-    //     // this.loadPrograms();
-    //     this.categorizeMoves();
-    //   },
-    //   error: (err) => {
-    //     console.error('Failed to fetch moves', err);
-    //   },
-    // });
   }
 
   /**
@@ -353,12 +311,16 @@ export class LisaaTreeni {
     this.isCustomMoveModalOpen = true;
   }
 
-  // when pressing 'cancel' when inside create custom move modal
+  /**
+   * When pressing 'cancel' when inside create custom move modal
+   */
   cancelCreateCustomMove() {
     this.isCustomMoveModalOpen = false;
   }
 
-  // when pressing 'ok' when inside create custom move modal
+  /**
+   * When pressing 'ok' when inside create custom move modal
+   */
   confirmCreateCustomMove() {
     const trimmedName = this.newMoveName.trim();
     if (trimmedName.length > 0 && trimmedName.length <= 30) {
@@ -371,13 +333,11 @@ export class LisaaTreeni {
       this.dataFetchService.createMove(newMove).subscribe({
         next: (data) => {
           console.log('New move created:', data);
-          // fetch all new moves afterwards:
+          // update all new moves afterwards:
           this.dataFetchService.getAllMoves().subscribe({
             next: (data) => {
-              // this.testData = [];
-              this.testData = data as Move[];
-              console.log('Moves fetched successfully:', this.testData);
-              // this.loadPrograms();
+              this.usersMoves = data as Move[];
+              console.log('Moves fetched successfully:', this.usersMoves);
               this.categorizeMoves();
             },
             error: (err) => {
@@ -390,7 +350,6 @@ export class LisaaTreeni {
         },
       });
 
-      // this.addNewExercise(trimmedName, this.newMoveType);
       this.isCustomMoveModalOpen = false;
     }
   }
@@ -441,7 +400,9 @@ export class LisaaTreeni {
     });
   }
 
-  // new saveProgram method modified to work with backend and database
+  /**
+   * New saveProgram method modified to work with backend and database
+   */
   saveProgram2() {
     // 1. Kerätään kaikki valitut liikkeet yhteen listaan
     // Muutetaan ExerciseIsSelected objektit Exercise muotoon
@@ -467,7 +428,7 @@ export class LisaaTreeni {
         exercises: selectedExercises,
       };
 
-      // kutsutaan dataFetchServicen metodi joka lähettää POST http-requestin backendiin
+      // kutsutaan dataFetchServicen metodia joka lähettää POST http-requestin backendiin
       this.dataFetchService.createProgram(newProgram2).subscribe({
         next: (savedProgram) => {
           console.log(

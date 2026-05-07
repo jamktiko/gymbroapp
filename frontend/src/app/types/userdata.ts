@@ -7,12 +7,6 @@ export interface Move {
   createdBy: string | null;
 }
 
-export interface ExerciseIsSelected {
-  move: Move;
-  sets: Set[];
-  isSelected: boolean;
-}
-
 export interface Set {
   reps: number;
   weight: number;
@@ -52,4 +46,15 @@ export interface UserData {
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+
+export interface ExerciseIsSelected {
+  move: Move;
+  sets: Set[];
+  isSelected: boolean;
+}
+
+export interface Category2 {
+  category: string;
+  exercises: ExerciseIsSelected[];
 }

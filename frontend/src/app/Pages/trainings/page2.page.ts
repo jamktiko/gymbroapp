@@ -1,11 +1,17 @@
+/**
+ * Trainings näkymä
+ */
+
 import { Component, OnInit, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { XpService } from '../../xp.service';
 import { AccordionGroupCustomEvent, ItemReorderEventDetail } from '@ionic/core';
-
+import { addIcons } from 'ionicons';
+import { add, trashOutline, play, reorderTwoOutline } from 'ionicons/icons';
+import { TrainingProgram, UserData } from '../../types/userdata';
+import { DataFetchService } from '../../data-fetch-service';
 import {
   IonContent,
   IonHeader,
@@ -15,7 +21,6 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  IonList,
   IonItem,
   IonLabel,
   IonAccordionGroup,
@@ -26,11 +31,6 @@ import {
   IonReorderGroup,
   IonReorder,
 } from '@ionic/angular/standalone';
-
-import { addIcons } from 'ionicons';
-import { add, trashOutline, play, reorderTwoOutline } from 'ionicons/icons';
-import { TrainingProgram, UserData } from '../../types/userdata';
-import { DataFetchService } from '../../data-fetch-service';
 
 @Component({
   selector: 'app-page2',
@@ -48,7 +48,6 @@ import { DataFetchService } from '../../data-fetch-service';
     IonFab,
     IonFabButton,
     IonIcon,
-    IonList,
     IonItem,
     IonLabel,
     IonAccordionGroup,
@@ -61,15 +60,13 @@ import { DataFetchService } from '../../data-fetch-service';
   ],
 })
 export class Page2Page implements OnInit {
-  private http = inject(HttpClient);
   private router = inject(Router);
   private alertCtrl = inject(AlertController);
   public xpService = inject(XpService);
   private dataFetchService = inject(DataFetchService);
-
-  savedPrograms: TrainingProgram[] = [];
-  testData!: UserData;
-  isAccordionOpen = false;
+  public usersTrainingPrograms: TrainingProgram[] = [];
+  public userData!: UserData;
+  public isAccordionOpen = false;
 
   constructor() {
     // Alustetaan ikonit käyttöliittymää varten
@@ -87,14 +84,9 @@ export class Page2Page implements OnInit {
     ev: CustomEvent<ItemReorderEventDetail>,
     program: TrainingProgram,
   ) {
-    // 1. Suoritetaan siirto
-    const draggedItem = program.exercises.splice(ev.detail.from, 1)[0];
-    program.exercises.splice(ev.detail.to, 0, draggedItem);
-
-    // 2. TÄRKEÄÄ: Pakotetaan Angular huomaamaan muutos luomalla uusi taulukkoviittaus
-    program.exercises = [...program.exercises];
-
-    ev.detail.complete();
+    // Annetaan Ionicin reorder-tapahtuman viitellä ja palauttaa järjestetty taulukko itsellään,
+    // mikä estää Angularin ja Ionicin ristiriidat DOM:n päivittämisessä (ja ns. tuplaliikkeet).
+    program.exercises = ev.detail.complete(program.exercises);
   }
 
   /**
@@ -115,8 +107,8 @@ export class Page2Page implements OnInit {
   ionViewWillEnter() {
     this.dataFetchService.getUserDataById().subscribe({
       next: (data) => {
-        this.testData = data as UserData;
-        console.log('Test data loaded:', this.testData);
+        this.userData = data as UserData;
+        console.log('Test data loaded:', this.userData);
         this.loadPrograms();
       },
       error: (err) => {
@@ -129,14 +121,14 @@ export class Page2Page implements OnInit {
    * Apufunktio ohjelmien lataamiseen testidatasta
    */
   loadPrograms() {
-    const data = this.testData?.trainingPrograms;
+    const data = this.userData?.trainingPrograms;
     if (data) {
-      this.savedPrograms = data;
+      this.usersTrainingPrograms = data;
     }
   }
 
   /**
-   * Poistaa treeniohjelman varmistusikkunan jälkeen
+   * Poistaa treeniohjelman modal-ikkunan varmistuksen jälkeen
    */
   async deleteProgram(programId: string, event: Event) {
     event.stopPropagation();

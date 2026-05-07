@@ -2,10 +2,7 @@
   <div class="xp-container">
     <div class="content-wrapper">
       <h1>Treeni valmis!</h1>
-      <ion-progress-bar
-        class="xpbar"
-        [value]="xpService.progress$ | async"
-      ></ion-progress-bar>
+      <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async"></ion-progress-bar>
       <div>
         <p>You got XP!</p>
       </div>
