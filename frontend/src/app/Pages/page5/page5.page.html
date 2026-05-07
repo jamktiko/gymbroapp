@@ -1,5 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-button class="keskeyta" slot="start" (click)="keskeytaTreeniVahvistus()">
+      <b>X</b>
+    </ion-button>
     <ion-title>{{ activeWorkoutReordered?.name }}</ion-title>
     <ion-buttons slot="end">
       <div class="ion-padding-horizontal" style="color: var(--ion-color-primary); font-weight: bold">
@@ -12,7 +15,6 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-
     @if (currentExercise) {
     <div class="exercise-card">
       <p class="label">NYKYINEN LIIKE</p>
@@ -41,12 +43,16 @@
     <!-- Lisää #workoutTimer -->
     <app-timer #workoutTimer [duration]="workoutTimerDuration"></app-timer>
 
+
+    <app-timer #workoutTimer [duration]="10"></app-timer>
+
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border ion-padding">
   @if (currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1) { <ion-button class="next-btn"
     expand="block" shape="round" color="primary" (click)="seuraavaLiike()">
+
     NEXT EXERCISE
     <ion-icon slot="end" name="arrow-forward"></ion-icon>
     </ion-button>

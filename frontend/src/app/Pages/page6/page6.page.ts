@@ -55,9 +55,8 @@ export class Page6Page implements OnInit {
    */
   saveTrainingSession() {
     this.dataFetchService.createSession(this.finishedSession).subscribe({
-      next: (data) => {
-        console.log('hop');
-        console.log('Uusi treenisessio tallennettu onnistuneesti\n' + data);
+      next: () => {
+        console.log('Uusi treenisessio tallennettu onnistuneesti');
       },
       error: (err) => {
         console.error('Uuden treenisession tallennus epäonnistui:', err);
