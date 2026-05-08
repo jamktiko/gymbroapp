@@ -3,20 +3,34 @@ const session = require('express-session');
 const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
+ 
+const corsOptions = {
+  origin: [
+    'http://localhost:8100', // Angular dev server
+    'http://localhost', // Capacitor Android default
+    'capacitor://localhost', // Capacitor iOS default
+    'http://127.0.0.1:8100', // Additional localhost format
+    'http://dzw1f1bfpf15d.cloudfront.net', // CloudFront URL
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Required if you use cookies/sessions
 
-const authRouter = require('./routes/auth');
-
+};
+ 
 // import routes to variables
+const authRouter = require('./routes/auth');
 const movesRouter = require('./routes/moves');
 const usersRouter = require('./routes/users');
 const trainingProgramsRouter = require('./routes/trainingPrograms');
 const trainingSessionsRouter = require('./routes/trainingSessions');
-
+ 
 // create express app
 const app = express();
-
+ 
 app.use(express.json());
-
+ 
+app.set('trust proxy', 1); // trust first proxy (tämä lisättyä + start:nodemon -> node, uri mismatch korjaantui)
+ 
 app.use(
   session({
     secret: process.env.JWT_SECRET,
@@ -24,35 +38,34 @@ app.use(
     saveUninitialized: false,
   }),
 );
-
+ 
 app.use(logger('dev'));
-app.use(cors());
-app.use(express.json());
+// app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+ 
 // Auth placeholder — täytyy tulla ennen reittejä
 app.use('/api/auth', authRouter);
-
+ 
 // API-reitit
 app.use('/api/moves', movesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/training-programs', trainingProgramsRouter);
 app.use('/api/training-sessions', trainingSessionsRouter);
-
+ 
 // connection health check
 app.get('/', (req, res) => res.json({ status: 'ok' }));
-
-
+ 
 // 404
 app.use((req, res) => {
   res.status(404).json({ error: 'Reitti ei löydy' });
 });
-
+ 
 // Virheenkäsittely
 app.use((err, req, res) => {
   console.error(err.stack);
   res.status(err.status || 500).json({ error: err.message || 'Palvelinvirhe' });
 });
-
+ 
 module.exports = app;

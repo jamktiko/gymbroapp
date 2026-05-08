@@ -11,10 +11,10 @@ import { Move, TrainingProgram, UserData } from './types/userdata';
   providedIn: 'root',
 })
 export class DataFetchService {
-  private apiurlMoves = 'http://localhost:3000/api/moves';
-  private apiurlUsers = 'http://localhost:3000/api/users';
-  private apiurlPrograms = 'http://localhost:3000/api/training-programs';
-  private apiurlSessions = 'http://localhost:3000/api/training-sessions';
+  private apiurlMoves = 'https://dzw1f1bfpf15d.cloudfront.net/api/moves';
+  private apiurlUsers = 'https://dzw1f1bfpf15d.cloudfront.net/api/users';
+  private apiurlPrograms = 'https://dzw1f1bfpf15d.cloudfront.net/api/training-programs';
+  private apiurlSessions = 'https://dzw1f1bfpf15d.cloudfront.net/api/training-sessions';
 
   private http = inject(HttpClient);
 

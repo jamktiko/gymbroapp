@@ -1,29 +1,16 @@
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding">
   <div class="login-container">
     <div class="logo-section">
       <h1>GymBro</h1>
       <p>Kirjaudu sisään jatkaaksesi</p>
     </div>
-
     <div class="logo-wrapper">
       <img src="assets/logoilmantaustaa.png" alt="Sovelluksen logo" />
     </div>
-
-    <div class="action-section">
-      <asl-google-signin-button
-        type="standard"
-        size="large"
-      ></asl-google-signin-button>
-
-      <!-- Fallback button for testing -->
-      <ion-button
-        expand="block"
-        color="light"
-        class="google-btn ion-margin-top"
-        (click)="loginWithGoogle()"
-      >
-        <ion-icon slot="start" name="logo-google"></ion-icon>
-        Test Login (Fallback)
+    <div class="action-section" style="display: flex; justify-content: center">
+      <ion-button expand="block" class="google-btn" (click)="onGoogleLoginClick()">
+        <ion-icon name="logo-google" slot="start"></ion-icon>
+        Sign in with Google
       </ion-button>
     </div>
 
