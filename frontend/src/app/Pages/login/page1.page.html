@@ -8,19 +8,15 @@
       <img src="assets/logoilmantaustaa.png" alt="Sovelluksen logo" />
     </div>
     <div class="action-section" style="display: flex; justify-content: center">
-      <ion-button expand="block" class="google-btn" (click)="onGoogleLoginClick()">
-        <ion-icon name="logo-google" slot="start"></ion-icon>
-        Sign in with Google
+      <ion-button expand="block" (click)="signInNative()" color="light">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Kirjaudu Googlella
       </ion-button>
     </div>
 
     <div class="footer-text">
       <p>Ainoa kirjautumisvaihtoehto turvallisuutesi takaamiseksi.</p>
-      <a
-        href="https://policies.google.com/privacy"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
         Tietosuojaseloste
       </a>
     </div>
