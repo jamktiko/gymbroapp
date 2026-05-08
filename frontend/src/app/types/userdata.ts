@@ -7,12 +7,6 @@ export interface Move {
   createdBy: string | null;
 }
 
-export interface ExerciseIsSelected {
-  move: Move;
-  sets: Set[];
-  isSelected: boolean;
-}
-
 export interface Set {
   reps: number;
   weight: number;
@@ -44,13 +38,24 @@ export interface UserData {
   googleId: string;
   name: string;
   email: string;
-  level: number;
+  level: number; // virtual property
   xp: number;
-  xpToNextLevel: number; // XP:n määrälle seuraavalle levelille
+  xpToNextLevel: number; // virtual property
   weightUnit: string;
   trainingPrograms: TrainingProgram[];
   trainingSessions: TrainingSession[];
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+
+export interface ExerciseIsSelected {
+  move: Move;
+  sets: Set[];
+  isSelected: boolean;
+}
+
+export interface Category2 {
+  category: string;
+  exercises: ExerciseIsSelected[];
 }

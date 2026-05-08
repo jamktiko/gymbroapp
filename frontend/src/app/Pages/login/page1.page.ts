@@ -1,8 +1,8 @@
-﻿/**
+/**
  * Login näkymä
  */
 
-import { Component, inject, OnInit, output, NgZone } from '@angular/core';
+import { Component, inject, NgZone, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,18 +18,13 @@ import { LoginEventService } from '../../login-event.service';
   templateUrl: './page1.page.html',
   styleUrls: ['./page1.page.scss'],
   standalone: true,
-  imports: [
-    IonContent,
-    IonButton,
-    IonIcon,
-    CommonModule,
-    FormsModule,
-  ],
+  imports: [IonContent, IonButton, IonIcon, CommonModule, FormsModule],
 })
 export class Page1Page implements OnInit {
   private ngZone = inject(NgZone);
   private authService = inject(AuthService);
   private menu = inject(MenuController);
+  // private user!: SocialUser;
   private router = inject(Router);
   private loginEventService = inject(LoginEventService);
   public loggedInEvent = output<void>();
@@ -47,7 +42,8 @@ export class Page1Page implements OnInit {
   async onGoogleLoginClick() {
     try {
       GoogleAuth.initialize({
-        clientId: '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com',
+        clientId:
+          '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com',
         scopes: ['profile', 'email'],
         grantOfflineAccess: true,
       });
@@ -71,34 +67,26 @@ export class Page1Page implements OnInit {
         }
 
         if (idToken && googleId) {
-          console.log('Calling authService.glogin with:', { idToken: idToken.substring(0, 50) + '...', googleId });
-          
+          console.log('Calling authService.glogin with:', {
+            idToken: idToken.substring(0, 50) + '...',
+            googleId,
+          });
+
           this.authService
-            .glogin(idToken, googleId)
-            .subscribe({
-              next: (loginResult) => {
-                console.log('glogin result:', loginResult);
-                if (loginResult === true) {
-                  this.ngZone.run(() => {
-                    console.log('Login successful, navigating to page2');
-                    this.loginEventService.emitLoggedIn();
-                    this.router.navigate(['/page2']).then(() => {
-                      console.log('Navigation complete');
-                    });
-                  });
-                } else {
-                  console.log('Backend authentication failed, loginResult:', loginResult);
-                }
-              },
-              error: (error) => {
-                console.error('glogin error:', error);
-                console.error('glogin error status:', error?.status);
-                console.error('glogin error message:', error?.message);
-                console.error('glogin error body:', error?.error);
-              },
+            .glogin(this.user.idToken!, this.user.id!)
+            .subscribe((result) => {
+              if (result === true) {
+                this.loginEventService.emitLoggedIn();
+                this.router.navigateByUrl('/page2', { replaceUrl: true });
+              } else {
+                console.log('Väärä tunnus tai salasana');
+              }
             });
         } else {
-          console.log('Missing idToken or googleId', { idToken: !!idToken, googleId: !!googleId });
+          console.log('Missing idToken or googleId', {
+            idToken: !!idToken,
+            googleId: !!googleId,
+          });
         }
       }
     } catch (error) {
@@ -114,7 +102,7 @@ export class Page1Page implements OnInit {
         atob(base64)
           .split('')
           .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
+          .join(''),
       );
       return JSON.parse(jsonPayload) as { sub?: string };
     } catch (error) {
@@ -127,7 +115,8 @@ export class Page1Page implements OnInit {
     // Initialize GoogleAuth
     try {
       GoogleAuth.initialize({
-        clientId: '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com',
+        clientId:
+          '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com',
         scopes: ['profile', 'email'],
         grantOfflineAccess: true,
       });

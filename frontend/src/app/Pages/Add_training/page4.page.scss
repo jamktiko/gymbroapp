@@ -7,8 +7,8 @@
      - 400px = kapea
      - 600px = leveämpi 
      - 95% = melkein koko ruutu */
-  max-width: 500px; 
-  margin: 0 auto; 
+  max-width: 500px;
+  margin: 0 auto;
   margin-top: 4vh;
   padding: 0 10px; /* Estää reunoihin osumisen mobiilissa */
 }
@@ -19,7 +19,7 @@
   margin-bottom: 3vh !important;
   --background: transparent;
   --color: white;
-  
+
   ion-label {
     color: var(--ion-color-medium) !important;
     text-transform: uppercase;
@@ -75,7 +75,7 @@ ion-accordion {
   /* Sisältöalue (Liikkeet) */
   div[slot="content"] {
     background: #252525 !important; /* Page2:n tummempi tausta */
-    
+
     .exercise-item-shared {
       --background: transparent;
       --color: #ffffff;

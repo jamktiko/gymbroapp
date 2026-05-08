@@ -1,11 +1,18 @@
-// DataFetchService acts as a bridge between the application and backend
-// By injecting this service into a component you can send authorized http requests to backend
-// Backend will then take these requests in and invoke REST API methods accordingly
+/**
+ * DataFetchService acts as a bridge between the application and backend
+ * By injecting this service into a component you can send authorized http requests to backend
+ * Backend will then take these requests in and invoke REST API methods accordingly
+ */
 
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { Move, TrainingProgram, UserData } from './types/userdata';
+import {
+  Move,
+  TrainingProgram,
+  TrainingSession,
+  UserData,
+} from './types/userdata';
 
 @Injectable({
   providedIn: 'root',
@@ -13,39 +20,17 @@ import { Move, TrainingProgram, UserData } from './types/userdata';
 export class DataFetchService {
   private apiurlMoves = 'https://dzw1f1bfpf15d.cloudfront.net/api/moves';
   private apiurlUsers = 'https://dzw1f1bfpf15d.cloudfront.net/api/users';
-  private apiurlPrograms = 'https://dzw1f1bfpf15d.cloudfront.net/api/training-programs';
-  private apiurlSessions = 'https://dzw1f1bfpf15d.cloudfront.net/api/training-sessions';
+  private apiurlPrograms =
+    'https://dzw1f1bfpf15d.cloudfront.net/api/training-programs';
+  private apiurlSessions =
+    'https://dzw1f1bfpf15d.cloudfront.net/api/training-sessions';
 
   private http = inject(HttpClient);
-
-  // private sessionStorageToken;
-
-  // private sessionData = null;
 
   // GET
   // POST
   // PATCH
   // DELETE
-
-  // fetchJWTToken() {
-  //   // try {
-  //   //   const sessionDataString = sessionStorage.getItem('accesstoken');
-  //   //   if (sessionDataString) {
-  //   //     const sessionData = JSON.parse(sessionDataString);
-  //   //     // const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
-  //   //   }
-  //   // } catch (error) {
-  //   //   console.error(
-  //   //     'Error while fetching JTW token from sessionStorage:',
-  //   //     error,
-  //   //   );
-  //   // }
-  // }
-
-  //
-  //
-  //
-  //
 
   // ---------------------------- USER METHODS: ----------------------------
 
@@ -87,29 +72,6 @@ export class DataFetchService {
    * [GET] Fetches all default moves + user's custom created moves from database.
    */
   getAllMoves(): Observable<Move[]> {
-    // fetch JWT token from sessionStorage
-    // let sessionData;
-
-    // try {
-    //   const sessionDataString = sessionStorage.getItem('accesstoken');
-    //   if (!sessionDataString) {
-    //     return throwError(() => new Error('No access token found in session.'));
-    //   }
-    //   sessionData = JSON.parse(sessionDataString);
-    // } catch (error) {
-    //   console.error('Error parsing session data:', error);
-    //   return throwError(() => new Error('Invalid or corrupted session data.'));
-    // }
-
-    // return this.http.get<Move[]>(this.apiurlMoves, {
-    //   headers: {
-    //     'googleId': sessionData.googleId
-    //   }
-    // });
-
-    // actual http request
-    const test = this.http.get<Move[]>(this.apiurlMoves);
-    console.log(`test: ${test}`);
     return this.http.get<Move[]>(this.apiurlMoves);
   }
 
@@ -210,7 +172,12 @@ export class DataFetchService {
   /**
    * [POST] Creates a new trainingsession and adds it to the database.
    */
-  createSession() {
-    //
+  createSession(
+    sessionData: Omit<
+      TrainingSession,
+      '_id' | 'createdAt' | 'updatedAt' | 'datetime'
+    >,
+  ): Observable<TrainingSession> {
+    return this.http.post<TrainingSession>(this.apiurlSessions, sessionData);
   }
 }

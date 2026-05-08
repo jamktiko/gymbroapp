@@ -8,7 +8,8 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private googleLoginUrl = 'https://dzw1f1bfpf15d.cloudfront.net/api/auth/google';
+  private googleLoginUrl =
+    'https://dzw1f1bfpf15d.cloudfront.net/api/auth/google';
   public token: string;
   private jwtHelp = new JwtHelperService();
   private http = inject(HttpClient);
