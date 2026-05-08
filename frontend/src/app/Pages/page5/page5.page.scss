@@ -88,12 +88,16 @@ ion-content {
   }
 }
 .keskeyta {
-  --width: 60px; /* Määritä leveys */
-  --height: 60px; /* Määritä sama korkeus */
-  --border-radius: 50%; /* Tämä tekee siitä ympyrän */
   margin: 10px;
-  --background: #e7e7e7ec;
-  font-size: 13px;
+  --background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 4px 4px rgba(39, 39, 39, 0.2);
+}
+.X {
+  color: #ff0000;
+  font-size: 22px;
 }
 /* --- YLÄPALKKI (HEADER) --- */
 ion-header {
