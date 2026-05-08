@@ -38,8 +38,9 @@ export interface UserData {
   googleId: string;
   name: string;
   email: string;
-  level: number;
+  level: number; // virtual property
   xp: number;
+  xpToNextLevel: number; // virtual property
   weightUnit: string;
   trainingPrograms: TrainingProgram[];
   trainingSessions: TrainingSession[];
