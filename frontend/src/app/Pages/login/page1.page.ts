@@ -69,18 +69,6 @@ export class Page1Page implements OnInit {
       console.error('Sign out failed on init', error);
     }
 
-    // Initialize the native plugin only on native platforms
-    if (this.isNative) {
-      try {
-        GoogleAuth.initialize({
-          clientId: '949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com',
-          scopes: ['profile', 'email'],
-        });
-      } catch (error) {
-        console.error('Error initializing GoogleAuth:', error);
-      }
-    }
-
     // Web login using angularx-social-login
     if (!this.isNative) {
       this.socauthService.authState.subscribe((user) => {
