@@ -11,6 +11,7 @@ import {
   IonFooter,
   IonHeader,
   IonMenuButton,
+  IonInput,
   IonToolbar,
   IonTitle,
   IonIcon,
@@ -20,6 +21,9 @@ import { arrowForward, checkmarkDone, timerOutline } from 'ionicons/icons';
 import { TrainingProgram, TrainingSession } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
 import { DataFetchService } from '../../data-fetch-service';
+
+// Setin tyyppi suorituksille
+type PerformedSet = { reps?: number; weight?: number };
 
 @Component({
   selector: 'app-page5',
@@ -35,6 +39,7 @@ import { DataFetchService } from '../../data-fetch-service';
     IonButtons,
     IonMenuButton,
     IonButton,
+      IonInput,
     IonFooter,
     IonTitle,
     IonIcon,
@@ -51,6 +56,10 @@ export class Page5Page implements OnInit {
   public activeWorkoutReordered!: TrainingProgram;
   public currentIndex = 0;
   public workoutTimerDuration = 120;
+  // Käyttäjän syöttämät suoritetut arvot per liike
+  public performedInputs: { sets?: PerformedSet[] }[] = [];
+  // Hallitsee, onko kyseisen liikkeen settilista avattuna
+  public expandedSets: boolean[] = [];
   private dataFetchService = inject(DataFetchService);
 
   constructor() {
@@ -62,6 +71,33 @@ export class Page5Page implements OnInit {
       navigation?.extras.state?.['activeWorkoutReordered'];
   }
 
+  /**
+   * Kopioi käyttäjän syöttämät suoritetut arvot valitun liikkeen seteihin
+   */
+  private applyPerformedToExercise(index: number) {
+    const exercise = this.activeWorkoutReordered?.exercises[index];
+    if (!exercise) return;
+
+    const performedEntry = this.performedInputs[index];
+    const performedSets = performedEntry?.sets;
+
+    // Kopioi per-set-arvot käyttäjän syötteestä exercise.sets:iin
+    if (performedSets && performedSets.length > 0) {
+      // Käy läpi niin monta settiä kuin käyttäjä on syöttänyt tai kuin exercise.sets sisältää
+      const count = Math.min(performedSets.length, exercise.sets.length);
+      for (let i = 0; i < count; i++) {
+        const p = performedSets[i];
+        if (!p) continue;
+        if (p.reps !== undefined && p.reps !== null) {
+          exercise.sets[i].reps = Number(p.reps);
+        }
+        if (p.weight !== undefined && p.weight !== null) {
+          exercise.sets[i].weight = Number(p.weight);
+        }
+      }
+    }
+  }
+
   ngOnInit() {
     // Aloitetaan aina alusta ja varmistetaan datan löytyminen
     this.currentIndex = 0;
@@ -69,6 +105,50 @@ export class Page5Page implements OnInit {
     if (!this.activeWorkoutReordered) {
       this.router.navigate(['/page2']);
     }
+    // Alusta taulukko suoritetuille arvoille yhtä pitkäksi kuin harjoitus
+    this.performedInputs = (this.activeWorkoutReordered?.exercises || []).map((ex) => ({
+      sets: (ex.sets || []).map(() => ({} as PerformedSet)),
+    }));
+
+    // Alusta dropdown-tilat (oletuksena suljettu)
+    this.expandedSets = (this.activeWorkoutReordered?.exercises || []).map(() => false);
+  }
+
+  toggleSets(index: number) {
+    if (!this.expandedSets) this.expandedSets = [];
+    this.expandedSets[index] = !this.expandedSets[index];
+  }
+
+  // Poistettu globaalin `limitInput`-funktion käyttö; käytetään per-set-funktiota `limitPerSetInput`.
+
+  /**
+   * Rajaa per-set syötteen pituuden enintään 6 merkkiin ja päivittää `performedInputs[index].sets[i]`.
+   */
+  limitPerSetInput(
+    event: Event & { detail?: { value?: string | number | null } },
+    index: number,
+    setIndex: number,
+    field: 'reps' | 'weight',
+  ) {
+    const rawVal = event?.detail?.value;
+    const strVal = rawVal === null || rawVal === undefined ? '' : String(rawVal);
+    const truncated = strVal.length > 6 ? strVal.slice(0, 6) : strVal;
+
+    // Päivitä näkyvä kenttä
+    const target = event.target as unknown as { value?: string } | null;
+    if (target && typeof target.value === 'string') target.value = truncated;
+
+    if (!this.performedInputs[index]) this.performedInputs[index] = { sets: [] };
+    if (!this.performedInputs[index].sets) this.performedInputs[index].sets = [];
+    if (!this.performedInputs[index].sets![setIndex]) this.performedInputs[index].sets![setIndex] = {};
+
+    if (truncated === '') {
+      this.performedInputs[index].sets![setIndex][field] = undefined;
+      return;
+    }
+
+    const asNumber = Number(truncated);
+    this.performedInputs[index].sets![setIndex][field] = Number.isNaN(asNumber) ? undefined : asNumber;
   }
   ionViewWillEnter() {
     this.menu.enable(false); //menu disabled
@@ -139,6 +219,8 @@ export class Page5Page implements OnInit {
       this.currentIndex <
       (this.activeWorkoutReordered?.exercises?.length || 0) - 1
     ) {
+      // Tallenna käyttäjän syöttämät suoritetut arvot nykyiseen liikkeeseen
+      this.applyPerformedToExercise(this.currentIndex);
       this.currentIndex++;
     }
   }
@@ -158,6 +240,9 @@ export class Page5Page implements OnInit {
     if (this.timer) {
       this.timer.forceStopAndReset();
     }
+
+    // Tallenna myös nykyisen liikkeen suoritetut arvot ennen lopetusta
+    this.applyPerformedToExercise(this.currentIndex);
 
     this.currentIndex = 0;
 
