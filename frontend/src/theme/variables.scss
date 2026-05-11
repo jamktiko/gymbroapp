@@ -1,18 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 :root {
+  color-scheme: only dark !important;
   /** 1. Keltainen pääväri (Primary) **/
   --ion-color-primary: #ffd900;
   --ion-color-primary-rgb: 255, 217, 0;
   --ion-color-primary-contrast: #000000;
   --ion-color-primary-contrast-rgb: 0, 0, 0;
-  --ion-color-primary-shade: #e0bf00; // Korjattu shade tummemmaksi keltaiseksi
-  --ion-color-primary-tint: #ffdd1a; // Korjattu tint vaaleammaksi keltaiseksi
+  --ion-color-primary-shade: #e0bf00; /* Korjattu shade tummemmaksi keltaiseksi */
+  --ion-color-primary-tint: #ffdd1a; /* Korjattu tint vaaleammaksi keltaiseksi */
 
   /** 2. Yleiset taustavärit koko sovellukseen **/
-  --ion-background-color: #202020; // Tämä vaikuttaa oletuksena ion-contentiin
-  --ion-text-color: #ffffff; // Valkoinen perusteksti
-  --ion-item-background: #2a2a2a; // Listojen (ion-item) tausta
-  --ion-font-family: "Inter", sans-serif; //fontti
+  --ion-background-color: #202020; /* Tämä vaikuttaa oletuksena ion-contentiin */
+  --ion-text-color: #ffffff; /* Valkoinen perusteksti */
+  --ion-item-background: #2a2a2a; /* Listojen (ion-item) tausta */
+  --ion-font-family: "Inter", sans-serif; /* fontti */
 }
 ion-content {
   --background: radial-gradient(
@@ -20,6 +21,8 @@ ion-content {
     #222 0%,
     #111 100%
   ) !important; /*taustan gradient */
+  --background: var(--ion-background-color);
+  --color: var(--ion-text-color);
 }
 /* Globaalit komponenttimääritykset */
 ion-toolbar {
