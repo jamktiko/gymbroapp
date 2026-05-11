@@ -1,5 +1,9 @@
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div class="login-container">
+  <div *ngIf="isLoading" class="spinner-overlay">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <div *ngIf="!isLoading" class="login-container">
     <div class="logo-section">
       <h1>GymBro</h1>
       <p>Kirjaudu sisään jatkaaksesi</p>

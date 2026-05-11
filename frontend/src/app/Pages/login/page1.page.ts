@@ -18,6 +18,7 @@ import {
 } from '@abacritt/angularx-social-login';
 import { AuthService } from '../../auth.service';
 import { LoginEventService } from '../../login-event.service';
+import { LoadingSpinnerComponent } from '../../loading-spinner/loading-spinner.component';
 @Component({
   selector: 'app-page1',
   templateUrl: './page1.page.html',
@@ -29,6 +30,7 @@ import { LoginEventService } from '../../login-event.service';
     FormsModule,
     GoogleSigninButtonModule,
     SocialLoginModule,
+    LoadingSpinnerComponent,
   ],
 })
 export class Page1Page implements OnInit {
@@ -49,6 +51,7 @@ export class Page1Page implements OnInit {
   ionViewWillLeave() {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
   }
+  isLoading = false;
   ngOnInit() {
     this.socauthService.signOut();
     this.authService.logout();

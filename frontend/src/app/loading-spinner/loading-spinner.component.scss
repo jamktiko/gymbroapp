@@ -1,5 +1,36 @@
-ion-spinner {
-  width: 3.5rem;
-  height: 3.5rem;
-  color: var(--ion-color-primary);
+.custom-ion-spinner-wrapper {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.hidden-spinner {
+  visibility: hidden;
+  position: absolute;
+}
+
+.overlay-image {
+  width: 70%;
+  height: auto;
+  animation: spin 1.5s ease-in-out 2;
+  animation-fill-mode: forwards;
+}
+//374 asteeseen kaks kertaa, tauko välissä
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  60% {
+    transform: rotate(374deg);
+  }
+  100% {
+    transform: rotate(374deg);
+  }
 }
