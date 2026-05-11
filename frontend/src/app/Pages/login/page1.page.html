@@ -8,10 +8,11 @@
       <img src="assets/logoilmantaustaa.png" alt="Sovelluksen logo" />
     </div>
     <div class="action-section" style="display: flex; justify-content: center">
-      <ion-button expand="block" (click)="signInNative()" color="light">
+      <ion-button *ngIf="isNative" expand="block" (click)="signInNative()" color="light">
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Kirjaudu Googlella
       </ion-button>
+      <asl-google-signin-button *ngIf="!isNative"></asl-google-signin-button>
     </div>
 
     <div class="footer-text">
