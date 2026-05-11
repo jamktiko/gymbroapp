@@ -137,17 +137,39 @@
 
           <ion-item>
             <ion-label position="stacked">Sarjat</ion-label>
-            <ion-input type="number" [(ngModel)]="modalInputCount" (ngModelChange)="updateModalSetsCount($event)" placeholder="{{ modalTempSets.length }}"></ion-input>
+            <ion-input
+              type="text"
+              inputmode="numeric"
+              maxlength="6"
+              [(ngModel)]="modalInputCount"
+            
+              (ngModelChange)="updateModalSetsCount($event)"
+              placeholder="{{ modalTempSets.length }}">
+            </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Toistot</ion-label>
-            <ion-input type="number" [(ngModel)]="modalSingleReps" placeholder="{{ modalTempSets[0]?.reps }}"></ion-input>
+            <ion-input
+              type="text"
+              inputmode="numeric"
+              maxlength="6"
+              [(ngModel)]="modalSingleReps"
+              
+              placeholder="{{ modalTempSets[0]?.reps }}">
+            </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Paino kg</ion-label>
-            <ion-input type="number" [(ngModel)]="modalSingleWeight" placeholder="{{ modalTempSets[0]?.weight }}"></ion-input>
+            <ion-input
+              type="text"
+              inputmode="decimal"
+              maxlength="7"
+              [(ngModel)]="modalSingleWeight"
+              
+              placeholder="{{ modalTempSets[0]?.weight }}">
+            </ion-input>
           </ion-item>
 
           <div class="ion-padding-top modal-actions">

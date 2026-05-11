@@ -134,7 +134,7 @@ export class LisaaTreeni {
         isSelected: false,
       };
 
-      // 1. Add to its original muscleGroup
+        // 1. Lisää alkuperäiseen lihasryhmään
       let originalCategory = this.exerciseList2.find(
         (y) => y.category === x.muscleGroup,
       );
@@ -147,14 +147,14 @@ export class LisaaTreeni {
         this.exerciseList2.push(originalCategory);
       }
 
-      // Need a deep copy of the sets so the two references do not modify each other if added to both
+      // Tarvitaan syväkopio seteistä, jotta kahden eri viitteen muokkaukset eivät vaikuta toisiinsa
       const exerciseForOriginal = {
         ...exerciseToAdd,
         sets: exerciseToAdd.sets.map((set) => ({ ...set })),
       };
       originalCategory.exercises.push(exerciseForOriginal);
 
-      // 2. If it's a custom move (not default), also add to "Omat liikkeet"
+      // 2. Jos liike on käyttäjän oma (ei oletus), lisää se myös "Omat liikkeet"-kategoriaan
       if (!x.isDefault) {
         let customCat = this.exerciseList2.find(
           (y) => y.category === 'Omat liikkeet',
@@ -176,7 +176,7 @@ export class LisaaTreeni {
       }
     });
 
-    // Move 'Omat liikkeet' to be the very last category in the list
+    // Siirrä 'Omat liikkeet' listan viimeiseksi kategoriaksi
     const customIndex = this.exerciseList2.findIndex(
       (c) => c.category === 'Omat liikkeet',
     );
@@ -185,13 +185,14 @@ export class LisaaTreeni {
       this.exerciseList2.push(customCat);
     }
 
-    // Update the array reference so Ionic change detection picks up new categories immediately
+    // Päivitä taulukon viite, jotta Ionicin change detection huomaa kategoriamuutokset heti
     this.exerciseList2 = [...this.exerciseList2];
   }
 
   /**
-   * Helper method to update the amount of Sets
-   * this is because whenever a user changes the amount of sets for a move, we need to add also a new object with reps and weights otherwise it will be undefined
+   * Apufunktio sarjojen määrän päivittämiseen
+   * Kun käyttäjä muuttaa sarjojen määrää, lisätään tai poistetaan kohteita
+   * `modalTempSets`-taulukosta jotta jokaiselle sarjalle on reps/weight-objekti.
    */
   updateSets(exercise: ExerciseIsSelected, newLengthVal: string) {
     if (!exercise.sets) {
