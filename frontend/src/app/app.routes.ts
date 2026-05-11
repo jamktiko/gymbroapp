@@ -50,10 +50,5 @@ export const routes: Routes = [
     path: 'calendar',
     loadComponent: () => import('./Pages/calendar/calendar.page').then( m => m.CalendarPage)
   },
-  {
-    path: 'calendar',
-    loadComponent: () => import('./Pages/calendar/calendar.page').then( m => m.CalendarPage)
-  },
-
 
 ];

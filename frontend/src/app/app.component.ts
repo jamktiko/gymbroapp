@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+
 import {
   IonApp,
   IonSplitPane,
@@ -16,6 +18,7 @@ import {
   IonRouterOutlet,
   IonRouterLink,
 } from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
 import { LoadingService } from './loading.service';
 import { CommonModule } from '@angular/common';
@@ -39,8 +42,10 @@ import {
   calendarOutline,
   calendar,
 } from 'ionicons/icons';
+
 import { AuthService } from './auth.service';
 import { UserData } from './types/userdata';
+import { HttpClient } from '@angular/common/http';
 import { LoginEventService } from './login-event.service';
 import { DataFetchService } from './data-fetch-service';
 
@@ -72,16 +77,21 @@ import { DataFetchService } from './data-fetch-service';
 export class AppComponent implements OnInit {
   public userDisplayName: string = '';
   public userEmail: string = '';
+
   public appPages = [
     { title: 'Treenit', url: '/page2', icon: 'barbell' },
     { title: 'Saavutukset', url: '/page8', icon: 'golf' },
-    { title: 'Historia', url: '/page3', icon: 'calendar' },
+    { title: 'Historia', url: '/calendar', icon: 'calendar' },
     { title: 'Statsit', url: '/page7', icon: 'analytics' },
+
   ];
-  private router = inject(Router);
+
+  protected router = inject(Router);
   public loadingService = inject(LoadingService);
-  private authService = inject(AuthService);
-  private userData!: UserData;
+  public authService = inject(AuthService);
+  private http = inject(HttpClient);
+  testData!: UserData;
+
   private loginEventService = inject(LoginEventService);
   private dataFetchService = inject(DataFetchService);
 
@@ -109,36 +119,58 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // loginEventService ja checkUserStatus() yhdessä varmistavat että sivubarin menun käyttäjätiedot ovat ajan tasalla login ja logout tapahtumien jälkeenkin:
+    GoogleAuth.initialize();// loginEventService ja checkUserStatus() yhdessä varmistavat että sivubarin menun käyttäjätiedot ovat ajan tasalla login ja logout tapahtumien jälkeenkin:
     this.loginEventService.loggedIn$.subscribe(() => {
-      this.fetchUserData();
+      this.checkUserStatus();
       return;
     });
-    this.fetchUserData();
+    this.checkUserStatus();
   }
 
-  fetchUserData() {
-    this.dataFetchService.getUserDataById().subscribe({
-      next: (data) => {
-        this.userData = data as UserData;
-        console.log('User data loaded:', this.userData);
+  checkUserStatus() {
+    // fetch userdata from backend:
+    try {
+      // 1. Get the object from sessionStorage
+      const sessionDataStr = sessionStorage.getItem('accesstoken');
+      if (sessionDataStr) {
+        const sessionData = JSON.parse(sessionDataStr);
+        // 2. Use sessionData.googleId for the URL. Added backend port 3000.
+        const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
 
-        const savedName = this.userData?.name;
-        const savedEmail = this.userData?.email;
+        // 3. Use sessionData.token for the Authorization header
+        this.http
+          .get(url, {
+            headers: {
+              Authorization: `Bearer ${sessionData.token}`, // Only the raw token string
+              'Content-Type': 'application/json',
+            },
+          })
+          .subscribe({
+            next: (data) => {
+              this.testData = data as UserData;
+              console.log('Test data loaded:', this.testData);
 
-        if (savedName) {
-          this.userDisplayName = savedName;
-        }
-        if (savedEmail) {
-          this.userEmail = savedEmail;
-        }
-      },
-      error: (err) => {
-        console.error('Failed to load user data', err);
-      },
-    });
+              const savedName = this.testData?.name;
+              const savedEmail = this.testData?.email;
+
+              if (savedName) {
+                this.userDisplayName = savedName;
+              }
+              if (savedEmail) {
+                this.userEmail = savedEmail;
+              }
+            },
+            error: (err) => {
+              console.error('Failed to load test data', err);
+            },
+          });
+      }
+    } catch (error) {
+      console.error('Error loading test data:', error);
+    }
   }
 
+  // ---  FUNKTIO: Kirjaudu ulos ---
   logout() {
     console.log('Kirjaudutaan ulos...');
 
@@ -151,6 +183,7 @@ export class AppComponent implements OnInit {
     // replaceUrl: true poistaa historian, jotta ei pääse "takaisin"-napilla sisään
     this.router.navigateByUrl('/page1', { replaceUrl: true }).then(() => {
       // 3. Päivitetään sivu, jotta AppComponent nollautuu (nimet ja tilat)
+      // window.location.reload();
     });
   }
 }
