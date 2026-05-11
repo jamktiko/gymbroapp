@@ -1,4 +1,7 @@
 /* --- SIVUN YLEINEN RAKENNE --- */
+ion-content {
+  --ion-safe-area-bottom: 60px !important;
+}
 .content-container {
   display: flex;
   flex-direction: column;
@@ -12,7 +15,9 @@
   margin-top: 4vh;
   padding: 0 10px; /* Estää reunoihin osumisen mobiilissa */
 }
-
+.tallennaohjelma {
+  margin-bottom: calc(env(safe-area-inset-bottom) + 16px);
+}
 /* --- OHJELMAN NIMEÄMINEN --- */
 .name-input-item {
   width: 100%;
