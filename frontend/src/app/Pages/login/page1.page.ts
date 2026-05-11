@@ -58,6 +58,17 @@ export class Page1Page implements OnInit {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
   }
   ngOnInit() {
+    // Prevent auto-login loop by clearing the session state when arriving at the login page
+    try {
+      if (this.isNative) {
+        GoogleAuth.signOut().catch(() => {});
+      } else {
+        this.socauthService.signOut().catch(() => {});
+      }
+    } catch (error) {
+      console.error('Sign out failed on init', error);
+    }
+
     // Initialize the native plugin only on native platforms
     if (this.isNative) {
       try {
