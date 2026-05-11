@@ -26,7 +26,7 @@ const addTokenHeader = (req: HttpRequest<unknown>, token: string) => {
 
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const http = inject(HttpClient);
-  const urlIsBackend = req.url.startsWith('http://localhost:3000');
+  const urlIsBackend = req.url.startsWith('https://dzw1f1bfpf15d.cloudfront.net');
 
   const sessionDataString = sessionStorage.getItem('accesstoken');
   let authReq = req;
@@ -84,7 +84,7 @@ function handle401Error(
     // Call your refresh endpoint here
     return http
       .post<{ token: string; refreshToken?: string }>(
-        'http://localhost:3000/api/auth/refresh',
+        'https://dzw1f1bfpf15d.cloudfront.net/api/auth/refresh',
         {
           token: refreshToken, // adjust payload based on your backend expectation
           googleId: googleId,

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">GymBroApp</string>
+    <string name="title_activity_main">GymBroApp</string>
+    <string name="package_name">laanhema.dev.gymbro.app</string>
+    <string name="custom_url_scheme">laanhema.dev.gymbro.app</string>
+    <string name="server_client_id">949356362637-8k499680i9rc1pi3is0d3d2jd61lli5k.apps.googleusercontent.com</string>
+</resources>

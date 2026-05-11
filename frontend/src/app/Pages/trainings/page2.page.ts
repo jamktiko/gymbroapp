@@ -64,6 +64,14 @@ export class Page2Page implements OnInit {
   private alertCtrl = inject(AlertController);
   public xpService = inject(XpService);
   private dataFetchService = inject(DataFetchService);
+
+  get levelProgress(): number {
+    if (!this.userData) return 0;
+    const lvl = this.userData.level;
+    const total = (lvl + 1) * (lvl + 1) * 50 - lvl * lvl * 50;
+    return 1 - this.userData.xpToNextLevel / total;
+  }
+
   public usersTrainingPrograms: TrainingProgram[] = [];
   public userData!: UserData;
   public isAccordionOpen = false;
