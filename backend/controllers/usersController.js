@@ -67,3 +67,29 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// GET /api/users/:id/calendar
+exports.getCalendarDates = async (req, res) => {
+  try {
+    if (req.user.googleId !== req.params.id) {
+      return res.status(403).json({ error: 'Ei oikeuksia' });
+    }
+    // Haetaan vain datetime-kenttä, ei koko trainingSessions-arrayta
+    const user = await User.findOne(
+      { googleId: req.params.id },
+      { 'trainingSessions.datetime': 1 }
+    );
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+    // Palautetaan pelkät päivämäärät YYYY-MM-DD muodossa
+    const dates = user.trainingSessions.map((s) =>
+      s.datetime.toISOString().split('T')[0]
+    );
+    res.json(dates);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
