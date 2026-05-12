@@ -20,56 +20,59 @@
   <div class="calendar-card">
     <!-- Navigointi -->
     <div class="calendar-nav">
-  <ion-button fill="clear" (click)="navigate(-1)">
-    <ion-icon slot="icon-only" name="chevron-back-outline" color="light"></ion-icon>
-  </ion-button>
+      <ion-button fill="clear" (click)="navigate(-1)">
+        <ion-icon slot="icon-only" name="chevron-back-outline" color="light"></ion-icon>
+      </ion-button>
 
-  <div class="nav-center">
-    <span class="calendar-title">{{ view === 'month' ? getMonthLabel() : getWeekLabel() }}</span>
-    <span class="view-toggle" (click)="toggleView()">
-      {{ view === 'month' ? ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
-    </span>
-  </div>
+      <div class="nav-center">
+        <span class="calendar-title">{{ view === 'month' ? getMonthLabel() : getWeekLabel() }}</span>
+        <span class="view-toggle" (click)="toggleView()">
+          {{ view === 'month' ? ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
+        </span>
+      </div>
 
-  <ion-button fill="clear" (click)="navigate(1)">
-    <ion-icon slot="icon-only" name="chevron-forward-outline" color="light"></ion-icon>
-  </ion-button>
-</div>
+      <ion-button fill="clear" (click)="navigate(1)">
+        <ion-icon slot="icon-only" name="chevron-forward-outline" color="light"></ion-icon>
+      </ion-button>
+    </div>
 
     <!-- Viikonpäivien otsikot -->
     <div class="weekday-header">
-      <span *ngFor="let d of ['Ma','Ti','Ke','To','Pe','La','Su']">{{ d }}</span>
+      @for (d of ['Ma','Ti','Ke','To','Pe','La','Su']; track $index) {
+      <span>{{ d }}</span>
+      }
     </div>
 
     <!-- Kuukausinäkymä -->
-    <ng-container *ngIf="view === 'month'">
-      <div class="week-row" *ngFor="let week of weeks">
-        <div
-          *ngFor="let day of week"
-          class="day-cell"
-          [class.other-month]="!isCurrentMonth(day)"
-          [class.today]="isToday(day)"
-          [class.has-workout]="hasWorkout(day)"
-        >
-          <span class="day-number">{{ day.getDate() }}</span>
-          <ion-icon *ngIf="hasWorkout(day)" name="checkmark-circle"></ion-icon>
-        </div>
+    @if (view === 'month') {
+    @for (week of weeks; track $index) {
+    <div class="week-row">
+      @for (day of week; track $index) {
+      <div class="day-cell" [class.other-month]="!isCurrentMonth(day)" [class.today]="isToday(day)"
+        [class.has-workout]="hasWorkout(day)">
+        <span class="day-number">{{ day.getDate() }}</span>
+        @if (hasWorkout(day)) {
+        <ion-icon name="checkmark-circle"></ion-icon>
+        }
       </div>
-    </ng-container>
+      }
+    </div>
+    }
+    }
 
     <!-- Viikkonäkymä -->
-    <ng-container *ngIf="view === 'week'">
-      <div class="week-row">
-        <div
-          *ngFor="let day of weekDays"
-          class="day-cell"
-          [class.today]="isToday(day)"
-          [class.has-workout]="hasWorkout(day)"
-        >
-          <span class="day-number">{{ day.getDate() }}</span>
-          <ion-icon *ngIf="hasWorkout(day)" name="checkmark-circle"></ion-icon>
-        </div>
+    @if (view === 'week') {
+    <div class="week-row">
+      @for (day of weekDays; track $index) {
+      <div class="day-cell" [class.today]="isToday(day)" [class.has-workout]="hasWorkout(day)">
+        <span class="day-number">{{ day.getDate() }}</span>
+        @if (hasWorkout(day)) {
+        <ion-icon name="checkmark-circle"></ion-icon>
+        }
       </div>
-    </ng-container>
+      }
+    </div>
+    }
+
   </div>
 </ion-content>
