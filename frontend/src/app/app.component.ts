@@ -82,9 +82,8 @@ export class AppComponent implements OnInit {
     { title: 'Treenit', url: '/page2', icon: 'barbell' },
     { title: 'Saavutukset', url: '/page8', icon: 'golf' },
     { title: 'Historia', url: '/page3', icon: 'calendar' },
-    { title: 'Statsit', url: '/page7', icon: 'analytics'}, 
-     { title: 'Kalenteri', url: '/../calendar', icon: 'calendar'
-    },
+    { title: 'Statsit', url: '/page7', icon: 'analytics' },
+    { title: 'Kalenteri', url: '/../calendar', icon: 'calendar' },
   ];
 
   protected router = inject(Router);
@@ -120,7 +119,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    GoogleAuth.initialize();// loginEventService ja checkUserStatus() yhdessä varmistavat että sivubarin menun käyttäjätiedot ovat ajan tasalla login ja logout tapahtumien jälkeenkin:
+    GoogleAuth.initialize(); // loginEventService ja checkUserStatus() yhdessä varmistavat että sivubarin menun käyttäjätiedot ovat ajan tasalla login ja logout tapahtumien jälkeenkin:
     this.loginEventService.loggedIn$.subscribe(() => {
       this.checkUserStatus();
       return;
@@ -135,8 +134,8 @@ export class AppComponent implements OnInit {
       const sessionDataStr = sessionStorage.getItem('accesstoken');
       if (sessionDataStr) {
         const sessionData = JSON.parse(sessionDataStr);
-        // 2. Use sessionData.googleId for the URL. Added backend port 3000.
-        const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
+        // 2. Use sessionData.googleId for the URL.
+        const url = `https://dzw1f1bfpf15d.cloudfront.net/api/users'/${sessionData.googleId}`;
 
         // 3. Use sessionData.token for the Authorization header
         this.http
