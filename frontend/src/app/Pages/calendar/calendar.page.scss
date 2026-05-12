@@ -93,4 +93,12 @@
       filter: drop-shadow(0 0 4px rgba(45, 211, 111, 0.5));
     }
   }
+
+  .calendar-arrow-forward {
+    --color: var(--ion-color-primary);
+  }
+
+  .calendar-arrow-backward {
+    --color: var(--ion-color-primary);
+  }
 }
