@@ -58,7 +58,12 @@ export class XpService {
               sub.unsubscribe();
             }
 
-            const currentLevel = Math.floor(Math.sqrt(currentXp / 50)) + 1;
+            let currentLevel = Math.floor(Math.sqrt(currentXp / 50)) + 1;
+            
+            // Jos animaatio päättyy tasan uuden tason rajalle, pidetään palkki visuaalisesti täytenä
+            if (currentXp === targetXp && currentXp > 0 && Math.sqrt(currentXp / 50) % 1 === 0) {
+              currentLevel -= 1;
+            }
             const levelStartXp = (currentLevel - 1) ** 2 * 50;
             const levelEndXp = currentLevel ** 2 * 50;
 
