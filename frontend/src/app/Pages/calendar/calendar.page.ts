@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { DataFetchService } from '../../data-fetch-service'; // päivitä polku
+import { DataFetchService } from '../../data-fetch-service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircle } from 'ionicons/icons';
+import { checkmarkCircle, chevronBackOutline, chevronForwardOutline, } from 'ionicons/icons';
 
 @Component({
   selector: 'app-calendar',
@@ -21,7 +21,8 @@ export class CalendarPage implements OnInit {
   weekDays: Date[] = [];
 
   constructor(private dataFetchService: DataFetchService) {
-  addIcons({ checkmarkCircle });
+
+  addIcons({ checkmarkCircle, chevronBackOutline, chevronForwardOutline });
   }
 
   ngOnInit() {

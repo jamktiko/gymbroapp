@@ -16,6 +16,61 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+exports.getStats = async (req, res) => {
+  try {
+    if (req.user.googleId !== req.params.id) {
+      return res.status(403).json({ error: 'Ei oikeuksia' });
+    }
+    const user = await User.findOne({ googleId: req.params.id });
+    if (!user) {
+      return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
+    }
+
+    const muscleMap = {};   // { "Rinta": 24, "Selkä": 18, ... }
+    const recordMap = {};   // { "Rinta": { exercise: "Penkkipunnerrus", weight: 85 }, ... }
+
+    for (const session of user.trainingSessions) {
+      for (const exercise of session.exercises) {
+        const group = exercise.move.muscleGroup;
+        const name = exercise.move.name;
+
+        // Lihasryhmäjakauma: lasketaan harjoituskerrat
+        muscleMap[group] = (muscleMap[group] || 0) + 1;
+
+        // Personal records: etsitään korkein paino per lihasryhmä
+        for (const set of exercise.sets) {
+          if (!recordMap[group] || set.weight > recordMap[group].weight) {
+            recordMap[group] = { exercise: name, weight: set.weight };
+          }
+        }
+      }
+    }
+
+    const muscleDistribution = Object.entries(muscleMap).map(
+      ([muscleGroup, count]) => ({ muscleGroup, count })
+    );
+
+    const personalRecords = Object.entries(recordMap).map(
+      ([muscleGroup, data]) => ({
+        muscleGroup,
+        exercise: data.exercise,
+        weight: data.weight,
+      })
+    );
+
+    res.json({
+      totalXp: user.xp,
+      level: user.level,
+      xpToNextLevel: user.xpToNextLevel,
+      totalSessions: user.trainingSessions.length,
+      muscleDistribution,
+      personalRecords,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // POST /api/users — luo uusi käyttäjä (myöhemmin Google Auth hoitaa tämän)
 exports.createUser = async (req, res) => {
   try {

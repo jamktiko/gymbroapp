@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GymBro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow: #FFE600;
+      --yellow-dim: #CDB800;
+      --black: #0A0A0A;
+      --gray: #1A1A1A;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--black);
+      color: var(--yellow);
+      font-family: 'Barlow Condensed', sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .bg-stripe {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 60px,
+        rgba(255, 230, 0, 0.03) 60px,
+        rgba(255, 230, 0, 0.03) 61px
+      );
+      pointer-events: none;
+    }
+
+    .corner {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border-color: var(--yellow-dim);
+      border-style: solid;
+      opacity: 0.5;
+    }
+    .corner-tl { top: 32px; left: 32px; border-width: 2px 0 0 2px; }
+    .corner-tr { top: 32px; right: 32px; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: 32px; left: 32px; border-width: 0 0 2px 2px; }
+    .corner-br { bottom: 32px; right: 32px; border-width: 0 2px 2px 0; }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 14vw, 160px);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--yellow);
+      text-align: center;
+    }
+
+    .title span {
+      display: inline-block;
+      color: var(--black);
+      background: var(--yellow);
+      padding: 0 16px;
+      margin-left: 8px;
+    }
+
+    .qr-container {
+      padding: 20px;
+      background: #ffffff;
+      display: inline-block;
+      position: relative;
+    }
+
+    .qr-container::before,
+    .qr-container::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--yellow);
+      border-style: solid;
+    }
+    .qr-container::before {
+      top: -4px; left: -4px;
+      border-width: 3px 0 0 3px;
+    }
+    .qr-container::after {
+      bottom: -4px; right: -4px;
+      border-width: 0 3px 3px 0;
+    }
+
+    #qrcode {
+      display: block;
+    }
+
+    .cta {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(20px, 3vw, 32px);
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--yellow-dim);
+      text-align: center;
+    }
+
+    .cta strong {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    .divider {
+      width: 80px;
+      height: 2px;
+      background: var(--yellow);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-stripe"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="wrapper">
+    <div class="title">Gym<span>Bro</span></div>
+    <div class="qr-container">
+      <div id="qrcode"></div>
+    </div>
+    <div class="divider"></div>
+    <div class="cta">Skannaa &amp; <strong>lataa sovellus</strong></div>
+  </div>
+
+  <script>
+    new QRCode(document.getElementById("qrcode"), {
+      text: "https://gymbro.app",
+      width: 280,
+      height: 280,
+      colorDark: "#0A0A0A",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>
