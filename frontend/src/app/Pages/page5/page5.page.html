@@ -18,27 +18,67 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-    @if (currentExercise) {
+    <ng-container *ngIf="currentExercise">
     <div class="exercise-card">
       <p class="label">NYKYINEN LIIKE</p>
-      <h1 class="exercise-title">{{ currentExercise.move.name }}</h1>
+      <h1 class="exercise-title">{{ currentExercise!.move.name }}</h1>
 
       <div class="stats-grid">
         <div class="stat">
           <small>SETS</small>
-          <span>{{ currentExercise.sets.length }}</span>
+          <span>{{ currentExercise!.sets.length }}</span>
         </div>
         <div class="stat">
           <small>REPS</small>
-          <span>{{ currentExercise.sets[0].reps }}</span>
+          <span>{{ currentExercise!.sets[0].reps }}</span>
         </div>
         <div class="stat">
           <small>WEIGHT</small>
-          <span>{{ currentExercise.sets[0].weight }}kg</span>
+          <span>{{ currentExercise!.sets[0].weight }}kg</span>
+          
+        </div>
+      </div>
+
+      <!-- Siirrä Näytä sarjat -nappi stats-ruudukon alle, keskelle (reps-sarakkeen alle) -->
+      <div class="toggle-wrapper">
+        <ion-button
+          class="toggle-btn"
+          fill="solid"
+          size="small"
+          (click)="toggleSets(currentIndex)"
+          [attr.aria-expanded]="expandedSets[currentIndex]"
+        >
+          <ion-icon slot="start" [name]="expandedSets[currentIndex] ? 'chevron-up' : 'chevron-down'"></ion-icon>
+          <span class="toggle-text">{{ expandedSets[currentIndex] ? 'Piilota sarjat' : 'Näytä sarjat' }}</span>
+        </ion-button>
+      </div>
+
+      <!-- Settirivit: jokaiselle setille oma rivi, jossa on toistot- ja paino-kentät -->
+      <div class="sets-list" *ngIf="expandedSets[currentIndex]">
+        <div class="set-row" *ngFor="let _s of currentExercise!.sets; let i = index">
+          <div class="set-label">SET {{ i + 1 }}</div>
+          <ion-input
+            type="text"
+            maxlength="6"
+            inputmode="numeric"
+            placeholder="toistot"
+            
+            (ionInput)="limitPerSetInput($event, currentIndex, i, 'reps')"
+            class="performed-input set-reps"
+          ></ion-input>
+          <ion-input
+            type="text"
+            maxlength="6"
+            inputmode="numeric"
+            placeholder="kg"
+            
+            (ionInput)="limitPerSetInput($event, currentIndex, i, 'weight')"
+            class="performed-input set-weight"
+          ></ion-input>
         </div>
       </div>
     </div>
-    }
+    </ng-container>
 
     <!-- TIMER KOMPONENTTI -->
     <!-- duration: kuinka monta sekuntia lasketaan (nyt vakio 10) -->
@@ -49,7 +89,7 @@
 </ion-content>
 
 <ion-footer class="ion-no-border ion-padding">
-  @if (currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1) {
+  <ng-container *ngIf="currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1; else finishBlock">
   <ion-button
     class="next-btn"
     expand="block"
@@ -60,7 +100,8 @@
     NEXT EXERCISE
     <ion-icon slot="end" name="arrow-forward"></ion-icon>
   </ion-button>
-  } @else {
+  </ng-container>
+  <ng-template #finishBlock>
   <ion-button
     class="next-btn"
     expand="block"
@@ -71,5 +112,5 @@
     FINISH WORKOUT
     <ion-icon slot="end" name="checkmark-done"></ion-icon>
   </ion-button>
-  }
+  </ng-template>
 </ion-footer>
