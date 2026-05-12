@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MenuController, AlertController } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
@@ -17,8 +18,8 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowForward, checkmarkDone, timerOutline } from 'ionicons/icons';
-import { TrainingProgram, TrainingSession } from '../../types/userdata';
+import { arrowForward, arrowBack, checkmarkDone, timerOutline } from 'ionicons/icons';
+import { TrainingProgram, TrainingSession, Exercise } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
 import { DataFetchService } from '../../data-fetch-service';
 
@@ -51,11 +52,15 @@ export class Page5Page implements OnInit {
   private http = inject(HttpClient);
   private menu = inject(MenuController);
   private alertController = inject(AlertController);
+  private navCtrl = inject(NavController);
   @ViewChild('workoutTimer') timer!: TimerComponent;
   // --- TREENIN TILA ---
   public activeWorkoutReordered!: TrainingProgram;
   public currentIndex = 0;
   public workoutTimerDuration = 120;
+  // finish confirmation state: user must click twice within short time to confirm finish
+  public finishConfirm = false;
+  private finishConfirmTimeoutId: number | undefined;
   // Käyttäjän syöttämät suoritetut arvot per liike
   public performedInputs: { sets?: PerformedSet[] }[] = [];
   // Hallitsee, onko kyseisen liikkeen settilista avattuna
@@ -63,7 +68,7 @@ export class Page5Page implements OnInit {
   private dataFetchService = inject(DataFetchService);
 
   constructor() {
-    addIcons({ arrowForward, checkmarkDone, timerOutline });
+    addIcons({ arrowForward, arrowBack, checkmarkDone, timerOutline });
 
     // Luetaan navigoinnin mukana tullut treenidata
     const navigation = this.router.currentNavigation();
@@ -105,7 +110,8 @@ export class Page5Page implements OnInit {
     if (!this.activeWorkoutReordered) {
       this.router.navigate(['/page2']);
     }
-    // Alusta taulukko suoritetuille arvoille yhtä pitkäksi kuin harjoitus
+    // Alusta tyhjät performedInputs niin, että oletusarvot näytetään placeholderina
+    // mutta käyttäjän syötöt tallentuvat performedInputs:iin ja pysyvät näkyvissä.
     this.performedInputs = (this.activeWorkoutReordered?.exercises || []).map((ex) => ({
       sets: (ex.sets || []).map(() => ({} as PerformedSet)),
     }));
@@ -114,9 +120,19 @@ export class Page5Page implements OnInit {
     this.expandedSets = (this.activeWorkoutReordered?.exercises || []).map(() => false);
   }
 
+  private resetFinishConfirm() {
+    if (this.finishConfirmTimeoutId !== undefined) {
+      clearTimeout(this.finishConfirmTimeoutId);
+      this.finishConfirmTimeoutId = undefined;
+    }
+    this.finishConfirm = false;
+  }
+
   toggleSets(index: number) {
     if (!this.expandedSets) this.expandedSets = [];
     this.expandedSets[index] = !this.expandedSets[index];
+    // moving around resets any pending finish confirmation
+    this.resetFinishConfirm();
   }
 
   // Poistettu globaalin `limitInput`-funktion käyttö; käytetään per-set-funktiota `limitPerSetInput`.
@@ -150,11 +166,26 @@ export class Page5Page implements OnInit {
     const asNumber = Number(truncated);
     this.performedInputs[index].sets![setIndex][field] = Number.isNaN(asNumber) ? undefined : asNumber;
   }
+
+  /**
+   * Safe getter used by the template to avoid possible 'undefined' access.
+   * Returns a string (for binding to [value]) or empty string when not present.
+   */
+  getPerformedValue(index: number, setIndex: number, field: 'reps' | 'weight'): string | number {
+    if (!this.performedInputs) return '';
+    const entry = this.performedInputs[index];
+    if (!entry || !entry.sets) return '';
+    const set = entry.sets[setIndex];
+    if (!set) return '';
+    const val = set[field];
+    return val === undefined || val === null ? '' : val;
+  }
   ionViewWillEnter() {
     this.menu.enable(false); //menu disabled
   }
   ionViewWillLeave() {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+    this.resetFinishConfirm();
   }
   async keskeytaTreeniVahvistus() {
     //keskeyttää treenin
@@ -198,8 +229,8 @@ export class Page5Page implements OnInit {
   /**
    * Palauttaa  liikkeen datan.
    */
-  get currentExercise() {
-    return this.activeWorkoutReordered?.exercises[this.currentIndex];
+  get currentExercise(): Exercise | undefined {
+    return this.activeWorkoutReordered?.exercises?.[this.currentIndex];
   }
 
   // --- TREENILOGIIKKA ---
@@ -222,6 +253,23 @@ export class Page5Page implements OnInit {
       // Tallenna käyttäjän syöttämät suoritetut arvot nykyiseen liikkeeseen
       this.applyPerformedToExercise(this.currentIndex);
       this.currentIndex++;
+    }
+  }
+  
+  /**
+   * Siirtyy edelliseen liikkeeseen.
+   */
+  edellinenLiike() {
+    // pysäytetään ja nollataan kello
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
+
+    if (this.currentIndex > 0) {
+      // Tallenna mahdolliset syötöt nykyisestä liikkeestä
+      this.applyPerformedToExercise(this.currentIndex);
+      this.currentIndex--;
+      this.resetFinishConfirm();
     }
   }
   /**
@@ -247,10 +295,29 @@ export class Page5Page implements OnInit {
     this.currentIndex = 0;
 
     // navigoi xp-näkymään:
-    this.router.navigate(['/page6'], {
-      replaceUrl: true,
+    this.navCtrl.navigateRoot('/page6', {
+      animated: true,
       state: { finishedSession: finishedSession },
     });
+  }
+
+  /**
+   * Wrapper for Finish button: requires two clicks within a short time window.
+   */
+  confirmFinish() {
+    if (this.finishConfirm) {
+      // second click: proceed
+      this.resetFinishConfirm();
+      this.lopetaTreeni();
+      return;
+    }
+
+    // first click: set flag and timeout to reset
+    this.finishConfirm = true;
+    this.finishConfirmTimeoutId = window.setTimeout(() => {
+      this.finishConfirm = false;
+      this.finishConfirmTimeoutId = undefined;
+    }, 3000);
   }
 }
 
@@ -265,3 +332,4 @@ export class Page5Page implements OnInit {
 //     state: { activeWorkoutReordered: programToLaunch },
 //   })
 // }
+

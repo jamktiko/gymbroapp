@@ -1,4 +1,5 @@
 <ion-header class="ion-no-border">
+  
   <ion-toolbar>
     <ion-title>{{ activeWorkoutReordered?.name }}</ion-title>
     <ion-buttons slot="end">
@@ -15,27 +16,30 @@
     </ion-button>
   </ion-toolbar>
 </ion-header>
+<ion-button *ngIf="currentIndex > 0" class="prev-btn" fill="clear" (click)="edellinenLiike()">
+    <ion-icon slot="start" name="arrow-back"></ion-icon>
+    PREVIOUS
+  </ion-button>
 
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
-    <ng-container *ngIf="currentExercise">
+    <ng-container *ngIf="currentExercise as exercise">
     <div class="exercise-card">
       <p class="label">NYKYINEN LIIKE</p>
-      <h1 class="exercise-title">{{ currentExercise!.move.name }}</h1>
+      <h1 class="exercise-title">{{ exercise.move.name }}</h1>
 
       <div class="stats-grid">
         <div class="stat">
           <small>SETS</small>
-          <span>{{ currentExercise!.sets.length }}</span>
+          <span>{{ exercise.sets?.length || 0 }}</span>
         </div>
         <div class="stat">
           <small>REPS</small>
-          <span>{{ currentExercise!.sets[0].reps }}</span>
+          <span>{{ exercise.sets?.[0]?.reps ?? '-' }}</span>
         </div>
         <div class="stat">
           <small>WEIGHT</small>
-          <span>{{ currentExercise!.sets[0].weight }}kg</span>
-          
+          <span>{{ exercise.sets?.[0]?.weight ?? '-' }}kg</span>
         </div>
       </div>
 
@@ -55,14 +59,14 @@
 
       <!-- Settirivit: jokaiselle setille oma rivi, jossa on toistot- ja paino-kentät -->
       <div class="sets-list" *ngIf="expandedSets[currentIndex]">
-        <div class="set-row" *ngFor="let _s of currentExercise!.sets; let i = index">
+        <div class="set-row" *ngFor="let _s of exercise.sets; let i = index">
           <div class="set-label">SET {{ i + 1 }}</div>
           <ion-input
             type="text"
             maxlength="6"
             inputmode="numeric"
-            placeholder="toistot"
-            
+            [placeholder]="exercise.sets[i]?.reps ?? 'toistot'"
+            [value]="getPerformedValue(currentIndex, i, 'reps')"
             (ionInput)="limitPerSetInput($event, currentIndex, i, 'reps')"
             class="performed-input set-reps"
           ></ion-input>
@@ -70,8 +74,8 @@
             type="text"
             maxlength="6"
             inputmode="numeric"
-            placeholder="kg"
-            
+            [placeholder]="exercise.sets[i]?.weight ? (exercise.sets[i].weight + 'kg') : 'kg'"
+            [value]="getPerformedValue(currentIndex, i, 'weight')"
             (ionInput)="limitPerSetInput($event, currentIndex, i, 'weight')"
             class="performed-input set-weight"
           ></ion-input>
@@ -89,6 +93,8 @@
 </ion-content>
 
 <ion-footer class="ion-no-border ion-padding">
+  
+
   <ng-container *ngIf="currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1; else finishBlock">
   <ion-button
     class="next-btn"
@@ -102,15 +108,17 @@
   </ion-button>
   </ng-container>
   <ng-template #finishBlock>
-  <ion-button
-    class="next-btn"
-    expand="block"
-    shape="round"
-    color="primary"
-    (click)="lopetaTreeni()"
-  >
-    FINISH WORKOUT
+    <ion-button
+      class="next-btn"
+      expand="block"
+      shape="round"
+      [color]="finishConfirm ? 'success' : 'primary'"
+      (click)="confirmFinish()"
+    >
+    {{ finishConfirm ? 'CLICK AGAIN TO CONFIRM' : 'FINISH WORKOUT' }}
     <ion-icon slot="end" name="checkmark-done"></ion-icon>
   </ion-button>
   </ng-template>
 </ion-footer>
+
+
