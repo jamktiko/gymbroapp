@@ -74,6 +74,12 @@ export class LisaaTreeni {
   public isCustomMoveModalOpen: boolean = false;
   public newMoveName: string = '';
   public newMoveMuscle: string = '';
+  public isExerciseModalOpen: boolean = false;
+  public modalExercise: ExerciseIsSelected | null = null;
+  public modalTempSets: { reps: number; weight: number }[] = [];
+  public modalSingleReps: string = '';
+  public modalSingleWeight: string = '';
+  public modalInputCount: string = '';
   private menu = inject(MenuController);
   public newMoveType: 'compound' | 'targeted' = 'compound';
   public exerciseList2: Category2[] = [];
@@ -91,6 +97,9 @@ export class LisaaTreeni {
    * Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
    */
   ionViewWillEnter() {
+    // Kun sivu tulee näkyviin: estä sivuvalikko ja hae kaikki liikkeet backendistä.
+    // Tämän kutsun jälkeen `categorizeMoves()` rakentaa käyttöliittymään
+    // tarvittavan `exerciseList2`-rakenteen.
     this.menu.enable(false);
     this.dataFetchService.getAllMoves().subscribe({
       next: (data) => {
@@ -110,7 +119,9 @@ export class LisaaTreeni {
    * Takes moves fetched from database and categorizes them by muscleGroup property
    */
   categorizeMoves() {
-    this.exerciseList2 = []; // Clear previous categories before re-categorizing
+    // Ryhmitä backendistä haetut liikkeet lihasryhmän mukaan.
+    // Luo myös erillinen kategoria "Omat liikkeet" käyttäjän custom-liikkeille.
+    this.exerciseList2 = []; // Tyhjennä aiemmat kategoriat ennen uudelleenrakennusta
 
     this.usersMoves.forEach((x) => {
       const exerciseToAdd: ExerciseIsSelected = {
@@ -123,7 +134,7 @@ export class LisaaTreeni {
         isSelected: false,
       };
 
-      // 1. Add to its original muscleGroup
+        // 1. Lisää alkuperäiseen lihasryhmään
       let originalCategory = this.exerciseList2.find(
         (y) => y.category === x.muscleGroup,
       );
@@ -136,14 +147,14 @@ export class LisaaTreeni {
         this.exerciseList2.push(originalCategory);
       }
 
-      // Need a deep copy of the sets so the two references do not modify each other if added to both
+      // Tarvitaan syväkopio seteistä, jotta kahden eri viitteen muokkaukset eivät vaikuta toisiinsa
       const exerciseForOriginal = {
         ...exerciseToAdd,
         sets: exerciseToAdd.sets.map((set) => ({ ...set })),
       };
       originalCategory.exercises.push(exerciseForOriginal);
 
-      // 2. If it's a custom move (not default), also add to "Omat liikkeet"
+      // 2. Jos liike on käyttäjän oma (ei oletus), lisää se myös "Omat liikkeet"-kategoriaan
       if (!x.isDefault) {
         let customCat = this.exerciseList2.find(
           (y) => y.category === 'Omat liikkeet',
@@ -165,7 +176,7 @@ export class LisaaTreeni {
       }
     });
 
-    // Move 'Omat liikkeet' to be the very last category in the list
+    // Siirrä 'Omat liikkeet' listan viimeiseksi kategoriaksi
     const customIndex = this.exerciseList2.findIndex(
       (c) => c.category === 'Omat liikkeet',
     );
@@ -174,19 +185,23 @@ export class LisaaTreeni {
       this.exerciseList2.push(customCat);
     }
 
-    // Update the array reference so Ionic change detection picks up new categories immediately
+    // Päivitä taulukon viite, jotta Ionicin change detection huomaa kategoriamuutokset heti
     this.exerciseList2 = [...this.exerciseList2];
   }
 
   /**
-   * Helper method to update the amount of Sets
-   * this is because whenever a user changes the amount of sets for a move, we need to add also a new object with reps and weights otherwise it will be undefined
+   * Apufunktio sarjojen määrän päivittämiseen
+   * Kun käyttäjä muuttaa sarjojen määrää, lisätään tai poistetaan kohteita
+   * `modalTempSets`-taulukosta jotta jokaiselle sarjalle on reps/weight-objekti.
    */
   updateSets(exercise: ExerciseIsSelected, newLengthVal: string) {
     if (!exercise.sets) {
       exercise.sets = [];
     }
 
+    // Muunna syöte numeroksi ja validoi se. Tämän metodin tarkoitus on
+    // varmistaa että `exercise.sets`-taulukossa on oikea määrä objekteja.
+    // Lisätessä uusiin seteihin kopioidaan ensimmäisen setin arvot oletuksena.
     const newLength = parseInt(newLengthVal, 10);
     if (isNaN(newLength) || newLength < 0) {
       return;
@@ -212,6 +227,7 @@ export class LisaaTreeni {
    * Helper method for updating all sets reps at once
    */
   updateAllReps(exercise: ExerciseIsSelected, newRepsVal: string) {
+    // Aseta jokaisen sarjan `reps`-kenttä samaan arvoon.
     const newReps = parseInt(newRepsVal, 10);
     if (isNaN(newReps) || newReps < 0) return;
 
@@ -226,6 +242,7 @@ export class LisaaTreeni {
    * Helper method for updating all sets weights at once
    */
   updateAllWeights(exercise: ExerciseIsSelected, newWeightsVal: string) {
+    // Aseta jokaisen sarjan `weight`-kenttä samaan arvoon.
     const newWeight = parseInt(newWeightsVal, 10);
     if (isNaN(newWeight) || newWeight < 0) return;
 
@@ -237,6 +254,8 @@ export class LisaaTreeni {
   }
 
   toggleSelection(item: ExerciseIsSelected) {
+    // Vaihda liikkeen valintatila (valittu / ei valittu) kun käyttäjä klikkaa riviä.
+    // Valinta vaikuttaa siihen, näytetäänkö modal-painike rivillä.
     item.isSelected = !item.isSelected;
   }
 
@@ -245,6 +264,9 @@ export class LisaaTreeni {
    */
   async removeExercise(exerciseToRemove: ExerciseIsSelected, event: Event) {
     event.stopPropagation();
+    // Näytä varmistusdialogi ennen liikkeen poistamista backendistä.
+    // Jos käyttäjä vahvistaa, kutsutaan DataFetchService.deleteMove ja
+    // päivitetään liikelista backendistä haettuihin arvoihin.
     const alert = await this.alertCtrl.create({
       header: 'Poistetaanko liike?',
       message: 'Haluatko varmasti poistaa tämän liikkeen?',
@@ -290,6 +312,8 @@ export class LisaaTreeni {
    * Nollaa kaikki valinnat ja syötetyt arvot.
    */
   resetSelections() {
+    // Palauta sivun tilat oletuksiin: tyhjennä ohjelman nimi, sulje accordion
+    // ja nollaa jokaisen liikkeen valinnat ja sarjat oletusarvoihin.
     this.programName = ''; // Tyhjennetään ohjelman nimi
 
     if (this.accordionGroup) {
@@ -309,6 +333,7 @@ export class LisaaTreeni {
   }
 
   openCustomMoveModal() {
+    // Avaa pieni modal oman liikkeen luomiselle ja nollaa syötekentät.
     this.newMoveName = '';
     this.newMoveMuscle = '';
     this.newMoveType = 'compound';
@@ -319,13 +344,112 @@ export class LisaaTreeni {
    * When pressing 'cancel' when inside create custom move modal
    */
   cancelCreateCustomMove() {
+    // Peruuta custom-move -modal
     this.isCustomMoveModalOpen = false;
+  }
+
+  /**
+   * Open modal for editing specific exercise sets/reps/weights
+   */
+  openExerciseModal(exercise: ExerciseIsSelected) {
+    // Avaa modal tietylle liikkeelle. Kopioi nykyiset sarjat `modalTempSets`-
+    // taulukkoon, jotta käyttäjä voi muokata/arvot ilman että alkuperäinen
+    // `exercise.sets` muuttuu ennen tallennusta. Tyhjennä myös syötekentät
+    // niin että ne toimivat placeholdereina nykyisille arvoille.
+    this.modalExercise = exercise;
+    this.modalTempSets = (exercise.sets || []).map((s) => ({ ...s }));
+    if (this.modalTempSets.length === 0) {
+      this.modalTempSets = [{ reps: 8, weight: 0 }];
+    }
+    this.modalSingleReps = '';
+    this.modalSingleWeight = '';
+    this.modalInputCount = '';
+    this.isExerciseModalOpen = true;
+  }
+
+  /**
+   * Close modal. If cancelled, do not apply changes. If true passed, treat as cancel.
+   */
+  closeExerciseModal(cancel: boolean = false) {
+    // Sulje modal. Jos `cancel` on tosi, tyhjennä väliaikaiset arvot ja
+    // peruuta muokkaus. Jos taas modal suljetaan tallennuksen jälkeen,
+    // älä ylikirjoita `modalExercise.sets` täällä (saveExerciseModal hoitaa sen).
+    if (cancel) {
+      this.modalTempSets = [];
+      this.modalExercise = null;
+      this.isExerciseModalOpen = false;
+      return;
+    }
+
+    this.modalTempSets = [];
+    this.modalExercise = null;
+    this.isExerciseModalOpen = false;
+  }
+
+  updateModalSetsCount(newLengthVal: string) {
+    // Kun käyttäjä muuttaa sarjojen määrää modalissa, säädä `modalTempSets`
+    // -taulukon pituutta vastaavasti. Uudet sarjat peritään ensimmäisen
+    // setin arvoista oletuksena.
+    const newLength = parseInt(String(newLengthVal), 10);
+    if (isNaN(newLength) || newLength < 0) return;
+
+    const currentLength = this.modalTempSets.length;
+    if (newLength > currentLength) {
+      for (let i = currentLength; i < newLength; i++) {
+        const template = this.modalTempSets[0];
+        this.modalTempSets.push({ reps: template.reps, weight: template.weight });
+      }
+    } else if (newLength < currentLength) {
+      this.modalTempSets.splice(newLength);
+    }
+    // Koska modalissa käytetään nyt yhtä syöteriviä (kaikille sarjoille),
+    // ei tarvitse synkronoida per-set-kenttiä täällä.
+  }
+
+  saveExerciseModal() {
+    // Tallenna modalin syötteet: luo uusi `sets`-taulukko valitulla määrällä
+    // sarjoja ja käytä modalissa annettuja toistoja/painoja. Jos kenttä on
+    // tyhjä tai ei-numeraalinen, käytetään olemassa olevaa arvoa oletuksena.
+    console.log('saveExerciseModal called', {
+      modalExercise: this.modalExercise?.move?.name,
+      modalInputCount: this.modalInputCount,
+      modalSingleReps: this.modalSingleReps,
+      modalSingleWeight: this.modalSingleWeight,
+      modalTempSets: this.modalTempSets,
+    });
+
+    if (!this.modalExercise) {
+      console.warn('saveExerciseModal: modalExercise is null — closing modal without saving');
+      this.isExerciseModalOpen = false;
+      return;
+    }
+
+    // Parsitaan käyttäjän syöte turvallisesti (muuntaen ensin stringiksi).
+    const parsedCount = parseInt(String(this.modalInputCount ?? '').trim(), 10);
+    const targetCount = !isNaN(parsedCount) && parsedCount > 0 ? parsedCount : this.modalTempSets.length;
+
+    const parsedReps = parseInt(String(this.modalSingleReps ?? '').trim(), 10);
+    const parsedWeight = parseInt(String(this.modalSingleWeight ?? '').trim(), 10);
+    const baseReps = !isNaN(parsedReps) ? parsedReps : this.modalTempSets[0].reps;
+    const baseWeight = !isNaN(parsedWeight) ? parsedWeight : this.modalTempSets[0].weight;
+
+    const newSets = [] as { reps: number; weight: number }[];
+    for (let i = 0; i < targetCount; i++) {
+      newSets.push({ reps: baseReps, weight: baseWeight });
+    }
+    // Aseta uudet sarjat muokattavaan harjoitukseen ja pakota UI-päivitys
+    this.modalExercise.sets = newSets;
+    this.exerciseList2 = [...this.exerciseList2];
+
+    // Sulje modal, `closeExerciseModal(false)` vain tyhjentää tilan.
+    this.closeExerciseModal(false);
   }
 
   /**
    * When pressing 'ok' when inside create custom move modal
    */
   confirmCreateCustomMove() {
+    // Luo uusi custom-liike backendissä; validointi pienennetyllä nimellä
     const trimmedName = this.newMoveName.trim();
     if (trimmedName.length > 0 && trimmedName.length <= 30) {
       const newMove = {
@@ -410,6 +534,7 @@ export class LisaaTreeni {
   saveProgram2() {
     // 1. Kerätään kaikki valitut liikkeet yhteen listaan
     // Muutetaan ExerciseIsSelected objektit Exercise muotoon
+    // Kerää valitut liikkeet ja muunna backendin odottamaan muotoon.
     const selectedExercises: Exercise[] = this.exerciseList2
       .reduce(
         (all: ExerciseIsSelected[], c: Category2) => all.concat(c.exercises),

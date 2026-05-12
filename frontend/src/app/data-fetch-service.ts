@@ -180,4 +180,25 @@ export class DataFetchService {
   ): Observable<TrainingSession> {
     return this.http.post<TrainingSession>(this.apiurlSessions, sessionData);
   }
+
+  // ----------------------- CALENDAR METHODS: -----------------------
+ 
+  /**
+   * [GET] Fetches dates of completed training sessions for calendar view.
+   * Palauttaa listan päivämääriä muodossa ['2025-05-01', '2025-05-03', ...].
+   */
+  getCalendarDates(): Observable<string[]> {
+    let googleId = null;
+    try {
+      const sessionDataString = sessionStorage.getItem('accesstoken');
+      if (sessionDataString) {
+        const sessionData = JSON.parse(sessionDataString);
+        googleId = sessionData.googleId;
+      }
+    } catch (error) {
+      console.error('Error parsing session data for googleId:', error);
+    }
+    return this.http.get<string[]>(`${this.apiurlUsers}/${googleId}/calendar`);
+  }
 }
+

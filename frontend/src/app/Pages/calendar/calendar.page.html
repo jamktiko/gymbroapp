@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Kalenteri</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Kalenteri</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="calendar-card">
+    <!-- Navigointi -->
+    <div class="calendar-nav">
+  <ion-button fill="clear" (click)="navigate(-1)">
+    <ion-icon slot="icon-only" name="chevron-back-outline" color="light"></ion-icon>
+  </ion-button>
+
+  <div class="nav-center">
+    <span class="calendar-title">{{ view === 'month' ? getMonthLabel() : getWeekLabel() }}</span>
+    <span class="view-toggle" (click)="toggleView()">
+      {{ view === 'month' ?   ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
+    </span>
+  </div>
+
+  <ion-button fill="clear" (click)="navigate(1)">
+    <ion-icon slot="icon-only" name="chevron-forward-outline" color="light"></ion-icon>
+  </ion-button>
+</div>
+
+    <!-- Viikonpäivien otsikot -->
+    <div class="weekday-header">
+      <span *ngFor="let d of ['Ma','Ti','Ke','To','Pe','La','Su']">{{ d }}</span>
+    </div>
+
+    <!-- Kuukausinäkymä -->
+    <ng-container *ngIf="view === 'month'">
+      <div class="week-row" *ngFor="let week of weeks">
+        <div
+          *ngFor="let day of week"
+          class="day-cell"
+          [class.other-month]="!isCurrentMonth(day)"
+          [class.today]="isToday(day)"
+          [class.has-workout]="hasWorkout(day)"
+        >
+          <span class="day-number">{{ day.getDate() }}</span>
+          <ion-icon *ngIf="hasWorkout(day)" name="checkmark-circle"></ion-icon>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Viikkonäkymä -->
+    <ng-container *ngIf="view === 'week'">
+      <div class="week-row">
+        <div
+          *ngFor="let day of weekDays"
+          class="day-cell"
+          [class.today]="isToday(day)"
+          [class.has-workout]="hasWorkout(day)"
+        >
+          <span class="day-number">{{ day.getDate() }}</span>
+          <ion-icon *ngIf="hasWorkout(day)" name="checkmark-circle"></ion-icon>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>

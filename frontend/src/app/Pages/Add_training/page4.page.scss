@@ -99,6 +99,84 @@ ion-accordion {
   }
 }
 
+    /* --- OPEN SETS MODAL - PAINIKE --- */
+    .open-sets-modal {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(var(--ion-color-primary-rgb), 0.10);
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--ion-color-primary);
+      min-width: 120px;
+      color: var(--ion-color-primary-contrast);
+      transition: background 120ms ease, box-shadow 120ms ease;
+    }
+
+    .open-sets-modal:hover {
+      background: rgba(var(--ion-color-primary-rgb), 0.16);
+      box-shadow: 0 4px 18px rgba(var(--ion-color-primary-rgb), 0.08);
+    }
+
+    .open-sets-modal .stats-summary {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--ion-text-color);
+    }
+
+    .open-sets-modal .open-label {
+      font-size: 0.75rem;
+      color: var(--ion-color-primary);
+      margin-left: 6px;
+    }
+
+    /* Ensure inputs inside modal look consistent */
+    .sets-list ion-item ion-input {
+      width: 80px;
+      margin-left: 8px;
+    }
+
+    /* Modal card styles */
+    .exercise-modal-card {
+      background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.55));
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
+
+    .exercise-modal-card .modal-header-row h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--ion-color-primary);
+    }
+
+    .exercise-modal-card .modal-sub {
+      margin: 4px 0 10px 0;
+      color: var(--ion-color-primary-contrast);
+      opacity: 0.85;
+    }
+
+    .exercise-modal-card .set-row ion-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .exercise-modal-card .set-label {
+      width: 80px;
+      color: var(--ion-text-color);
+    }
+
+    .exercise-modal-card ion-input {
+      width: 110px;
+    }
+
+    .exercise-modal-card .modal-actions ion-button {
+      margin-top: 6px;
+    }
+
 /* --- SETS, REPS, KG YKSIKKÖ --- */
 .stats-container {
   flex-shrink: 0;

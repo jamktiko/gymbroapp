@@ -46,4 +46,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Pages/page8/page8.page').then((m) => m.Page8Page),
   },
+  {
+    path: 'calendar',
+    loadComponent: () => import('./Pages/calendar/calendar.page').then( m => m.CalendarPage)
+  },
+
 ];
