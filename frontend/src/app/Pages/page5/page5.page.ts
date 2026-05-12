@@ -18,7 +18,7 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowForward, arrowBack, checkmarkDone, timerOutline } from 'ionicons/icons';
+import { arrowForward, arrowBack, checkmarkDone, timerOutline, trashOutline } from 'ionicons/icons';
 import { TrainingProgram, TrainingSession, Exercise } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
 import { DataFetchService } from '../../data-fetch-service';
@@ -55,7 +55,7 @@ export class Page5Page implements OnInit {
   private navCtrl = inject(NavController);
   @ViewChild('workoutTimer') timer!: TimerComponent;
   // --- TREENIN TILA ---
-  public activeWorkoutReordered!: TrainingProgram;
+  public activeWorkoutReordered?: TrainingProgram;
   public currentIndex = 0;
   public workoutTimerDuration = 120;
   // finish confirmation state: user must click twice within short time to confirm finish
@@ -68,12 +68,67 @@ export class Page5Page implements OnInit {
   private dataFetchService = inject(DataFetchService);
 
   constructor() {
-    addIcons({ arrowForward, arrowBack, checkmarkDone, timerOutline });
+    addIcons({ arrowForward, arrowBack, checkmarkDone, timerOutline, trashOutline });
 
     // Luetaan navigoinnin mukana tullut treenidata
     const navigation = this.router.currentNavigation();
     this.activeWorkoutReordered =
       navigation?.extras.state?.['activeWorkoutReordered'];
+  }
+
+  /**
+   * Poistaa viimeisen setin annetusta liikkeestä (käyttäjän pyynnöstä).
+   * Päivittää myös `performedInputs`-rakenteen vastaavasti.
+   */
+  async removeLastSet(exerciseIndex: number) {
+    const ex = this.activeWorkoutReordered?.exercises?.[exerciseIndex];
+    if (!ex || !ex.sets) return;
+
+    // Estetään kaikkien settien poistaminen: vähintään yksi pitää jäädä
+    if (ex.sets.length <= 1) {
+      const alert = await this.alertController.create({
+        header: 'Ei sallittu',
+        message: 'Liikkeellä täytyy olla vähintään yksi setti. Et voi poistaa viimeistä settiä.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+
+    // Varmistetaan käyttäjältä ennen lopullista poistoa
+    const confirm = await this.alertController.create({
+      header: 'Poistetaanko setti?',
+      message: 'Haluatko varmasti poistaa viimeisen setin?',
+      cssClass: 'delete-set-alert',
+      buttons: [
+        {
+          text: 'Peruuta',
+          role: 'cancel',
+        },
+        {
+          text: 'Poista',
+          role: 'destructive',
+          handler: () => {
+            // Poistetaan viimeinen set
+            ex.sets.splice(ex.sets.length - 1, 1);
+
+            // Poistetaan vastaava performedInputs-rivi, jos sellainen on
+            if (!this.performedInputs) this.performedInputs = [];
+            if (!this.performedInputs[exerciseIndex]) this.performedInputs[exerciseIndex] = { sets: [] };
+            if (this.performedInputs[exerciseIndex].sets && this.performedInputs[exerciseIndex].sets.length > 0) {
+              this.performedInputs[exerciseIndex].sets.splice(this.performedInputs[exerciseIndex].sets.length - 1, 1);
+            }
+
+            // Triggeröidään change-detection varmistavasti uudella taulukolla
+            if (this.activeWorkoutReordered && this.activeWorkoutReordered.exercises) {
+              this.activeWorkoutReordered.exercises = [...this.activeWorkoutReordered.exercises];
+            }
+          },
+        },
+      ],
+    });
+
+    await confirm.present();
   }
 
   /**
@@ -133,6 +188,13 @@ export class Page5Page implements OnInit {
     this.expandedSets[index] = !this.expandedSets[index];
     // moving around resets any pending finish confirmation
     this.resetFinishConfirm();
+  }
+
+  /**
+   * Safe accessor for expanded state to avoid "possibly undefined" when indexing the array.
+   */
+  getExpanded(index: number): boolean {
+    return !!(this.expandedSets && this.expandedSets[index]);
   }
 
   // Poistettu globaalin `limitInput`-funktion käyttö; käytetään per-set-funktiota `limitPerSetInput`.
@@ -280,7 +342,7 @@ export class Page5Page implements OnInit {
       TrainingSession,
       '_id' | 'createdAt' | 'updatedAt' | 'datetime'
     > = {
-      exercises: this.activeWorkoutReordered.exercises,
+      exercises: this.activeWorkoutReordered?.exercises || [],
       breakTimeSeconds: this.workoutTimerDuration,
     };
 

@@ -160,19 +160,41 @@ ion-content {
   margin-top: 18px;
 }
 .set-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 56px 14% 30% 30%;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   padding: 8px 0;
 }
 .set-label {
   color: #aaa;
-  width: 18%;
   text-align: left;
 }
 .set-reps, .set-weight {
-  width: 38%;
+  width: 100%;
+}
+.set-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.remove-set-btn-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(255, 59, 48, 0.06);
+}
+.remove-set-btn-inline ion-icon {
+  font-size: 22px;
+  color: var(--ion-color-danger, #ff3b30);
+}
+
+/* New bottom-remove layout */
+.remove-row {
+  display: none;
 }
 .keskeyta {
   margin: 10px;
@@ -217,3 +239,4 @@ ion-menu-button {
   text-transform: uppercase; // Lisää auktoriteettia painikkeeseen
   margin-bottom: 60px;
 }
+
