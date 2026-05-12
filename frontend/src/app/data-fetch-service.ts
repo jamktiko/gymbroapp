@@ -18,12 +18,10 @@ import {
   providedIn: 'root',
 })
 export class DataFetchService {
-  private apiurlMoves = 'https://dzw1f1bfpf15d.cloudfront.net/api/moves';
-  private apiurlUsers = 'https://dzw1f1bfpf15d.cloudfront.net/api/users';
-  private apiurlPrograms =
-    'https://dzw1f1bfpf15d.cloudfront.net/api/training-programs';
-  private apiurlSessions =
-    'https://dzw1f1bfpf15d.cloudfront.net/api/training-sessions';
+  private apiurlMoves =    'https://dzw1f1bfpf15d.cloudfront.net/api/moves';
+  private apiurlUsers =    'https://dzw1f1bfpf15d.cloudfront.net/api/users';
+  private apiurlPrograms = 'https://dzw1f1bfpf15d.cloudfront.net/api/training-programs';
+  private apiurlSessions = 'https://dzw1f1bfpf15d.cloudfront.net/api/training-sessions';
 
   private http = inject(HttpClient);
 
@@ -149,6 +147,17 @@ export class DataFetchService {
    */
   deleteProgram(id: string): Observable<TrainingProgram> {
     return this.http.delete<TrainingProgram>(`${this.apiurlPrograms}/${id}`);
+  }
+
+  /**
+  * [PATCH] Updates an existing trainingprogram.
+  */
+  updateProgram(
+    id: string,
+      programData: Partial<Omit<TrainingProgram, '_id' | '__v'>>,
+    ): Observable<TrainingProgram> {
+      return this.http.patch<TrainingProgram>(
+    `${this.apiurlPrograms}/${id}`, programData);
   }
 
   // ----------------------- TRAININGSESSION METHODS: -----------------------

@@ -1,5 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>Kalenteri</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -21,7 +24,7 @@
   <div class="nav-center">
     <span class="calendar-title">{{ view === 'month' ? getMonthLabel() : getWeekLabel() }}</span>
     <span class="view-toggle" (click)="toggleView()">
-      {{ view === 'month' ?   ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
+      {{ view === 'month' ? ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
     </span>
   </div>
 
