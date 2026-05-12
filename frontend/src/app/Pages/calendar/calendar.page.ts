@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { DataFetchService } from '../../data-fetch-service'; // päivitä polku
+import { DataFetchService } from '../../data-fetch-service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircle } from 'ionicons/icons';
+import {
+  checkmarkCircle,
+  chevronBackOutline,
+  chevronForwardOutline,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-calendar',
@@ -21,7 +25,7 @@ export class CalendarPage implements OnInit {
   weekDays: Date[] = [];
 
   constructor(private dataFetchService: DataFetchService) {
-  addIcons({ checkmarkCircle });
+    addIcons({ checkmarkCircle, chevronBackOutline, chevronForwardOutline });
   }
 
   ngOnInit() {
@@ -32,6 +36,7 @@ export class CalendarPage implements OnInit {
   }
 
   buildCalendar() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this.view === 'month' ? this.buildMonth() : this.buildWeek();
   }
 
@@ -67,11 +72,18 @@ export class CalendarPage implements OnInit {
   }
 
   hasWorkout(date: Date): boolean {
-    return this.workoutDates.has(date.toISOString().split('T')[0]);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return this.workoutDates.has(`${year}-${month}-${day}`);
   }
 
   isToday(date: Date): boolean {
-    return date.toISOString().split('T')[0] === this.today.toISOString().split('T')[0];
+    return (
+      date.getDate() === this.today.getDate() &&
+      date.getMonth() === this.today.getMonth() &&
+      date.getFullYear() === this.today.getFullYear()
+    );
   }
 
   isCurrentMonth(date: Date): boolean {
@@ -95,7 +107,10 @@ export class CalendarPage implements OnInit {
   }
 
   getMonthLabel(): string {
-    return this.currentDate.toLocaleDateString('fi-FI', { month: 'long', year: 'numeric' });
+    return this.currentDate.toLocaleDateString('fi-FI', {
+      month: 'long',
+      year: 'numeric',
+    });
   }
 
   getWeekLabel(): string {
