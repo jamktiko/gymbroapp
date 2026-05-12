@@ -135,7 +135,7 @@ export class AppComponent implements OnInit {
       if (sessionDataStr) {
         const sessionData = JSON.parse(sessionDataStr);
         // 2. Use sessionData.googleId for the URL. Added backend port 3000.
-        const url = `http://localhost:3000/api/users/${sessionData.googleId}`;
+        const url = `https://dzw1f1bfpf15d.cloudfront.net/api/users/${sessionData.googleId}`;
 
         // 3. Use sessionData.token for the Authorization header
         this.http

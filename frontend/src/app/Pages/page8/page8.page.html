@@ -8,60 +8,89 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="content-container">
-    
-    <!-- Yhteenveto-osio -->
-    <div class="header-stats ion-text-center ion-padding">
-      <ion-icon name="trophy" color="warning" style="font-size: 48px;"></ion-icon>
-      <h2 style="margin-top: 5px;">Sinun edistymisesi</h2>
-     <p>Olet avannut {{ unlockedCount }} / {{ achievements.length }} saavutusta</p>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Saavutukset</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Stats-kortit -->
+  <div class="stats-grid">
+    <div class="stat-box">
+      <small>XP</small>
+      <p>{{ totalXp }}</p>
     </div>
-
-    <!-- Saavutusruudukko -->
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12" size-sm="6" *ngFor="let item of achievements">
-          <ion-card [style.opacity]="item.unlocked ? '1' : '0.7'">
-            <ion-grid>
-              <ion-row class="ion-align-items-center">
-                <ion-col size="3" class="ion-text-center">
-                  <ion-icon 
-                    [name]="item.unlocked ? item.icon : 'lock-closed'" 
-                    [color]="item.unlocked ? item.color : 'medium'"
-                    style="font-size: 32px;">
-                  </ion-icon>
-                </ion-col>
-                <ion-col size="9">
-                  <ion-card-header class="ion-no-padding">
-                    <ion-card-title style="font-size: 1.1rem;">{{ item.title }}</ion-card-title>
-                  </ion-card-header>
-                  <ion-card-content class="ion-no-padding ion-margin-top">
-                    <p>{{ item.description }}</p>
-                    
-                    <div *ngIf="!item.unlocked" class="ion-margin-top">
-                      <ion-progress-bar [value]="item.progress" [color]="item.color"></ion-progress-bar>
-                      <ion-text color="medium">
-                        <small>{{ (item.progress * 100).toFixed(0) }}% suoritettu</small>
-                      </ion-text>
-                    </div>
-
-                    <ion-text color="success" *ngIf="item.unlocked">
-                      <small><b>Saavutettu!</b></small>
-                    </ion-text>
-                  </ion-card-content>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
+    <div class="stat-box">
+      <small>Taso</small>
+      <p>{{ level }}</p>
+    </div>
+    <div class="stat-box">
+      <small>Treenikerrat</small>
+      <p>{{ totalSessions }}</p>
+    </div>
+    <div class="stat-box">
+      <small>Seuraava taso</small>
+      <p>{{ xpToNextLevel }} XP</p>
+    </div>
   </div>
-</ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <ion-title></ion-title>
-  </ion-toolbar>
-</ion-footer>
+  <!-- Piirakkagraafi -->
+  <ion-card class="chart-card">
+  <ion-card-header>
+    <ion-card-title>Lihasryhmäjakauma</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <canvas
+      baseChart
+      [data]="pieChartData"
+      [options]="pieChartOptions"
+      type="pie"
+    ></canvas>
+    <p *ngIf="!pieChartData.datasets[0].data.length" class="no-data">
+      Ei vielä treenidataa
+    </p>
+  </ion-card-content>
+</ion-card>
+
+  <!-- Saavutukset -->
+  <ion-card class="achievements-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="trophy"></ion-icon>
+        Saavutukset ({{ unlockedCount }}/{{ achievements.length }})
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="achievement-row" *ngFor="let a of achievements" [class.locked]="!a.unlocked">
+        <div class="achievement-icon">
+          <ion-icon [name]="a.unlocked ? a.icon : 'lock-closed'" [color]="a.unlocked ? a.color : 'medium'"></ion-icon>
+        </div>
+        <div class="achievement-info">
+          <span class="achievement-title">{{ a.title }}</span>
+          <span class="achievement-desc">{{ a.description }}</span>
+          <ion-progress-bar [value]="a.progress" [color]="a.color"></ion-progress-bar>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Personal Records -->
+  <ion-card class="records-card" *ngIf="personalRecords.length > 0">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="ribbon"></ion-icon>
+        Henkilökohtaiset ennätykset
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="record-row" *ngFor="let record of personalRecords">
+        <div class="record-info">
+          <span class="record-exercise">{{ record.exercise }}</span>
+          <span class="record-group">{{ record.muscleGroup }}</span>
+        </div>
+        <span class="record-weight">{{ record.weight }} kg</span>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

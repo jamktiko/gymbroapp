@@ -5,7 +5,7 @@
         <span>LVL {{userData?.level}}</span>
       </div>
       <div class="progress-wrapper">
-        <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async"></ion-progress-bar>
+        <ion-progress-bar class="xpbar" [value]="levelProgress" />
       </div>
     </div>
     <ion-buttons slot="end">
@@ -22,9 +22,8 @@
     <p class="placeholder">
       Täällä näkyvät omat treeniohjelmasi. Aloita luomalla uusi ohjelma!
     </p>
-    }
-
-    @if (usersTrainingPrograms.length > 0) {
+    } @if (usersTrainingPrograms.length > 0) {
+    <!-- LISÄTTY: (ionChange) kuuntelija -->
     <ion-accordion-group (ionChange)="onAccordionChange($event)">
       @for (program of usersTrainingPrograms; track $index) {
       <ion-accordion [value]="program._id">
@@ -36,25 +35,27 @@
           </ion-label>
 
           <!-- Poistonappi -->
-          <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"
-            [disabled]="program.isDefault">
+          <ion-button
+            slot="end"
+            fill="clear"
+            color="danger"
+            (click)="deleteProgram(program._id, $event)"
+            [disabled]="program.isDefault"
+          >
             <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+          <!-- Muokkaus -->
+          <ion-button slot="end" fill="clear" color="medium"
+          [disabled]="program.isDefault"
+          (click)="editProgram(program, $event)">
+          <ion-icon name="pencil-outline"></ion-icon>
           </ion-button>
         </ion-item>
 
-        <div class="ion-padding" slot="content" style="background: transparent;">
-
-          <!--  Reorder-ryhmä liikkeiden ympärille -->
-          <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($event, program)">
-
-            @for (ex of program.exercises; track ex.move.name + $index) {
-            <ion-item style="--background: transparent;">
-
-              <!-- LISÄTTY: Raahauskahva liikkeen alkuun -->
-              <ion-reorder slot="start">
-                <ion-icon name="reorder-two-outline" style="color: var(--ion-color-medium)"></ion-icon>
-              </ion-reorder>
-
+        <div class="ion-padding" slot="content" style="background: transparent">
+          <ion-list lines="full">
+            @for (ex of program.exercises; track $index) {
+            <ion-item style="--background: transparent">
               <ion-label>
                 <h3>{{ ex.move.name }}</h3>
                 <p>
@@ -65,11 +66,14 @@
               </ion-label>
             </ion-item>
             }
-
-          </ion-reorder-group>
-
+          </ion-list>
           <div style="padding: 10px 0">
-            <ion-button color="primary" expand="block" shape="round" (click)="startProgram(program)">
+            <ion-button
+              color="primary"
+              expand="block"
+              shape="round"
+              (click)="startProgram(program)"
+            >
               <ion-icon slot="start" name="play"></ion-icon>
               ALOITA TREENI
             </ion-button>
@@ -81,6 +85,7 @@
     }
   </div>
 
+  <!-- MUOKATTU: FAB-nappi piilotetaan, jos isAccordionOpen on true -->
   @if (!isAccordionOpen) {
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="primary" (click)="lisaaOhjelma()">

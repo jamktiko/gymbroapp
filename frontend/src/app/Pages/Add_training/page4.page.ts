@@ -94,7 +94,7 @@ export class LisaaTreeni {
   constructor() {
     addIcons({ addOutline, trashOutline });
   }
-  preSelectExercises(existingExercises: Exercise[]) {
+preSelectExercises(existingExercises: Exercise[]) {
   existingExercises.forEach(ex => {
     this.exerciseList2.forEach(cat => {
       cat.exercises.forEach(e => {
@@ -105,6 +105,8 @@ export class LisaaTreeni {
       });
     });
   });
+  // Pakotetaan Ionicin change detection huomaamaan muutokset päivittämällä
+  // taulukon viite — muuten UI ei välttämättä päivity automaattisesti
   this.exerciseList2 = [...this.exerciseList2];
 }
   /**

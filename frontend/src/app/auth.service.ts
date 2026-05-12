@@ -1,5 +1,6 @@
-import { inject, Injectable } from '@angular/core';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,8 +9,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private googleLoginUrl =
-    'https://dzw1f1bfpf15d.cloudfront.net/api/auth/google';
+  private googleLoginUrl = 'https://dzw1f1bfpf15d.cloudfront.net/api/auth/google';
   public token: string;
   private jwtHelp = new JwtHelperService();
   private http = inject(HttpClient);
@@ -20,6 +20,20 @@ export class AuthService {
     );
     this.token = currentUser || currentUser.token;
   }
+
+  async googleLogin() {
+  const googleUser = await GoogleAuth.signIn();
+  const idToken = googleUser.authentication.idToken;
+  const googleId = googleUser.id;
+  
+  
+  return new Promise((resolve) => {
+    this.glogin(idToken, googleId).subscribe({
+      next: (success) => resolve(success),
+      error: () => resolve(false)
+    });
+  });
+}
 
   glogin(googleIdToken: string, googleId: string): Observable<boolean> {
     // console.log(googleId);
