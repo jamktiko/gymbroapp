@@ -26,8 +26,8 @@ exports.getStats = async (req, res) => {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
 
-    const muscleMap = {};   // { "Rinta": 24, "Selkä": 18, ... }
-    const recordMap = {};   // { "Rinta": { exercise: "Penkkipunnerrus", weight: 85 }, ... }
+    const muscleMap = {}; // { "Rinta": 24, "Selkä": 18, ... }
+    const recordMap = {}; // { "Rinta": { exercise: "Penkkipunnerrus", weight: 85 }, ... }
 
     for (const session of user.trainingSessions) {
       for (const exercise of session.exercises) {
@@ -47,7 +47,7 @@ exports.getStats = async (req, res) => {
     }
 
     const muscleDistribution = Object.entries(muscleMap).map(
-      ([muscleGroup, count]) => ({ muscleGroup, count })
+      ([muscleGroup, count]) => ({ muscleGroup, count }),
     );
 
     const personalRecords = Object.entries(recordMap).map(
@@ -55,7 +55,7 @@ exports.getStats = async (req, res) => {
         muscleGroup,
         exercise: data.exercise,
         weight: data.weight,
-      })
+      }),
     );
 
     res.json({
@@ -90,14 +90,20 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     if (req.user.googleId !== req.params.id) {
-      return res.status(403).json({ error: 'Ei oikeuksia muokata toista käyttäjää' });
+      return res
+        .status(403)
+        .json({ error: 'Ei oikeuksia muokata toista käyttäjää' });
     }
     // Suojataan level ja exp suoralta muokkaukselta (lisätään logiikka myöhemmin)
     const { ...safeFields } = req.body;
-    const user = await User.findOneAndUpdate({ googleId: req.params.id }, safeFields, {
-      returnDocument: 'after',
-      runValidators: true,
-    });
+    const user = await User.findOneAndUpdate(
+      { googleId: req.params.id },
+      safeFields,
+      {
+        returnDocument: 'after',
+        runValidators: true,
+      },
+    );
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
@@ -111,7 +117,9 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     if (req.user.googleId !== req.params.id) {
-      return res.status(403).json({ error: 'Ei oikeuksia poistaa toista käyttäjää' });
+      return res
+        .status(403)
+        .json({ error: 'Ei oikeuksia poistaa toista käyttäjää' });
     }
     const user = await User.findOneAndDelete({ googleId: req.params.id });
     if (!user) {
@@ -132,19 +140,17 @@ exports.getCalendarDates = async (req, res) => {
     // Haetaan vain datetime-kenttä, ei koko trainingSessions-arrayta
     const user = await User.findOne(
       { googleId: req.params.id },
-      { 'trainingSessions.datetime': 1 }
+      { 'trainingSessions.datetime': 1 },
     );
     if (!user) {
       return res.status(404).json({ error: 'Käyttäjää ei löytynyt' });
     }
     // Palautetaan pelkät päivämäärät YYYY-MM-DD muodossa
-    const dates = user.trainingSessions.map((s) =>
-      s.datetime.toISOString().split('T')[0]
+    const dates = user.trainingSessions.map(
+      (s) => s.datetime.toISOString().split('T')[0],
     );
     res.json(dates);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
-

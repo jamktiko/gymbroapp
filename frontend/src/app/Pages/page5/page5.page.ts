@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MenuController, AlertController } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
@@ -11,15 +12,19 @@ import {
   IonFooter,
   IonHeader,
   IonMenuButton,
+  IonInput,
   IonToolbar,
   IonTitle,
   IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowForward, checkmarkDone, timerOutline } from 'ionicons/icons';
-import { TrainingProgram, TrainingSession } from '../../types/userdata';
+import { arrowForward, arrowBack, checkmarkDone, timerOutline, trashOutline } from 'ionicons/icons';
+import { TrainingProgram, TrainingSession, Exercise } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
 import { DataFetchService } from '../../data-fetch-service';
+
+// Setin tyyppi suorituksille
+type PerformedSet = { reps?: number; weight?: number };
 
 @Component({
   selector: 'app-page5',
@@ -35,6 +40,7 @@ import { DataFetchService } from '../../data-fetch-service';
     IonButtons,
     IonMenuButton,
     IonButton,
+      IonInput,
     IonFooter,
     IonTitle,
     IonIcon,
@@ -46,20 +52,110 @@ export class Page5Page implements OnInit {
   private http = inject(HttpClient);
   private menu = inject(MenuController);
   private alertController = inject(AlertController);
+  private navCtrl = inject(NavController);
   @ViewChild('workoutTimer') timer!: TimerComponent;
   // --- TREENIN TILA ---
-  public activeWorkoutReordered!: TrainingProgram;
+  public activeWorkoutReordered?: TrainingProgram;
   public currentIndex = 0;
   public workoutTimerDuration = 120;
+  // finish confirmation state: user must click twice within short time to confirm finish
+  public finishConfirm = false;
+  private finishConfirmTimeoutId: number | undefined;
+  // Käyttäjän syöttämät suoritetut arvot per liike
+  public performedInputs: { sets?: PerformedSet[] }[] = [];
+  // Hallitsee, onko kyseisen liikkeen settilista avattuna
+  public expandedSets: boolean[] = [];
   private dataFetchService = inject(DataFetchService);
 
   constructor() {
-    addIcons({ arrowForward, checkmarkDone, timerOutline });
+    addIcons({ arrowForward, arrowBack, checkmarkDone, timerOutline, trashOutline });
 
     // Luetaan navigoinnin mukana tullut treenidata
     const navigation = this.router.currentNavigation();
     this.activeWorkoutReordered =
       navigation?.extras.state?.['activeWorkoutReordered'];
+  }
+
+  /**
+   * Poistaa viimeisen setin annetusta liikkeestä (käyttäjän pyynnöstä).
+   * Päivittää myös `performedInputs`-rakenteen vastaavasti.
+   */
+  async removeLastSet(exerciseIndex: number) {
+    const ex = this.activeWorkoutReordered?.exercises?.[exerciseIndex];
+    if (!ex || !ex.sets) return;
+
+    // Estetään kaikkien settien poistaminen: vähintään yksi pitää jäädä
+    if (ex.sets.length <= 1) {
+      const alert = await this.alertController.create({
+        header: 'Ei sallittu',
+        message: 'Liikkeellä täytyy olla vähintään yksi setti. Et voi poistaa viimeistä settiä.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+
+    // Varmistetaan käyttäjältä ennen lopullista poistoa
+    const confirm = await this.alertController.create({
+      header: 'Poistetaanko setti?',
+      message: 'Haluatko varmasti poistaa viimeisen setin?',
+      cssClass: 'delete-set-alert',
+      buttons: [
+        {
+          text: 'Peruuta',
+          role: 'cancel',
+        },
+        {
+          text: 'Poista',
+          role: 'destructive',
+          handler: () => {
+            // Poistetaan viimeinen set
+            ex.sets.splice(ex.sets.length - 1, 1);
+
+            // Poistetaan vastaava performedInputs-rivi, jos sellainen on
+            if (!this.performedInputs) this.performedInputs = [];
+            if (!this.performedInputs[exerciseIndex]) this.performedInputs[exerciseIndex] = { sets: [] };
+            if (this.performedInputs[exerciseIndex].sets && this.performedInputs[exerciseIndex].sets.length > 0) {
+              this.performedInputs[exerciseIndex].sets.splice(this.performedInputs[exerciseIndex].sets.length - 1, 1);
+            }
+
+            // Triggeröidään change-detection varmistavasti uudella taulukolla
+            if (this.activeWorkoutReordered && this.activeWorkoutReordered.exercises) {
+              this.activeWorkoutReordered.exercises = [...this.activeWorkoutReordered.exercises];
+            }
+          },
+        },
+      ],
+    });
+
+    await confirm.present();
+  }
+
+  /**
+   * Kopioi käyttäjän syöttämät suoritetut arvot valitun liikkeen seteihin
+   */
+  private applyPerformedToExercise(index: number) {
+    const exercise = this.activeWorkoutReordered?.exercises[index];
+    if (!exercise) return;
+
+    const performedEntry = this.performedInputs[index];
+    const performedSets = performedEntry?.sets;
+
+    // Kopioi per-set-arvot käyttäjän syötteestä exercise.sets:iin
+    if (performedSets && performedSets.length > 0) {
+      // Käy läpi niin monta settiä kuin käyttäjä on syöttänyt tai kuin exercise.sets sisältää
+      const count = Math.min(performedSets.length, exercise.sets.length);
+      for (let i = 0; i < count; i++) {
+        const p = performedSets[i];
+        if (!p) continue;
+        if (p.reps !== undefined && p.reps !== null) {
+          exercise.sets[i].reps = Number(p.reps);
+        }
+        if (p.weight !== undefined && p.weight !== null) {
+          exercise.sets[i].weight = Number(p.weight);
+        }
+      }
+    }
   }
 
   ngOnInit() {
@@ -69,12 +165,89 @@ export class Page5Page implements OnInit {
     if (!this.activeWorkoutReordered) {
       this.router.navigate(['/page2']);
     }
+    // Alusta tyhjät performedInputs niin, että oletusarvot näytetään placeholderina
+    // mutta käyttäjän syötöt tallentuvat performedInputs:iin ja pysyvät näkyvissä.
+    this.performedInputs = (this.activeWorkoutReordered?.exercises || []).map((ex) => ({
+      sets: (ex.sets || []).map(() => ({} as PerformedSet)),
+    }));
+
+    // Alusta dropdown-tilat (oletuksena suljettu)
+    this.expandedSets = (this.activeWorkoutReordered?.exercises || []).map(() => false);
+  }
+
+  private resetFinishConfirm() {
+    if (this.finishConfirmTimeoutId !== undefined) {
+      clearTimeout(this.finishConfirmTimeoutId);
+      this.finishConfirmTimeoutId = undefined;
+    }
+    this.finishConfirm = false;
+  }
+
+  toggleSets(index: number) {
+    if (!this.expandedSets) this.expandedSets = [];
+    this.expandedSets[index] = !this.expandedSets[index];
+    // moving around resets any pending finish confirmation
+    this.resetFinishConfirm();
+  }
+
+  /**
+   * Safe accessor for expanded state to avoid "possibly undefined" when indexing the array.
+   */
+  getExpanded(index: number): boolean {
+    return !!(this.expandedSets && this.expandedSets[index]);
+  }
+
+  // Poistettu globaalin `limitInput`-funktion käyttö; käytetään per-set-funktiota `limitPerSetInput`.
+
+  /**
+   * Rajaa per-set syötteen pituuden enintään 6 merkkiin ja päivittää `performedInputs[index].sets[i]`.
+   */
+  limitPerSetInput(
+    event: Event & { detail?: { value?: string | number | null } },
+    index: number,
+    setIndex: number,
+    field: 'reps' | 'weight',
+  ) {
+    const rawVal = event?.detail?.value;
+    const strVal = rawVal === null || rawVal === undefined ? '' : String(rawVal);
+    const truncated = strVal.length > 6 ? strVal.slice(0, 6) : strVal;
+
+    // Päivitä näkyvä kenttä
+    const target = event.target as unknown as { value?: string } | null;
+    if (target && typeof target.value === 'string') target.value = truncated;
+
+    if (!this.performedInputs[index]) this.performedInputs[index] = { sets: [] };
+    if (!this.performedInputs[index].sets) this.performedInputs[index].sets = [];
+    if (!this.performedInputs[index].sets![setIndex]) this.performedInputs[index].sets![setIndex] = {};
+
+    if (truncated === '') {
+      this.performedInputs[index].sets![setIndex][field] = undefined;
+      return;
+    }
+
+    const asNumber = Number(truncated);
+    this.performedInputs[index].sets![setIndex][field] = Number.isNaN(asNumber) ? undefined : asNumber;
+  }
+
+  /**
+   * Safe getter used by the template to avoid possible 'undefined' access.
+   * Returns a string (for binding to [value]) or empty string when not present.
+   */
+  getPerformedValue(index: number, setIndex: number, field: 'reps' | 'weight'): string | number {
+    if (!this.performedInputs) return '';
+    const entry = this.performedInputs[index];
+    if (!entry || !entry.sets) return '';
+    const set = entry.sets[setIndex];
+    if (!set) return '';
+    const val = set[field];
+    return val === undefined || val === null ? '' : val;
   }
   ionViewWillEnter() {
     this.menu.enable(false); //menu disabled
   }
   ionViewWillLeave() {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+    this.resetFinishConfirm();
   }
   async keskeytaTreeniVahvistus() {
     //keskeyttää treenin
@@ -118,8 +291,8 @@ export class Page5Page implements OnInit {
   /**
    * Palauttaa  liikkeen datan.
    */
-  get currentExercise() {
-    return this.activeWorkoutReordered?.exercises[this.currentIndex];
+  get currentExercise(): Exercise | undefined {
+    return this.activeWorkoutReordered?.exercises?.[this.currentIndex];
   }
 
   // --- TREENILOGIIKKA ---
@@ -139,7 +312,26 @@ export class Page5Page implements OnInit {
       this.currentIndex <
       (this.activeWorkoutReordered?.exercises?.length || 0) - 1
     ) {
+      // Tallenna käyttäjän syöttämät suoritetut arvot nykyiseen liikkeeseen
+      this.applyPerformedToExercise(this.currentIndex);
       this.currentIndex++;
+    }
+  }
+  
+  /**
+   * Siirtyy edelliseen liikkeeseen.
+   */
+  edellinenLiike() {
+    // pysäytetään ja nollataan kello
+    if (this.timer) {
+      this.timer.forceStopAndReset();
+    }
+
+    if (this.currentIndex > 0) {
+      // Tallenna mahdolliset syötöt nykyisestä liikkeestä
+      this.applyPerformedToExercise(this.currentIndex);
+      this.currentIndex--;
+      this.resetFinishConfirm();
     }
   }
   /**
@@ -150,7 +342,7 @@ export class Page5Page implements OnInit {
       TrainingSession,
       '_id' | 'createdAt' | 'updatedAt' | 'datetime'
     > = {
-      exercises: this.activeWorkoutReordered.exercises,
+      exercises: this.activeWorkoutReordered?.exercises || [],
       breakTimeSeconds: this.workoutTimerDuration,
     };
 
@@ -159,13 +351,35 @@ export class Page5Page implements OnInit {
       this.timer.forceStopAndReset();
     }
 
+    // Tallenna myös nykyisen liikkeen suoritetut arvot ennen lopetusta
+    this.applyPerformedToExercise(this.currentIndex);
+
     this.currentIndex = 0;
 
     // navigoi xp-näkymään:
-    this.router.navigate(['/page6'], {
-      replaceUrl: true,
+    this.navCtrl.navigateRoot('/page6', {
+      animated: true,
       state: { finishedSession: finishedSession },
     });
+  }
+
+  /**
+   * Wrapper for Finish button: requires two clicks within a short time window.
+   */
+  confirmFinish() {
+    if (this.finishConfirm) {
+      // second click: proceed
+      this.resetFinishConfirm();
+      this.lopetaTreeni();
+      return;
+    }
+
+    // first click: set flag and timeout to reset
+    this.finishConfirm = true;
+    this.finishConfirmTimeoutId = window.setTimeout(() => {
+      this.finishConfirm = false;
+      this.finishConfirmTimeoutId = undefined;
+    }, 3000);
   }
 }
 
@@ -180,3 +394,4 @@ export class Page5Page implements OnInit {
 //     state: { activeWorkoutReordered: programToLaunch },
 //   })
 // }
+

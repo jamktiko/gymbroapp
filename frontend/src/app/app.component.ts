@@ -81,16 +81,15 @@ export class AppComponent implements OnInit {
   public appPages = [
     { title: 'Treenit', url: '/page2', icon: 'barbell' },
     { title: 'Saavutukset', url: '/page8', icon: 'golf' },
-    { title: 'Historia', url: '/calendar', icon: 'calendar' },
+    { title: 'Kalenteri', url: '/../calendar', icon: 'calendar' },
     { title: 'Statsit', url: '/page7', icon: 'analytics' },
-
   ];
 
   protected router = inject(Router);
   public loadingService = inject(LoadingService);
   public authService = inject(AuthService);
   private http = inject(HttpClient);
-  testData!: UserData;
+  userData!: UserData;
 
   private loginEventService = inject(LoginEventService);
   private dataFetchService = inject(DataFetchService);
@@ -119,55 +118,34 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    GoogleAuth.initialize();// loginEventService ja checkUserStatus() yhdessä varmistavat että sivubarin menun käyttäjätiedot ovat ajan tasalla login ja logout tapahtumien jälkeenkin:
+    GoogleAuth.initialize(); // loginEventService ja fetchUserData() yhdessä varmistavat että sivubarin menun käyttäjätiedot ovat ajan tasalla login ja logout tapahtumien jälkeenkin:
     this.loginEventService.loggedIn$.subscribe(() => {
-      this.checkUserStatus();
+      this.fetchUserData();
       return;
     });
-    this.checkUserStatus();
+    this.fetchUserData();
   }
 
-  checkUserStatus() {
-    // fetch userdata from backend:
-    try {
-      // 1. Get the object from sessionStorage
-      const sessionDataStr = sessionStorage.getItem('accesstoken');
-      if (sessionDataStr) {
-        const sessionData = JSON.parse(sessionDataStr);
-        // 2. Use sessionData.googleId for the URL. Added backend port 3000.
-        const url = `https://dzw1f1bfpf15d.cloudfront.net/api/users/${sessionData.googleId}`;
+  fetchUserData() {
+    this.dataFetchService.getUserDataById().subscribe({
+      next: (data) => {
+        this.userData = data as UserData;
+        console.log('User data loaded:', this.userData);
 
-        // 3. Use sessionData.token for the Authorization header
-        this.http
-          .get(url, {
-            headers: {
-              Authorization: `Bearer ${sessionData.token}`, // Only the raw token string
-              'Content-Type': 'application/json',
-            },
-          })
-          .subscribe({
-            next: (data) => {
-              this.testData = data as UserData;
-              console.log('Test data loaded:', this.testData);
+        const savedName = this.userData?.name;
+        const savedEmail = this.userData?.email;
 
-              const savedName = this.testData?.name;
-              const savedEmail = this.testData?.email;
-
-              if (savedName) {
-                this.userDisplayName = savedName;
-              }
-              if (savedEmail) {
-                this.userEmail = savedEmail;
-              }
-            },
-            error: (err) => {
-              console.error('Failed to load test data', err);
-            },
-          });
-      }
-    } catch (error) {
-      console.error('Error loading test data:', error);
-    }
+        if (savedName) {
+          this.userDisplayName = savedName;
+        }
+        if (savedEmail) {
+          this.userEmail = savedEmail;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load user data', err);
+      },
+    });
   }
 
   // ---  FUNKTIO: Kirjaudu ulos ---

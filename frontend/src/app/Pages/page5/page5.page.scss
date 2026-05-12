@@ -1,8 +1,8 @@
 /* --- SIVUN PERUSTAUSTA --- */
 ion-content {
-  // Estetään sivun turha rullaus (hyödyllinen, kun käytetään fixed-elementtejä)
-  --overflow: hidden;
-  overflow: hidden;
+  // Salli sisältörullausta — tarvitaan, jotta pitkä lista seteistä skrollautuu
+  --overflow: auto;
+  overflow: auto;
 
   // Luodaan syvyysvaikutelma: keskeltä harmaa (#222), reunoilta musta (#111)
   --background: radial-gradient(circle at center, #222 0%, #111 100%);
@@ -14,8 +14,10 @@ ion-content {
   flex-direction: column; // Pinotaan elementit päällekkäin
   align-items: center; // Keskiteään elementit vaakasuunnassa
   justify-content: flex-start; // Aloitetaan sijoittelu ylhäältä
-  height: 100%;
-  padding-top: 40px; // Jätetään tilaa yläpalkin ja kortin väliin
+  flex: 1 1 auto;
+  overflow-y: auto; /* Mahdollistaa sisällön pystyrullauksen */
+  padding-top: 40px; /* Jätetään tilaa yläpalkin ja kortin väliin */
+  padding-bottom: 140px; /* Varmistaa, että footer/timer eivät peitä viimeisiä rivejä */
 }
 
 /* --- LIIKEKORTTI (KESKELLÄ RUUTUA) --- */
@@ -26,6 +28,8 @@ ion-content {
   border-radius: 20px;
   padding: 40px 20px; // Sisäpuolen tyhjä tila (pysty, vaaka)
   text-align: center;
+  padding-bottom: 36px; /* Vähennetty alapaddingia, vähemmän tyhjää tilaa */
+  min-height: 300px; /* Pienennetty kortin min-heightiä */
 
   // "Frosted glass" -efekti: sumentaa kortin takana olevan taustan
   backdrop-filter: blur(15px);
@@ -54,10 +58,53 @@ ion-content {
   }
 }
 
+.toggle-btn {
+  border-radius: 20px;
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.24);
+  margin: 8px 0 0 0; /* pieni yläreuna, wrapper hoitaa keskityksen */
+  padding: 8px 12px;
+}
+
+.toggle-text {
+  font-size: 13px;
+  color: var(--ion-color-contrast); /* kontrastiväri napin tekstille */
+}
+
+/* Matchataan sivun keltaista aksenttiväriä ja tummaa tekstiä */
+.toggle-btn {
+  --background: #000000; /* sivun keltainen tehosteväri */
+  --color:  #ffd900; /* tumma teksti kontrastiksi */
+  border: 1px solid rgba(11, 11, 11, 0.06);
+  background: var(--background);
+  color: var(--color);
+}
+.toggle-btn ion-icon {
+  color: inherit; /* icon seuraa tekstin väriä */
+}
+.toggle-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+
+/* Wrapper joka keskittää napin täsmälleen stats-ruudukon alle */
+.toggle-wrapper {
+  display: flex;
+  justify-content: center; /* keskitetään vaakasuunnassa */
+  width: 100%;
+  margin-top: 6px; /* lisää tilaa stats-ruudukon ja napin väliin */
+}
+}
+
+
 /* --- SARJAT, TOISTOT JA PAINOT (KORTIN SISÄLLÄ) --- */
 .stats-grid {
   display: flex;
-  justify-content: space-around; // Jakaa kolme tietoa tasaisesti koko leveydelle
+  justify-content: space-between; // Tasaisempi jakautuminen sarakkeille
+  gap: 12px;
   margin-top: 20px;
   // Ohut keltainen viiva erottamaan nimen ja speksit toisistaan
   border-top: 1px solid rgba(255, 217, 0, 0.2);
@@ -67,6 +114,9 @@ ion-content {
     display: flex;
     flex-direction: column; // Otsikko (small) ja arvo (span) päällekkäin
     align-items: center;
+    width: 30%; /* Jokainen sarake ottaa saman leveyden */
+    box-sizing: border-box;
+    gap: 6px;
 
     /* Otsikot: SETS, REPS, WEIGHT */
     small {
@@ -74,7 +124,7 @@ ion-content {
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 5px;
+      margin-bottom: 0;
     }
 
     /* Arvot */
@@ -84,8 +134,67 @@ ion-content {
       font-weight: 800;
       // Kiinteälevyinen fontti varmistaa, etteivät arvot hypi
       font-family: "Inter", sans-serif;
+      margin-bottom: 4px;
+    }
+
+    /* Suoritetulle syötteelle kapeampi kenttä ja keskitys */
+    .performed-input {
+      width: 80%;
+      margin-top: 0;
+      margin-left: auto;
+      margin-right: auto;
+      --padding-start: 8px;
+      --padding-end: 8px;
+      --padding-top: 6px;
+      --padding-bottom: 6px;
+      --background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      color: #fff;
+      text-align: center;
     }
   }
+}
+
+/* Settirivit */
+.sets-list {
+  margin-top: 18px;
+}
+.set-row {
+  display: grid;
+  grid-template-columns: 56px 14% 30% 30%;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+.set-label {
+  color: #aaa;
+  text-align: left;
+}
+.set-reps, .set-weight {
+  width: 100%;
+}
+.set-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.remove-set-btn-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(255, 59, 48, 0.06);
+}
+.remove-set-btn-inline ion-icon {
+  font-size: 22px;
+  color: var(--ion-color-danger, #ff3b30);
+}
+
+/* New bottom-remove layout */
+.remove-row {
+  display: none;
 }
 .keskeyta {
   margin: 10px;
@@ -130,3 +239,4 @@ ion-menu-button {
   text-transform: uppercase; // Lisää auktoriteettia painikkeeseen
   margin-bottom: 60px;
 }
+
