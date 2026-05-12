@@ -116,7 +116,7 @@ export class LisaaTreeni {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
   }
   /**
-   * Takes moves fetched from database and categorizes them by muscleGroup property
+   * Käsittelee backendistä haetut liikkeet ja ryhmittelee ne `muscleGroup`-ominaisuuden mukaan
    */
   categorizeMoves() {
     // Ryhmitä backendistä haetut liikkeet lihasryhmän mukaan.
@@ -210,21 +210,21 @@ export class LisaaTreeni {
     const currentLength = exercise.sets.length;
 
     if (newLength > currentLength) {
-      // Add new sets with default values, copying from the first set
+      // Lisää uusia settejä oletusarvoilla, kopioiden arvot ensimmäisestä setistä
       for (let i = currentLength; i < newLength; i++) {
         exercise.sets.push({
           reps: exercise.sets[0].reps,
           weight: exercise.sets[0].weight,
-        }); // Default values
+        }); // Oletusarvot
       }
     } else if (newLength < currentLength) {
-      // Remove extra sets from the end
+      // Poista ylimääräiset setit lopusta
       exercise.sets.splice(newLength);
     }
   }
 
   /**
-   * Helper method for updating all sets reps at once
+   * Apumenetelmä kaikkien sarjojen toistomäärien päivittämiseen kerralla
    */
   updateAllReps(exercise: ExerciseIsSelected, newRepsVal: string) {
     // Aseta jokaisen sarjan `reps`-kenttä samaan arvoon.
@@ -239,7 +239,7 @@ export class LisaaTreeni {
   }
 
   /**
-   * Helper method for updating all sets weights at once
+   * Apumenetelmä kaikkien sarjojen painojen päivittämiseen kerralla
    */
   updateAllWeights(exercise: ExerciseIsSelected, newWeightsVal: string) {
     // Aseta jokaisen sarjan `weight`-kenttä samaan arvoon.
@@ -282,7 +282,7 @@ export class LisaaTreeni {
                 next: (data) => {
                   console.log('Custom move deleted successfully:', data);
 
-                  // update all new moves afterwards:
+                  // Päivitä liikelista haun jälkeen:
                   this.dataFetchService.getAllMoves().subscribe({
                     next: (data) => {
                       this.usersMoves = data as Move[];
@@ -341,7 +341,7 @@ export class LisaaTreeni {
   }
 
   /**
-   * When pressing 'cancel' when inside create custom move modal
+   * Kun painetaan 'Peruuta' luodessa omaa liikettä modalissa
    */
   cancelCreateCustomMove() {
     // Peruuta custom-move -modal
@@ -349,7 +349,7 @@ export class LisaaTreeni {
   }
 
   /**
-   * Open modal for editing specific exercise sets/reps/weights
+   * Avaa modalin tietylle liikkeelle sarjojen/toistojen/painojen muokkaamista varten
    */
   openExerciseModal(exercise: ExerciseIsSelected) {
     // Avaa modal tietylle liikkeelle. Kopioi nykyiset sarjat `modalTempSets`-
@@ -368,7 +368,7 @@ export class LisaaTreeni {
   }
 
   /**
-   * Close modal. If cancelled, do not apply changes. If true passed, treat as cancel.
+   * Sulje modal. Jos peruutetaan, älä tallenna muutoksia. `true`-parametri käsitellään peruutuksena.
    */
   closeExerciseModal(cancel: boolean = false) {
     // Sulje modal. Jos `cancel` on tosi, tyhjennä väliaikaiset arvot ja
@@ -446,7 +446,7 @@ export class LisaaTreeni {
   }
 
   /**
-   * When pressing 'ok' when inside create custom move modal
+   * Kun painetaan 'Ok' luodessa omaa liikettä modalissa
    */
   confirmCreateCustomMove() {
     // Luo uusi custom-liike backendissä; validointi pienennetyllä nimellä
@@ -461,7 +461,7 @@ export class LisaaTreeni {
       this.dataFetchService.createMove(newMove).subscribe({
         next: (data) => {
           console.log('New move created:', data);
-          // update all new moves afterwards:
+          // Päivitä liikelista haun jälkeen:
           this.dataFetchService.getAllMoves().subscribe({
             next: (data) => {
               this.usersMoves = data as Move[];
@@ -529,7 +529,7 @@ export class LisaaTreeni {
   }
 
   /**
-   * New saveProgram method modified to work with backend and database
+   * Uusi saveProgram-metodi, mukautettu toimimaan back-endin ja tietokannan kanssa
    */
   saveProgram2() {
     // 1. Kerätään kaikki valitut liikkeet yhteen listaan

@@ -32,6 +32,7 @@ export class CalendarPage implements OnInit {
   }
 
   buildCalendar() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this.view === 'month' ? this.buildMonth() : this.buildWeek();
   }
 
