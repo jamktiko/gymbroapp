@@ -40,6 +40,9 @@
           </ion-label>
 
           <!-- Poistonappi -->
+          <ion-button *ngIf="!program.isDefault" slot="end" fill="clear" color="medium" (click)="editProgram(program, $event)" title="Muokkaa ohjelmaa">
+            <ion-icon name="pencil-outline"></ion-icon>
+          </ion-button>
           <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"
             [disabled]="program.isDefault">
             <ion-icon name="trash-outline"></ion-icon>
