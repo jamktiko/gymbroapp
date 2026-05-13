@@ -45,11 +45,31 @@ export class Page6Page implements OnInit {
     this.finishedSession = navigation?.extras.state?.['finishedSession'];
   }
 
-  ngOnInit() {
-    // Haetaan nykyinen XP ja animoidaan siihen 50 XP lisää,
-    // koska treenin suorittaminen antaa oletuksena 50 XP.
-    this.xpService.animateXpGain(50);
+  // ngOnInit – animoidaan ensin arvio (lasketaan frontendissä)
+ngOnInit() {
+  const estimated = this.estimateXp(this.finishedSession?.exercises || []);
+  this.xpService.animateXpGain(estimated);
+}
+
+// Sama kaava kuin backendissä, pelkkä visuaalinen arvio
+private estimateXp(exercises: any[]): number {
+  let xp = 0;
+  for (const ex of exercises) {
+    const typeBonus = ex.move?.type === 'compound' ? 5 : 2;
+    for (const set of ex.sets || []) {
+      if (set.weight === 0) {
+        xp += set.reps * 0.5;
+      } else {
+        xp += (set.reps * set.weight) / 100;
+      }
+    }
+    xp += typeBonus;
   }
+  return Math.round(xp);
+}
+
+// saveTrainingSession pysyy ennallaan – backend laskee oikean XP:n
+
 
   /**
    * Tallennetaan sessio tietokantaan → XP +50

@@ -8,6 +8,8 @@ const {
   deleteUser,
   getCalendarDates,
   getStats,
+  setCommitment,
+  resetCommitment
 } = require('../controllers/usersController');
 
 router.get('/:id', verifyToken, getUserById);
@@ -16,5 +18,7 @@ router.patch('/:id', verifyToken, updateUser);
 router.delete('/:id', verifyToken, deleteUser);
 router.get('/:id/calendar', verifyToken, getCalendarDates);
 router.get('/:id/stats', verifyToken, getStats);
+router.post('/:id/commitment', verifyToken, setCommitment);
+router.delete('/:id/commitment', verifyToken, resetCommitment);
 
 module.exports = router;

@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { XpService } from '../../xp.service';
 import { AccordionGroupCustomEvent, ItemReorderEventDetail } from '@ionic/core';
 import { addIcons } from 'ionicons';
-import { add, trashOutline, play, reorderTwoOutline, pencilOutline } from 'ionicons/icons';
+import { add, trashOutline, play, reorderTwoOutline, pencilOutline, flag, checkmarkCircle } from 'ionicons/icons';
 import { TrainingProgram, UserData } from '../../types/userdata';
 import { DataFetchService } from '../../data-fetch-service';
 import { IonList } from '@ionic/angular/standalone';
@@ -72,7 +72,7 @@ export class Page2Page implements OnInit {
 
   constructor() {
     // Alustetaan ikonit käyttöliittymää varten
-    addIcons({ add, trashOutline, play, reorderTwoOutline, pencilOutline });
+    addIcons({ add, trashOutline, play, reorderTwoOutline, pencilOutline, flag, checkmarkCircle });
   }
 
   ngOnInit() {}
@@ -129,12 +129,8 @@ export class Page2Page implements OnInit {
     }
   }
 
-  get levelProgress(): number {
-  if (!this.userData) return 0;
-  const currentLevelXp = (this.userData.level - 1) ** 2 * 50;
-  const nextLevelXp = this.userData.level ** 2 * 50;
-  return (this.userData.xp - currentLevelXp) / (nextLevelXp - currentLevelXp);
-}
+
+
 
   editProgram(program: TrainingProgram, event: Event) {
   event.stopPropagation();
@@ -171,7 +167,57 @@ export class Page2Page implements OnInit {
     });
     await alert.present();
   }
+/**
+ * Tarkistaa onko käyttäjä sitoutunut tiettyyn ohjelmaan
+ */
+isCommittedTo(programId: string): boolean {
+  return this.userData?.commitment?.programId === programId;
+}
 
+/**
+ * Laskee jäljellä olevat päivät sitoutumisessa
+ */
+getRemainingDays(): number {
+  const c = this.userData?.commitment;
+  if (!c?.startDate || !c?.deadlineDays) return 0;
+  const elapsed = (Date.now() - new Date(c.startDate).getTime()) / (1000 * 60 * 60 * 24);
+  return Math.max(0, Math.round(c.deadlineDays - elapsed));
+}
+
+/**
+ * Sitoutuu valittuun ohjelmaan (21vrk / 8 treeniä)
+ */
+async commitToProgram(program: TrainingProgram, event: Event) {
+  event.stopPropagation();
+
+  const hasExisting = !!this.userData?.commitment?.programId;
+  const message = hasExisting
+    ? `Nykyinen sitoumus nollataan. Sitoudutaanko ohjelmaan "${program.name}"?`
+    : `Sitoudutaanko ohjelmaan "${program.name}"? Tavoite: 8 treeniä / 21 päivää.`;
+
+  const alert = await this.alertCtrl.create({
+    header: 'Sitoudu ohjelmaan',
+    message,
+    buttons: [
+      { text: 'Peruuta', role: 'cancel' },
+      {
+        text: 'Sitoudu',
+        handler: () => {
+          this.dataFetchService.setCommitment({
+            programId: program._id,
+            programName: program.name,
+            targetSessions: 8,
+            deadlineDays: 21,
+          }).subscribe({
+            next: () => this.ionViewWillEnter(),
+            error: (err: any) => console.error('Sitoutuminen epäonnistui:', err),
+          });
+        },
+      },
+    ],
+  });
+  await alert.present();
+}
   /**
    * Seuraa haitarivalikon tilaa FAB-napin piilottamista varten
    */
