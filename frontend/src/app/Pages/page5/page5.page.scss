@@ -78,7 +78,7 @@ ion-content {
 /* Matchataan sivun keltaista aksenttiväriä ja tummaa tekstiä */
 .toggle-btn {
   --background: #000000; /* sivun keltainen tehosteväri */
-  --color:  #ffd900; /* tumma teksti kontrastiksi */
+  --color: #ffd900; /* tumma teksti kontrastiksi */
   border: 1px solid rgba(11, 11, 11, 0.06);
   background: var(--background);
   color: var(--color);
@@ -90,15 +90,14 @@ ion-content {
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
 
-/* Wrapper joka keskittää napin täsmälleen stats-ruudukon alle */
-.toggle-wrapper {
-  display: flex;
-  justify-content: center; /* keskitetään vaakasuunnassa */
-  width: 100%;
-  margin-top: 6px; /* lisää tilaa stats-ruudukon ja napin väliin */
+  /* Wrapper joka keskittää napin täsmälleen stats-ruudukon alle */
+  .toggle-wrapper {
+    display: flex;
+    justify-content: center; /* keskitetään vaakasuunnassa */
+    width: 100%;
+    margin-top: 6px; /* lisää tilaa stats-ruudukon ja napin väliin */
+  }
 }
-}
-
 
 /* --- SARJAT, TOISTOT JA PAINOT (KORTIN SISÄLLÄ) --- */
 .stats-grid {
@@ -147,7 +146,7 @@ ion-content {
       --padding-end: 8px;
       --padding-top: 6px;
       --padding-bottom: 6px;
-      --background: rgba(255,255,255,0.03);
+      --background: rgba(255, 255, 255, 0.03);
       border-radius: 8px;
       color: #fff;
       text-align: center;
@@ -170,7 +169,8 @@ ion-content {
   color: #aaa;
   text-align: left;
 }
-.set-reps, .set-weight {
+.set-reps,
+.set-weight {
   width: 100%;
 }
 .set-action {
@@ -220,10 +220,10 @@ ion-header {
 }
 
 // Yläpalkin tekstit ja valikkonappi
-ion-title,
-ion-menu-button {
+ion-title {
   color: #ffd900;
   font-weight: bold;
+  padding-right: 0;
 }
 
 /* --- FOOTERIN NEXT/FINISH-NAPPI --- */
@@ -239,4 +239,3 @@ ion-menu-button {
   text-transform: uppercase; // Lisää auktoriteettia painikkeeseen
   margin-bottom: 60px;
 }
-
