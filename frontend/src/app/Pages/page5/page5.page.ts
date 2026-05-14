@@ -246,8 +246,13 @@ export class Page5Page implements OnInit {
     field: 'reps' | 'weight',
   ) {
     const rawVal = event?.detail?.value;
-    const strVal =
-      rawVal === null || rawVal === undefined ? '' : String(rawVal);
+    let strVal = rawVal === null || rawVal === undefined ? '' : String(rawVal);
+
+    // Remove ' kg' if present before processing
+    if (field === 'weight') {
+      strVal = strVal.replace(/ kg/g, '').trim();
+    }
+
     const truncated = strVal.length > 6 ? strVal.slice(0, 6) : strVal;
 
     // Päivitä näkyvä kenttä
@@ -287,7 +292,18 @@ export class Page5Page implements OnInit {
     const set = entry.sets[setIndex];
     if (!set) return '';
     const val = set[field];
-    return val === undefined || val === null ? '' : val;
+
+    if (val === undefined || val === null) return '';
+
+    // Append ' kg' when not focused
+    if (field === 'weight') {
+      const key = `${index}-${setIndex}-${field}`;
+      if (!this.focusedMap[key]) {
+        return `${val} kg`;
+      }
+    }
+
+    return val;
   }
 
   // Palauttaa placeholder-tekstin tai tyhjän merkkijonon, jos kyseinen kenttä on fokuksessa
