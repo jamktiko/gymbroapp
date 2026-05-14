@@ -14,16 +14,22 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- previous button -->
-@if (currentIndex > 0) {
-<ion-button class="prev-btn" fill="clear" (click)="edellinenLiike()">
-  <ion-icon slot="start" name="arrow-back"></ion-icon>
-  PREVIOUS
-</ion-button>
-}
-
 <ion-content [fullscreen]="true">
   <div class="content-container ion-padding">
+
+    <!-- previous button -->
+    @if (currentIndex > 0) {
+    <ion-button class="prev-btn" fill="clear" (click)="edellinenLiike()">
+      <ion-icon slot="start" name="arrow-back"></ion-icon>
+      PREVIOUS
+    </ion-button>
+    } @else {
+    <ion-button class="prev-btn" fill="clear" style="visibility: hidden; pointer-events: none;">
+      <ion-icon slot="start" name="arrow-back"></ion-icon>
+      PREVIOUS
+    </ion-button>
+    }
+
     @if (currentExercise; as exercise) {
     <div class="exercise-card">
       <p class="label">NYKYINEN LIIKE</p>
@@ -48,7 +54,7 @@
       <div class="toggle-wrapper">
         <ion-button class="toggle-btn" fill="solid" size="small" (click)="toggleSets(currentIndex)"
           [attr.aria-expanded]="getExpanded(currentIndex)">
-          <ion-icon slot="start" [name]="getExpanded(currentIndex) ? 'chevron-up' : 'chevron-down'"></ion-icon>
+          <!--<ion-icon slot="start" [name]="getExpanded(currentIndex) ? 'chevron-up' : 'chevron-down'"></ion-icon>-->
           <span class="toggle-text">{{ getExpanded(currentIndex) ? 'Piilota sarjat' : 'Näytä sarjat' }}</span>
         </ion-button>
       </div>
@@ -73,15 +79,15 @@
             [placeholder]="getPlaceholder(currentIndex, i, 'reps', exercise)"
             [value]="getPerformedValue(currentIndex, i, 'reps')"
             (ionInput)="limitPerSetInput($event, currentIndex, i, 'reps')"
-            (ionFocus)="onInputFocus(currentIndex, i, 'reps')" (ionBlur)="onInputBlur(currentIndex, i, 'reps')"
+            (ionFocus)="onInputFocus($event, currentIndex, i, 'reps')" (ionBlur)="onInputBlur(currentIndex, i, 'reps')"
             class="performed-input set-reps"></ion-input>
 
           <ion-input #weightInput type="text" inputmode="numeric"
             [placeholder]="getPlaceholder(currentIndex, i, 'weight', exercise)"
             [value]="getPerformedValue(currentIndex, i, 'weight')"
             (ionInput)="limitPerSetInput($event, currentIndex, i, 'weight')"
-            (ionFocus)="onInputFocus(currentIndex, i, 'weight')" (ionBlur)="onInputBlur(currentIndex, i, 'weight')"
-            class="performed-input set-weight"></ion-input>
+            (ionFocus)="onInputFocus($event, currentIndex, i, 'weight')"
+            (ionBlur)="onInputBlur(currentIndex, i, 'weight')" class="performed-input set-weight"></ion-input>
         </div>
         }
 
@@ -96,12 +102,15 @@
     <!-- duration: kuinka monta sekuntia lasketaan (nyt vakio 10) -->
     <!-- timerFinished: voit halutessasi kutsua funktiota kun aika loppuu -->
     <!-- Lisää #workoutTimer -->
-    <app-timer #workoutTimer [duration]="workoutTimerDuration"></app-timer>
+    <div [style.display]="timerVisible ? 'block' : 'none'" style="width: 100%;">
+      <app-timer #workoutTimer [duration]="workoutTimerDuration"></app-timer>
+    </div>
+
   </div>
 </ion-content>
 
-<ion-footer class="ion-no-border ion-padding">
-
+<ion-footer class="ion-no-border ion-padding" [style.visibility]="nextBtnVisible ? 'visible' : 'hidden'"
+  [style.opacity]="nextBtnVisible ? 1 : 0" style="transition: opacity 0.2s;">
 
   @if (currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1) { <ion-button class="next-btn"
     expand="block" shape="round" color="primary" (click)="seuraavaLiike()">

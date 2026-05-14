@@ -1,9 +1,5 @@
 /* --- SIVUN PERUSTAUSTA --- */
 ion-content {
-  // Salli sisältörullausta — tarvitaan, jotta pitkä lista seteistä skrollautuu
-  --overflow: auto;
-  overflow: auto;
-
   // Luodaan syvyysvaikutelma: keskeltä harmaa (#222), reunoilta musta (#111)
   --background: radial-gradient(circle at center, #222 0%, #111 100%);
 }
@@ -14,10 +10,9 @@ ion-content {
   flex-direction: column; // Pinotaan elementit päällekkäin
   align-items: center; // Keskiteään elementit vaakasuunnassa
   justify-content: flex-start; // Aloitetaan sijoittelu ylhäältä
-  flex: 1 1 auto;
-  overflow-y: auto; /* Mahdollistaa sisällön pystyrullauksen */
-  padding-top: 40px; /* Jätetään tilaa yläpalkin ja kortin väliin */
+  padding-top: 0px; /* Jätetään tilaa yläpalkin ja kortin väliin */
   padding-bottom: 140px; /* Varmistaa, että footer/timer eivät peitä viimeisiä rivejä */
+  margin-top: 0px;
 }
 
 /* --- LIIKEKORTTI (KESKELLÄ RUUTUA) --- */
@@ -37,13 +32,15 @@ ion-content {
   // Ulkopuolinen varjo tuo korttia lähemmäs käyttäjää
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
 
+  z-index: 10;
+
   /* Pieni yläteksti: "NYKYINEN LIIKE" */
   .label {
     color: #ffd900;
     font-size: 11px;
     letter-spacing: 3px; // Harvennettu teksti on helpompi lukea nopeasti
     text-transform: uppercase; // Pakotetaan isot kirjaimet
-    margin-bottom: 8px;
+    margin-bottom: 11px;
     opacity: 0.9;
   }
 
@@ -52,7 +49,7 @@ ion-content {
     font-size: 30px;
     color: #ffffff;
     font-weight: 800; // Erittäin lihavoitu
-    margin: 0 0 25px 0; // Tilaa vain alapuolelle
+    margin: 25px 0 25px 0;
     // Keltainen hohde tekstin ympärillä
     text-shadow: 0 0 15px rgba(255, 217, 0, 0.3);
   }
@@ -66,7 +63,7 @@ ion-content {
   gap: 8px;
   font-weight: 600;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.24);
-  margin: 8px 0 0 0; /* pieni yläreuna, wrapper hoitaa keskityksen */
+  margin: 12px 0 0 0; /* pieni yläreuna, wrapper hoitaa keskityksen */
   padding: 8px 12px;
 }
 
@@ -83,6 +80,7 @@ ion-content {
   background: var(--background);
   color: var(--color);
 }
+
 .toggle-btn ion-icon {
   color: inherit; /* icon seuraa tekstin väriä */
 }
@@ -276,9 +274,8 @@ ion-title {
 }
 
 .prev-btn {
-  position: absolute;
-  top: calc(81px + var(--ion-safe-area-top, 0px));
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
+  // margin-bottom: 20px
+  // color: #ffd900;
+  // font-weight: bold;
+  margin: 8px 4px 8px 4px;
 }
