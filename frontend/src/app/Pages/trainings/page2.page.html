@@ -23,7 +23,6 @@
       Täällä näkyvät treeniohjelmasi. Aloita treeni valitsemalla haluamasi ohjelma.
     </p>
 
-
     @if (usersTrainingPrograms.length > 0) {
     <ion-accordion-group (ionChange)="onAccordionChange($event)">
       @for (program of usersTrainingPrograms; track $index) {

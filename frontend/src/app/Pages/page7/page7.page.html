@@ -9,12 +9,12 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-container">
-    
+
     <!-- XP-KORTTI -->
     <div class="xp-wrapper">
       <div class="xp-header">
         <span class="level-text"></span>
-        
+
       </div>
       <div class="progress-bar-container">
         <div class="progress-bar-fill" [style.width.%]="(xpService.progress$ | async)! * 100"></div>
@@ -22,26 +22,26 @@
     </div>
 
     <!-- STREAK-KORTTI -->
-    
 
-<div class="user-stats-grid">
-  <div class="user-stat-box">
-    <small>Kokonais XP</small>
-    <p>{{ userData?.xp || 0 }}</p>
-  </div>
 
-  <div class="user-stat-box">
-    <small>Treenit</small>
-    <p>{{ userData?.trainingSessions?.length || 0 }}</p>
-  </div>
+    <div class="user-stats-grid">
+      <div class="user-stat-box">
+        <small>Kokonais XP</small>
+        <p>{{ userData?.xp || 0 }}</p>
+      </div>
 
-  <div class="user-stat-box full-width">
-    <small>Jäsenenä alkaen</small>
-    <p>{{ userData?.createdAt | date:'dd.MM.yyyy' }}</p>
-  </div>
-</div>
+      <div class="user-stat-box">
+        <small>Treenit</small>
+        <p>{{ userData?.trainingSessions?.length || 0 }}</p>
+      </div>
 
-<ion-card class="streak-card">
+      <div class="user-stat-box full-width">
+        <small>Jäsenenä alkaen</small>
+        <p>{{ userData?.createdAt | date:'dd.MM.yyyy' }}</p>
+      </div>
+    </div>
+
+    <ion-card class="streak-card">
       <ion-card-content>
         <div class="streak-header">
           <ion-icon name="flame" class="streak-flame"></ion-icon>
@@ -53,8 +53,7 @@
 
         <div class="days-grid">
           <div *ngFor="let d of streakData.weeklyActivity" class="day-dot">
-            <ion-icon 
-              [name]="d.active ? 'checkmark-circle' : 'ellipse-outline'"
+            <ion-icon [name]="d.active ? 'checkmark-circle' : 'ellipse-outline'"
               [color]="d.active ? 'success' : 'medium'">
             </ion-icon>
             <span [class.active-text]="d.active">{{ d.day }}</span>
@@ -62,7 +61,6 @@
         </div>
       </ion-card-content>
     </ion-card>
-
 
   </div>
 </ion-content>
