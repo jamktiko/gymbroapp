@@ -11,11 +11,19 @@
     <div class="logo-wrapper">
       <img src="assets/logoilmantaustaa.png" alt="Sovelluksen logo" />
     </div>
-    <div class="action-section" style="display: flex; justify-content: center">
+    <div class="action-section">
       @if (isNative) {
-      <ion-button expand="block" (click)="signInNative()" color="light">
+
+      <!-- newer grey google button style -->
+      <!-- <ion-button expand="block" (click)="signInNative()" color="light">
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Kirjaudu Googlella
+      </ion-button> -->
+
+      <!-- earlier yellow google button style -->
+      <ion-button class="google-btn" expand="block" (click)="signInNative()">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Kirjaudu Google-tunnuksilla
       </ion-button>
       }
       @if (!isNative) {
