@@ -264,7 +264,23 @@ ion-title {
     font-size: 14px;
   }
 }
+
 .performed-input:focus-within input::placeholder {
   color: transparent;
   opacity: 0; /* Varmistetaan näkymättömyys joillakin selaimilla */
+}
+
+.ion-padding-horizontal {
+  color: var(--ion-color-primary);
+  font-weight: bold;
+}
+
+.prev-btn {
+  position: absolute;
+  // top: 80px;
+  // right: 0;
+  top: 81px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
