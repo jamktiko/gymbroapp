@@ -119,7 +119,7 @@ export class Page5Page implements OnInit {
     // Varmistetaan käyttäjältä ennen lopullista poistoa
     const confirm = await this.alertController.create({
       header: 'Poistetaanko setti?',
-      message: 'Haluatko varmasti poistaa viimeisen setin?',
+      message: 'Haluatko varmasti poistaa tämän setin?',
       cssClass: 'delete-set-alert',
       buttons: [
         {
