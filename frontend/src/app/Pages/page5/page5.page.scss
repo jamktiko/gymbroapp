@@ -277,10 +277,8 @@ ion-title {
 
 .prev-btn {
   position: absolute;
-  // top: 80px;
-  // right: 0;
-  top: 81px;
+  top: calc(81px + var(--ion-safe-area-top, 0px));
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: 10;
 }
