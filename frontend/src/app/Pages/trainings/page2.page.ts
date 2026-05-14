@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { XpService } from '../../xp.service';
 import { AccordionGroupCustomEvent, ItemReorderEventDetail } from '@ionic/core';
 import { addIcons } from 'ionicons';
-import { add, trashOutline, play, reorderTwoOutline } from 'ionicons/icons';
+import { add, trashOutline, play, reorderTwoOutline, pencilOutline } from 'ionicons/icons';
 import { TrainingProgram, UserData } from '../../types/userdata';
 import { DataFetchService } from '../../data-fetch-service';
 import {
@@ -78,7 +78,18 @@ export class Page2Page implements OnInit {
 
   constructor() {
     // Alustetaan ikonit käyttöliittymää varten
-    addIcons({ add, trashOutline, play, reorderTwoOutline });
+    addIcons({ add, trashOutline, play, reorderTwoOutline, pencilOutline });
+  }
+
+  /**
+   * Avaa ohjelman muokkaustilan: siirtyy `page4` ja välittää ohjelman tilan
+   * jotta käyttäjä voi lisätä puuttuvia liikkeitä tai muokata settejä.
+   */
+  editProgram(program: TrainingProgram, event: Event) {
+    event.stopPropagation();
+    // Lähetetään ohjelma muokattavaksi page4:lle
+    const programToEdit = JSON.parse(JSON.stringify(program));
+    this.router.navigate(['/page4'], { state: { editProgram: programToEdit } });
   }
 
   ngOnInit() {}

@@ -63,6 +63,10 @@ export class Page5Page implements OnInit {
   private finishConfirmTimeoutId: number | undefined;
   // Käyttäjän syöttämät suoritetut arvot per liike
   public performedInputs: { sets?: PerformedSet[] }[] = [];
+  // Näytettävät merkkijonoarvot per-set (jos tarvitsee näyttää esim. '20 kg')
+  
+  // Seuraa, mitkä per-set-kentät ovat fokuksessa, jotta placeholder voidaan piilottaa
+  private focusedMap: Record<string, boolean> = {};
   // Hallitsee, onko kyseisen liikkeen settilista avattuna
   public expandedSets: boolean[] = [];
   private dataFetchService = inject(DataFetchService);
@@ -75,6 +79,8 @@ export class Page5Page implements OnInit {
     this.activeWorkoutReordered =
       navigation?.extras.state?.['activeWorkoutReordered'];
   }
+
+ 
 
   /**
    * Poistaa viimeisen setin annetusta liikkeestä (käyttäjän pyynnöstä).
@@ -241,6 +247,34 @@ export class Page5Page implements OnInit {
     if (!set) return '';
     const val = set[field];
     return val === undefined || val === null ? '' : val;
+  }
+
+  // Palauttaa placeholder-tekstin tai tyhjän merkkijonon, jos kyseinen kenttä on fokuksessa
+  getPlaceholder(index: number, setIndex: number, field: 'reps' | 'weight', exercise?: Exercise): string {
+    const key = `${index}-${setIndex}-${field}`;
+    if (this.focusedMap[key]) return '';
+
+    // Jos käyttäjä on syöttänyt arvon, älä näytä fallback-placeholderia
+    const performed = this.getPerformedValue(index, setIndex, field);
+    if (performed !== '') return '';
+
+    // Muodosta oletusteksti harjoitustiedosta
+    if (field === 'reps') {
+      return (exercise?.sets?.[setIndex]?.reps ?? 'toistot') as string;
+    }
+    // weight
+    const w = exercise?.sets?.[setIndex]?.weight;
+    return w ? `${w} kg` : 'kg';
+  }
+
+  onInputFocus(index: number, setIndex: number, field: 'reps' | 'weight') {
+    const key = `${index}-${setIndex}-${field}`;
+    this.focusedMap[key] = true;
+  }
+
+  onInputBlur(index: number, setIndex: number, field: 'reps' | 'weight') {
+    const key = `${index}-${setIndex}-${field}`;
+    delete this.focusedMap[key];
   }
   ionViewWillEnter() {
     this.menu.enable(false); //menu disabled

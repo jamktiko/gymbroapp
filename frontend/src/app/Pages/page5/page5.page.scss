@@ -160,7 +160,8 @@ ion-content {
 }
 .set-row {
   display: grid;
-  grid-template-columns: 56px 14% 30% 30%;
+  //grid-template-columns: 56px 14% 30% 30%;
+  grid-template-columns: 56px 20% 20% 30%;
   align-items: center;
   gap: 12px;
   padding: 8px 0;
@@ -238,4 +239,32 @@ ion-title {
   font-size: 18px;
   text-transform: uppercase; // Lisää auktoriteettia painikkeeseen
   margin-bottom: 60px;
+}
+
+/* Input-with-unit: shows a persistent unit (kg) inside the input field */
+.input-with-unit {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  .performed-input {
+    /* Make room for the unit on the right */
+    --padding-end: 44px;
+    box-sizing: border-box;
+  }
+
+  .unit {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffd900;
+    font-weight: 700;
+    pointer-events: none; /* clicks go to the input */
+    font-size: 14px;
+  }
+}
+.performed-input:focus-within input::placeholder {
+  color: transparent;
+  opacity: 0; /* Varmistetaan näkymättömyys joillakin selaimilla */
 }
