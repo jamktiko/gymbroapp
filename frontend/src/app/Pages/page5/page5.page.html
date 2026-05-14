@@ -40,7 +40,7 @@
         </div>
         <div class="stat">
           <small>WEIGHT</small>
-          <span>{{ exercise.sets[0]?.weight ?? '-' }}kg</span>
+          <span>{{ exercise.sets[0]?.weight ?? '-' }} kg</span>
         </div>
       </div>
 
@@ -54,14 +54,17 @@
       </div>
 
       <!-- Settirivit: jokaiselle setille oma rivi, jossa on toistot- ja paino-kentät -->
-      <div class="sets-list" *ngIf="getExpanded(currentIndex)">
-        <div class="set-row" *ngFor="let _s of exercise.sets; let i = index">
+      @if (getExpanded(currentIndex)) {
+      <div class="sets-list">
+        @for (_s of exercise.sets; track $index; let i = $index) {
+        <div class="set-row">
           <div class="set-action">
+            @if (i === (exercise.sets.length - 1) && exercise.sets.length > 1) {
             <ion-button fill="clear" color="danger" class="remove-set-btn-inline"
-              *ngIf="i === (exercise.sets.length - 1) && exercise.sets.length > 1"
               (click)="removeLastSet(currentIndex); $event.stopPropagation()" title="Poista viimeinen setti">
               <ion-icon name="trash-outline"></ion-icon>
             </ion-button>
+            }
           </div>
 
           <div class="set-label">SET {{ i + 1 }}</div>
@@ -80,7 +83,11 @@
             (ionFocus)="onInputFocus(currentIndex, i, 'weight')" (ionBlur)="onInputBlur(currentIndex, i, 'weight')"
             class="performed-input set-weight"></ion-input>
         </div>
+        }
+
       </div>
+      }
+
     </div>
     }
 
@@ -96,17 +103,16 @@
 <ion-footer class="ion-no-border ion-padding">
 
 
-  <ng-container *ngIf="currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1; else finishBlock">
-    <ion-button class="next-btn" expand="block" shape="round" color="primary" (click)="seuraavaLiike()">
-      NEXT EXERCISE
-      <ion-icon slot="end" name="arrow-forward"></ion-icon>
+  @if (currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1) { <ion-button class="next-btn"
+    expand="block" shape="round" color="primary" (click)="seuraavaLiike()">
+    NEXT EXERCISE
+    <ion-icon slot="end" name="arrow-forward"></ion-icon>
     </ion-button>
-  </ng-container>
-  <ng-template #finishBlock>
-    <ion-button class="next-btn" expand="block" shape="round" [color]="finishConfirm ? 'success' : 'primary'"
+    } @else { <ion-button class="next-btn" expand="block" shape="round" [color]="finishConfirm ? 'success' : 'primary'"
       (click)="confirmFinish()">
       {{ finishConfirm ? 'CLICK AGAIN TO CONFIRM' : 'FINISH WORKOUT' }}
       <ion-icon slot="end" name="checkmark-done"></ion-icon>
     </ion-button>
-  </ng-template>
+    }
+
 </ion-footer>
