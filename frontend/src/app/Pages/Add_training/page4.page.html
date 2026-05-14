@@ -11,16 +11,11 @@
   <div class="content-container ion-padding">
     <ion-item lines="full" class="name-input-item">
       <ion-label position="stacked">OHJELMAN NIMI</ion-label>
-      <ion-input
-        [(ngModel)]="programName"
-        type="text"
-        maxlength="30"
-        placeholder="esim. Jalkapäivä"
-      >
+      <ion-input [(ngModel)]="programName" type="text" maxlength="30" placeholder="esim. Jalkapäivä">
       </ion-input>
     </ion-item>
 
-    <h3 class="selection-title">VALITSE HARJOITTEET</h3>
+    <h3 class="selection-title">VALITSE LIIKKEET</h3>
 
     <ion-accordion-group #myAccordionGroup>
       @for (category of exerciseList2; track $index) {
@@ -33,51 +28,32 @@
 
         <div class="ion-padding" slot="content" style="background: #252525">
           @for (exercise of category.exercises; track $index) {
-          <ion-item
-            (click)="toggleSelection(exercise)"
-            lines="full"
-            button="true"
-            class="exercise-item-shared"
-          >
-            <ion-checkbox
-              [(ngModel)]="exercise.isSelected"
-              slot="start"
-              (click)="$event.stopPropagation()"
-            >
+
+          <ion-item (click)="toggleSelection(exercise)" lines="full" button="true" class="exercise-item-shared">
+            <ion-checkbox [(ngModel)]="exercise.isSelected" slot="start" (click)="$event.stopPropagation()">
             </ion-checkbox>
 
-            <ion-label class="exercise-label-shared"
-              >{{ exercise.move.name }}</ion-label
-            >
+            <div class="exercise-main-content">
+              <ion-label class="exercise-label-shared">{{ exercise.move.name }}</ion-label>
+
+              <!-- Korvataan inline-inputit modaalilla: avaa modal syöttöä varten -->
+              @if (exercise.isSelected) {
+              <ion-button fill="clear" class="open-sets-modal" title="Lisää tiedot" aria-label="Lisää tiedot"
+                (click)="openExerciseModal(exercise); $event.stopPropagation()">
+                <div class="stats-summary">
+                  <span>{{ exercise.sets.length }} sets</span>
+                  <span>{{ exercise.sets[0]?.reps ?? '-' }} x</span>
+                  <span>{{ exercise.sets[0]?.weight ?? '-'}} kg</span>
+                </div>
+                <div class="open-label"></div>
+              </ion-button>
+              }
+            </div>
 
             @if (!exercise.move.isDefault) {
-            <ion-button
-              fill="clear"
-              color="danger"
-              slot="end"
-              class="trash-button"
-              (click)="removeExercise(exercise, $event); $event.stopPropagation()"
-            >
+            <ion-button fill="clear" color="danger" slot="end" class="trash-button"
+              (click)="removeExercise(exercise, $event); $event.stopPropagation()">
               <ion-icon name="trash-outline"></ion-icon>
-            </ion-button>
-            }
-
-            <!-- Korvataan inline-inputit modaalilla: avaa modal syöttöä varten -->
-            @if (exercise.isSelected) {
-            <ion-button
-              slot="end"
-              fill="clear"
-              class="open-sets-modal"
-              title="Lisää tiedot"
-              aria-label="Lisää tiedot"
-              (click)="openExerciseModal(exercise); $event.stopPropagation()"
-            >
-              <div class="stats-summary">
-                <span>{{ exercise.sets.length }}x</span>
-                <span>{{ exercise.sets[0]?.reps ?? '-' }} reps</span>
-                <span>{{ exercise.sets[0]?.weight ?? '-'}} kg</span>
-              </div>
-              <div class="open-label"></div>
             </ion-button>
             }
           </ion-item>
@@ -93,22 +69,14 @@
         Luo uusi liike
       </ion-button>
 
-      <ion-button
-        class="tallennaohjelma"
-        expand="block"
-        color="primary"
-        (click)="saveProgram2()"
-        [disabled]="programName.trim().length === 0"
-      >
+      <ion-button class="tallennaohjelma" expand="block" color="primary" (click)="saveProgram2()"
+        [disabled]="programName.trim().length === 0">
         Tallenna ohjelma
       </ion-button>
     </div>
   </div>
 
-  <ion-modal
-    [isOpen]="isCustomMoveModalOpen"
-    (didDismiss)="cancelCreateCustomMove()"
-  >
+  <ion-modal [isOpen]="isCustomMoveModalOpen" (didDismiss)="cancelCreateCustomMove()">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -120,29 +88,16 @@
       </ion-header>
       <ion-content class="ion-padding">
         <ion-item>
-          <ion-input
-            label="Liikkeen nimi"
-            labelPlacement="stacked"
-            placeholder="Nimi"
-            [(ngModel)]="newMoveName"
-            maxlength="30"
-          ></ion-input>
+          <ion-input label="Liikkeen nimi" labelPlacement="stacked" placeholder="Nimi" [(ngModel)]="newMoveName"
+            maxlength="30"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input
-            label="Lihasryhmä"
-            labelPlacement="stacked"
-            placeholder="Esim. Rinta"
-            [(ngModel)]="newMoveMuscle"
-            maxlength="30"
-            autocapitalize="on"
-          ></ion-input>
+          <ion-input label="Lihasryhmä" labelPlacement="stacked" placeholder="Esim. Rinta" [(ngModel)]="newMoveMuscle"
+            maxlength="30" autocapitalize="on"></ion-input>
         </ion-item>
 
         <div class="ion-padding-top">
-          <ion-label class="ion-padding-start" color="medium"
-            >Liikkeen tyyppi</ion-label
-          >
+          <ion-label class="ion-padding-start" color="medium">Liikkeen tyyppi</ion-label>
           <ion-segment [(ngModel)]="newMoveType" class="ion-margin-top">
             <ion-segment-button value="compound">
               <ion-label>Compound</ion-label>
@@ -153,12 +108,8 @@
           </ion-segment>
         </div>
 
-        <ion-button
-          expand="block"
-          class="ion-margin-top"
-          (click)="confirmCreateCustomMove()"
-          [disabled]="newMoveName.trim().length === 0"
-        >
+        <ion-button expand="block" class="ion-margin-top" (click)="confirmCreateCustomMove()"
+          [disabled]="newMoveName.trim().length === 0">
           Lisää
         </ion-button>
       </ion-content>
@@ -184,51 +135,28 @@
 
           <ion-item>
             <ion-label position="stacked">Sarjat</ion-label>
-            <ion-input
-              type="text"
-              inputmode="numeric"
-              maxlength="6"
-              [(ngModel)]="modalInputCount"
-              (ngModelChange)="updateModalSetsCount($event)"
-              placeholder="{{ modalTempSets.length }}"
-            >
+            <ion-input type="text" inputmode="numeric" maxlength="6" [(ngModel)]="modalInputCount"
+              (ngModelChange)="updateModalSetsCount($event)" placeholder="{{ modalTempSets.length }}">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Toistot</ion-label>
-            <ion-input
-              type="text"
-              inputmode="numeric"
-              maxlength="6"
-              [(ngModel)]="modalSingleReps"
-              placeholder="{{ modalTempSets[0]?.reps }}"
-            >
+            <ion-input type="text" inputmode="numeric" maxlength="6" [(ngModel)]="modalSingleReps"
+              placeholder="{{ modalTempSets[0]?.reps }}">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Paino kg</ion-label>
-            <ion-input
-              type="text"
-              inputmode="decimal"
-              maxlength="7"
-              [(ngModel)]="modalSingleWeight"
-              placeholder="{{ modalTempSets[0]?.weight }}"
-            >
+            <ion-input type="text" inputmode="decimal" maxlength="7" [(ngModel)]="modalSingleWeight"
+              placeholder="{{ modalTempSets[0]?.weight }}">
             </ion-input>
           </ion-item>
 
           <div class="ion-padding-top modal-actions">
-            <ion-button expand="block" (click)="saveExerciseModal()"
-              >Tallenna</ion-button
-            >
-            <ion-button
-              expand="block"
-              fill="clear"
-              (click)="closeExerciseModal(true)"
-              >Peruuta</ion-button
-            >
+            <ion-button expand="block" (click)="saveExerciseModal()">Tallenna</ion-button>
+            <ion-button expand="block" fill="clear" (click)="closeExerciseModal(true)">Peruuta</ion-button>
           </div>
         </div>
       </ion-content>
