@@ -22,7 +22,13 @@
       <ion-accordion [value]="category.category">
         <ion-item slot="header">
           <ion-label>
-            <h3 class="category-title">{{ category.category }}</h3>
+            <!-- Show category name and the count of selected exercises if greater than 0, otherwise just the category name -->
+            <h3 class="category-title">
+              {{ category.category }}
+              @if(getSelectedCount(category) > 0) {
+              <span class="exercises-selected-count">({{ getSelectedCount(category) }})</span>
+              }
+            </h3>
           </ion-label>
         </ion-item>
 
