@@ -1,3 +1,7 @@
+/**
+ * Saavutukset-sivu
+ */
+
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -101,22 +105,22 @@ export class Page8Page implements OnInit {
 
   // Värit lihasryhmille
   private muscleColors: Record<string, string> = {
-  // Uudet nimet
-  Rinta: '#ff6384',
-  Selkä: '#36a2eb',
-  Hartiat: '#ffce56',
-  Hauis: '#4bc0c0',
-  Ojentaja: '#9966ff',
-  Jalat: '#ff9f40',
-  Takareidet: '#c9cbcf',
-  Pohkeet: '#7bc67e',
-  Vatsa: '#f77825',
-  Pakarat: '#e056a0',
-  Olkapäät: '#ffce56',
-  Ojentajat: '#9966ff',
-  Hauikset: '#4bc0c0',
-  Takareisi: '#c9cbcf',
-  Etureidet: '#ff9f40',
+    // Uudet nimet
+    Rinta: '#ff6384',
+    Selkä: '#36a2eb',
+    Hartiat: '#ffce56',
+    Hauis: '#4bc0c0',
+    Ojentaja: '#9966ff',
+    Jalat: '#ff9f40',
+    Takareidet: '#c9cbcf',
+    Pohkeet: '#7bc67e',
+    Vatsa: '#f77825',
+    Pakarat: '#e056a0',
+    Olkapäät: '#ffce56',
+    Ojentajat: '#9966ff',
+    Hauikset: '#4bc0c0',
+    Takareisi: '#c9cbcf',
+    Etureidet: '#ff9f40',
   };
 
   // Saavutukset
@@ -124,7 +128,7 @@ export class Page8Page implements OnInit {
     {
       id: 1,
       title: 'Eka treeni',
-      description: 'Suoritit ensimmäisen salitreenisi!',
+      description: 'Suorita ensimmäinen salitreenisi!',
       icon: 'flash',
       progress: 1,
       unlocked: true,
@@ -133,7 +137,7 @@ export class Page8Page implements OnInit {
     {
       id: 2,
       title: 'Teräsmies',
-      description: 'Treenannut 5 kertaa tällä viikolla.',
+      description: 'Treenaa 5 kertaa saman viikon aikana.',
       icon: 'flame',
       progress: 0.6,
       unlocked: false,
@@ -142,7 +146,7 @@ export class Page8Page implements OnInit {
     {
       id: 3,
       title: 'Voimanpesä',
-      description: 'Nosta yhteensä 1000kg yhdessä treenissä.',
+      description: 'Nosta yhteensä 1000 kg yhdessä treenissä.',
       icon: 'barbell',
       progress: 0.2,
       unlocked: false,
@@ -155,7 +159,17 @@ export class Page8Page implements OnInit {
   }
 
   constructor() {
-    addIcons({ trophy, flame, barbell, lockClosed, flash, medal, statsChart, fitness, ribbon });
+    addIcons({
+      trophy,
+      flame,
+      barbell,
+      lockClosed,
+      flash,
+      medal,
+      statsChart,
+      fitness,
+      ribbon,
+    });
   }
 
   ngOnInit() {
@@ -168,12 +182,12 @@ export class Page8Page implements OnInit {
         this.personalRecords = stats.personalRecords;
 
         // Rakennetaan piirakkagraafin data
-        const labels = stats.muscleDistribution.map(
-          (d: any) => d.muscleGroup
-        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const labels = stats.muscleDistribution.map((d: any) => d.muscleGroup);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data = stats.muscleDistribution.map((d: any) => d.count);
         const colors = labels.map(
-          (l: string) => this.muscleColors[l] || '#888888'
+          (l: string) => this.muscleColors[l] || '#888888',
         );
 
         this.pieChartData = {

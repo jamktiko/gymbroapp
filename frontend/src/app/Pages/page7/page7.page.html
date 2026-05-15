@@ -21,17 +21,26 @@
       </div>
     </div>
 
-    <!-- STREAK-KORTTI -->
-
+    <!-- Stats-kortit -->
     <div class="user-stats-grid">
       <div class="user-stat-box">
         <small>Kokonais XP</small>
-        <p>{{ userData?.xp || 0 }}</p>
+        <p>{{ totalXp }}</p>
       </div>
 
       <div class="user-stat-box">
         <small>Treenejä</small>
-        <p>{{ userData?.trainingSessions?.length || 0 }}</p>
+        <p>{{ totalSessions }}</p>
+      </div>
+
+      <div class="user-stat-box">
+        <small>Taso</small>
+        <p>{{ level }}</p>
+      </div>
+
+      <div class="user-stat-box">
+        <small>Seuraava taso</small>
+        <p>{{ xpToNextLevel }}</p>
       </div>
 
       <div class="user-stat-box full-width">
@@ -39,6 +48,19 @@
         <p>{{ userData?.createdAt | date:'dd.MM.yyyy' }}</p>
       </div>
     </div>
+
+    <!-- Piirakkagraafi -->
+    <ion-card class="chart-card">
+      <ion-card-header>
+        <ion-card-title>Lihasryhmäjakauma</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="pie"></canvas>
+        <p *ngIf="!pieChartData.datasets[0].data.length" class="no-data">
+          Ei vielä treenidataa
+        </p>
+      </ion-card-content>
+    </ion-card>
 
   </div>
 </ion-content>

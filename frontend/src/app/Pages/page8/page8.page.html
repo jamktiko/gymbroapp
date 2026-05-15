@@ -8,89 +8,48 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Saavutukset</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="content-container">
 
-  <!-- Stats-kortit -->
-  <div class="stats-grid">
-    <div class="stat-box">
-      <small>XP</small>
-      <p>{{ totalXp }}</p>
-    </div>
-    <div class="stat-box">
-      <small>Taso</small>
-      <p>{{ level }}</p>
-    </div>
-    <div class="stat-box">
-      <small>Treenikerrat</small>
-      <p>{{ totalSessions }}</p>
-    </div>
-    <div class="stat-box">
-      <small>Seuraava taso</small>
-      <p>{{ xpToNextLevel }} XP</p>
-    </div>
+    <!-- Saavutukset -->
+    <ion-card class="achievements-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="trophy"></ion-icon>
+          Saavutukset ({{ unlockedCount }}/{{ achievements.length }})
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="achievement-row" *ngFor="let a of achievements" [class.locked]="!a.unlocked">
+          <div class="achievement-icon">
+            <ion-icon [name]="a.unlocked ? a.icon : 'lock-closed'" [color]="a.unlocked ? a.color : 'medium'"></ion-icon>
+          </div>
+          <div class="achievement-info">
+            <span class="achievement-title">{{ a.title }}</span>
+            <span class="achievement-desc">{{ a.description }}</span>
+            <ion-progress-bar [value]="a.progress" [color]="a.color"></ion-progress-bar>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Personal Records -->
+    <ion-card class="records-card" *ngIf="personalRecords.length > 0">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="ribbon"></ion-icon>
+          Henkilökohtaiset ennätykset
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="record-row" *ngFor="let record of personalRecords">
+          <div class="record-info">
+            <span class="record-exercise">{{ record.exercise }}</span>
+            <span class="record-group">{{ record.muscleGroup }}</span>
+          </div>
+          <span class="record-weight">{{ record.weight }} kg</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
   </div>
-
-  <!-- Piirakkagraafi -->
-  <ion-card class="chart-card">
-  <ion-card-header>
-    <ion-card-title>Lihasryhmäjakauma</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <canvas
-      baseChart
-      [data]="pieChartData"
-      [options]="pieChartOptions"
-      type="pie"
-    ></canvas>
-    <p *ngIf="!pieChartData.datasets[0].data.length" class="no-data">
-      Ei vielä treenidataa
-    </p>
-  </ion-card-content>
-</ion-card>
-
-  <!-- Saavutukset -->
-  <ion-card class="achievements-card">
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="trophy"></ion-icon>
-        Saavutukset ({{ unlockedCount }}/{{ achievements.length }})
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <div class="achievement-row" *ngFor="let a of achievements" [class.locked]="!a.unlocked">
-        <div class="achievement-icon">
-          <ion-icon [name]="a.unlocked ? a.icon : 'lock-closed'" [color]="a.unlocked ? a.color : 'medium'"></ion-icon>
-        </div>
-        <div class="achievement-info">
-          <span class="achievement-title">{{ a.title }}</span>
-          <span class="achievement-desc">{{ a.description }}</span>
-          <ion-progress-bar [value]="a.progress" [color]="a.color"></ion-progress-bar>
-        </div>
-      </div>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Personal Records -->
-  <ion-card class="records-card" *ngIf="personalRecords.length > 0">
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="ribbon"></ion-icon>
-        Henkilökohtaiset ennätykset
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <div class="record-row" *ngFor="let record of personalRecords">
-        <div class="record-info">
-          <span class="record-exercise">{{ record.exercise }}</span>
-          <span class="record-group">{{ record.muscleGroup }}</span>
-        </div>
-        <span class="record-weight">{{ record.weight }} kg</span>
-      </div>
-    </ion-card-content>
-  </ion-card>
-
 </ion-content>

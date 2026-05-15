@@ -1,111 +1,122 @@
-.calendar-card {
-  margin: 0;
-  margin-bottom: 20px;
-  background: #1e1e1e;
-  border-radius: 15px;
-  border: 1px solid #333;
-  padding: 15px;
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+  // margin-top: 15px;
+  padding: 10px;
 
-  .calendar-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.9rem;
+  .calendar-card {
+    margin: 0;
+    // margin-bottom: 20px;
+    background: #1e1e1e;
+    border-radius: 15px;
+    border: 1px solid #333;
+    padding: 10px;
+    width: 100%;
 
-    .calendar-title-container {
+    .calendar-nav {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      cursor: pointer;
+      justify-content: space-between;
+      margin-bottom: 0.9rem;
 
-      .calendar-title {
-        margin: 0;
-        font-size: 1.1rem;
-        color: white;
-        font-weight: bold;
-        text-transform: capitalize;
+      .calendar-title-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+
+        .calendar-title {
+          margin: 0;
+          font-size: 1.1rem;
+          color: white;
+          font-weight: bold;
+          text-transform: capitalize;
+        }
+
+        .view-toggle {
+          font-size: 0.75rem;
+          color: var(--ion-color-primary);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
       }
+    }
 
-      .view-toggle {
-        font-size: 0.75rem;
-        color: var(--ion-color-primary);
+    .weekday-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      margin-bottom: 8px;
+
+      span {
+        font-size: 0.65rem;
+        color: #666;
         text-transform: uppercase;
         letter-spacing: 1px;
       }
     }
-  }
 
-  .weekday-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    margin-bottom: 8px;
-
-    span {
-      font-size: 0.65rem;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-  }
-
-  .week-row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    margin-bottom: 4px;
-  }
-
-  .day-cell {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 6px 0;
-    min-height: 52px;
-    border-radius: 8px;
-
-    &.other-month .day-number {
-      opacity: 0.2;
+    .week-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 4px;
     }
 
-    &.today .day-number {
-      background: var(--ion-color-primary);
-      color: #000;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
+    .day-cell {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      font-weight: bold;
+      padding: 6px 0;
+      min-height: 52px;
+      border-radius: 8px;
+
+      &.other-month .day-number {
+        opacity: 0.2;
+      }
+
+      &.today .day-number {
+        background: var(--ion-color-primary);
+        color: #000;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+      }
+
+      &.has-workout {
+        background: rgba(45, 211, 111, 0.08);
+        border: 1px solid rgba(45, 211, 111, 0.2);
+      }
+
+      .day-number {
+        font-size: 0.9rem;
+        color: white;
+      }
+
+      ion-button {
+        color: var(--ion-color-primary);
+      }
+
+      ion-icon {
+        font-size: 1rem;
+        color: #2dd36f;
+        margin-top: 2px;
+        filter: drop-shadow(0 0 4px rgba(45, 211, 111, 0.5));
+      }
     }
 
-    &.has-workout {
-      background: rgba(45, 211, 111, 0.08);
-      border: 1px solid rgba(45, 211, 111, 0.2);
+    .calendar-arrow-forward {
+      --color: var(--ion-color-primary);
     }
 
-    .day-number {
-      font-size: 0.9rem;
-      color: white;
+    .calendar-arrow-backward {
+      --color: var(--ion-color-primary);
     }
-
-    ion-button {
-      color: var(--ion-color-primary);
-    }
-
-    ion-icon {
-      font-size: 1rem;
-      color: #2dd36f;
-      margin-top: 2px;
-      filter: drop-shadow(0 0 4px rgba(45, 211, 111, 0.5));
-    }
-  }
-
-  .calendar-arrow-forward {
-    --color: var(--ion-color-primary);
-  }
-
-  .calendar-arrow-backward {
-    --color: var(--ion-color-primary);
   }
 }
