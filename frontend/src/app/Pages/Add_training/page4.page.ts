@@ -94,7 +94,6 @@ export class LisaaTreeni {
   constructor() {
     addIcons({ addOutline, trashOutline });
   }
-<<<<<<< HEAD
 preSelectExercises(existingExercises: Exercise[]) {
   existingExercises.forEach(ex => {
     this.exerciseList2.forEach(cat => {
@@ -110,21 +109,6 @@ preSelectExercises(existingExercises: Exercise[]) {
   // taulukon viite — muuten UI ei välttämättä päivity automaattisesti
   this.exerciseList2 = [...this.exerciseList2];
 }
-=======
-  preSelectExercises(existingExercises: Exercise[]) {
-    existingExercises.forEach((ex) => {
-      this.exerciseList2.forEach((cat) => {
-        cat.exercises.forEach((e) => {
-          if (e.move._id === ex.move._id) {
-            e.isSelected = true;
-            e.sets = ex.sets.map((s) => ({ ...s }));
-          }
-        });
-      });
-    });
-    this.exerciseList2 = [...this.exerciseList2];
-  }
->>>>>>> main
   /**
    * Kun page4-sivu on tulossa näkyviin haetaan kaikki käyttäjän movet databasesta
    * Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
