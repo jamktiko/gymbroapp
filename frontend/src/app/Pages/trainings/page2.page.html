@@ -5,11 +5,7 @@
         <span>LVL {{userData?.level}}</span>
       </div>
       <div class="progress-wrapper">
-<<<<<<< HEAD
-        <ion-progress-bar class="xpbar" [value]="levelProgress" />
-=======
         <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async" [buffer]="1"></ion-progress-bar>
->>>>>>> main
       </div>
     </div>
     <ion-buttons slot="end">
@@ -26,13 +22,8 @@
     <p class="placeholder">
       Täällä näkyvät treeniohjelmasi. Aloita uusi treeni valitsemalla haluamasi ohjelma.
     </p>
-<<<<<<< HEAD
     } @if (usersTrainingPrograms.length > 0) {
     <!-- LISÄTTY: (ionChange) kuuntelija -->
-=======
-
-    @if (usersTrainingPrograms.length > 0) {
->>>>>>> main
     <ion-accordion-group (ionChange)="onAccordionChange($event)">
       @for (program of usersTrainingPrograms; track $index) {
       <ion-accordion [value]="program._id">
@@ -44,22 +35,12 @@
           </ion-label>
 
           <!-- Poistonappi -->
-<<<<<<< HEAD
-          <ion-button
-            slot="end"
-            fill="clear"
-            color="danger"
-            (click)="deleteProgram(program._id, $event)"
-            [disabled]="program.isDefault"
-          >
-=======
           <ion-button *ngIf="!program.isDefault" slot="end" fill="clear" color="medium"
             (click)="editProgram(program, $event)" title="Muokkaa ohjelmaa">
             <ion-icon name="pencil-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"
             [disabled]="program.isDefault">
->>>>>>> main
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
           <!-- Muokkaus -->
@@ -70,12 +51,6 @@
           </ion-button>
         </ion-item>
 
-<<<<<<< HEAD
-        <div class="ion-padding" slot="content" style="background: transparent">
-          <ion-list lines="full">
-            @for (ex of program.exercises; track $index) {
-            <ion-item style="--background: transparent">
-=======
         <div class="ion-padding" slot="content" style="background: transparent;">
 
           <!--  Reorder-ryhmä liikkeiden ympärille -->
@@ -97,7 +72,6 @@
                 <ion-icon name="reorder-two-outline" style="color: var(--ion-color-medium)"></ion-icon>
               </ion-reorder>
 
->>>>>>> main
               <ion-label>
                 <h3>{{ ex.move.name }}</h3>
                 <p>
