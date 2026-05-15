@@ -40,26 +40,5 @@
       </div>
     </div>
 
-    <ion-card class="streak-card">
-      <ion-card-content>
-        <div class="streak-header">
-          <ion-icon name="flame" class="streak-flame"></ion-icon>
-          <div class="streak-info">
-            <h2>{{ streakData.current }} päivän putki!</h2>
-            <p>Jatka samaan malliin!</p>
-          </div>
-        </div>
-
-        <div class="days-grid">
-          <div *ngFor="let d of streakData.weeklyActivity" class="day-dot">
-            <ion-icon [name]="d.active ? 'checkmark-circle' : 'ellipse-outline'"
-              [color]="d.active ? 'success' : 'medium'">
-            </ion-icon>
-            <span [class.active-text]="d.active">{{ d.day }}</span>
-          </div>
-        </div>
-      </ion-card-content>
-    </ion-card>
-
   </div>
 </ion-content>
