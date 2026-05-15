@@ -59,3 +59,16 @@ export interface Category2 {
   category: string;
   exercises: ExerciseIsSelected[];
 }
+
+
+export interface UserStats {
+  totalXp: number;
+  level: number;
+  xpToNextLevel: number;
+  totalSessions: number;
+  muscleDistribution: { muscleGroup: string; count: number }[];
+  personalRecords: { muscleGroup: string; exercise: string; weight: number }[];
+}
+
+
+

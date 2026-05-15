@@ -22,8 +22,8 @@
     <p class="placeholder">
       Täällä näkyvät treeniohjelmasi. Aloita uusi treeni valitsemalla haluamasi ohjelma.
     </p>
-
-    @if (usersTrainingPrograms.length > 0) {
+    } @if (usersTrainingPrograms.length > 0) {
+    <!-- LISÄTTY: (ionChange) kuuntelija -->
     <ion-accordion-group (ionChange)="onAccordionChange($event)">
       @for (program of usersTrainingPrograms; track $index) {
       <ion-accordion [value]="program._id">
@@ -42,6 +42,12 @@
           <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"
             [disabled]="program.isDefault">
             <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+          <!-- Muokkaus -->
+          <ion-button slot="end" fill="clear" color="medium"
+          [disabled]="program.isDefault"
+          (click)="editProgram(program, $event)">
+          <ion-icon name="pencil-outline"></ion-icon>
           </ion-button>
         </ion-item>
 
@@ -76,11 +82,14 @@
               </ion-label>
             </ion-item>
             }
-
-          </ion-reorder-group>
-
+          </ion-list>
           <div style="padding: 10px 0">
-            <ion-button color="primary" expand="block" shape="round" (click)="startProgram(program)">
+            <ion-button
+              color="primary"
+              expand="block"
+              shape="round"
+              (click)="startProgram(program)"
+            >
               <ion-icon slot="start" name="play"></ion-icon>
               ALOITA TREENI
             </ion-button>
@@ -92,6 +101,7 @@
     }
   </div>
 
+  <!-- MUOKATTU: FAB-nappi piilotetaan, jos isAccordionOpen on true -->
   @if (!isAccordionOpen) {
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="primary" (click)="lisaaOhjelma()">
