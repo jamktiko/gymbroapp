@@ -6,8 +6,13 @@ import { Component, inject, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MenuController, IonButton, IonIcon } from '@ionic/angular/standalone'; //tuodaan menucontroller jotta voidaan disable menu
-import { IonContent } from '@ionic/angular/standalone';
+import {
+  MenuController,
+  IonButton,
+  IonIcon,
+  IonToolbar,
+} from '@ionic/angular/standalone'; //tuodaan menucontroller jotta voidaan disable menu
+import { IonContent, IonFooter } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
 import {
@@ -34,6 +39,8 @@ import { Capacitor } from '@capacitor/core';
     SocialLoginModule,
     IonButton,
     IonIcon,
+    IonFooter,
+    IonToolbar,
   ],
 })
 export class Page1Page implements OnInit {
@@ -74,7 +81,7 @@ export class Page1Page implements OnInit {
       this.socauthService.authState.subscribe((user) => {
         if (user) {
           console.log('Successfully logged in via Google button', user);
-          
+
           if (user.idToken && user.id) {
             this.authService
               .glogin(user.idToken, user.id)
@@ -101,18 +108,16 @@ export class Page1Page implements OnInit {
       const googleId = googleUser.id;
 
       if (idToken && googleId) {
-        this.authService
-          .glogin(idToken, googleId)
-          .subscribe((result) => {
-            if (result === true) {
-              this.loginEventService.emitLoggedIn();
-              this.router.navigateByUrl('/page2', { replaceUrl: true });
-            } else {
-              console.log('Väärä tunnus tai salasana');
-            }
-          });
+        this.authService.glogin(idToken, googleId).subscribe((result) => {
+          if (result === true) {
+            this.loginEventService.emitLoggedIn();
+            this.router.navigateByUrl('/page2', { replaceUrl: true });
+          } else {
+            console.log('Väärä tunnus tai salasana');
+          }
+        });
       } else {
-         console.error('Login failed: missing idToken or googleId');
+        console.error('Login failed: missing idToken or googleId');
       }
     } catch (error) {
       console.error('Google Sign-In Failed:', error);

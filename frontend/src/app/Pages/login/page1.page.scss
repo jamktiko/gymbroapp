@@ -84,20 +84,40 @@ p {
   transform: translateY(-2px); /* Nousee hieman */
   transition: 0.2s ease;
 }
-
 /* Alareunan tekstiosio */
-.footer-text {
+.transparent-footer,
+.transparent-footer ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  --ion-background-color: transparent;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  box-shadow: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column; /* Teksti ja linkki päällekkäin */
+  align-items: center; /* Keskittää ne vaakasuunnassa */
+  justify-content: center;
+  width: 100%; /* Varmistaa, että vie koko leveyden */
+  text-align: center;
+  padding: 10px;
+  margin-bottom: calc(env(safe-area-inset-bottom) + 16px) !important;
+
   p {
+    margin: 5px 0; /* Lisää pieni väli ylä- ja alapuolelle */
+    width: 100%;
     font-size: clamp(9px, 3vw, 13px);
     color: #ffffff;
     opacity: 0.7;
     white-space: nowrap;
   }
 
-  .tieto {
+  a {
+    display: inline-block; /* Varmistaa, että marginaalit ja keskitys toimivat */
     font-size: clamp(11px, 3.5vw, 15px);
     color: #ffffff;
-    text-decoration: underline; /* Alleviivaus linkille */
+    text-decoration: underline;
     opacity: 0.7;
   }
 }
