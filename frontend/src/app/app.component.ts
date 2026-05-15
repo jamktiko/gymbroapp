@@ -82,7 +82,7 @@ export class AppComponent implements OnInit {
     { title: 'Treenit', url: '/page2', icon: 'barbell' },
     { title: 'Saavutukset', url: '/page8', icon: 'golf' },
     { title: 'Kalenteri', url: '/../calendar', icon: 'calendar' },
-    { title: 'Statsit', url: '/page7', icon: 'analytics' },
+    { title: 'Tilastot', url: '/page7', icon: 'analytics' },
   ];
 
   protected router = inject(Router);
