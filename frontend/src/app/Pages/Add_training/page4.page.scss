@@ -147,12 +147,6 @@ ion-accordion {
   margin-left: 6px;
 }
 
-/* Ensure inputs inside modal look consistent */
-.sets-list ion-item ion-input {
-  width: 80px;
-  margin-left: 8px;
-}
-
 /* Modal card styles */
 .exercise-modal-card {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.55));
@@ -173,62 +167,16 @@ ion-accordion {
   opacity: 0.85;
 }
 
-.exercise-modal-card .set-row ion-item {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.exercise-modal-card .set-label {
-  width: 80px;
-  color: var(--ion-text-color);
-}
-
 .exercise-modal-card ion-input {
   width: 110px;
 }
 
 .exercise-modal-card .modal-actions ion-button {
   margin-top: 6px;
-}
-
-/* --- SETS, REPS, KG YKSIKKÖ --- */
-.stats-container {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 17px;
-  background: rgba(var(--ion-color-primary-rgb), 0.15);
-  padding: 4px 8px;
-  border-radius: 10px;
-  border: 2px solid var(--ion-color-primary);
-  scale: 0.85; /* Pienennetty, jotta mahtuu paremmin riville */
-}
-
-.small-input {
-  width: 30px;
-  font-weight: 800;
-  text-align: center;
-  color: white !important;
-  --padding-start: 0;
-}
-
-.stat-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .unit {
-    font-size: 0.6rem;
-    color: var(--ion-color-medium);
-    text-transform: uppercase;
-    margin-top: -4px;
-  }
-}
-
-.separator {
-  color: var(--ion-color-medium);
-  font-weight: bold;
+  height: 60px;
+  --border-radius: 8px;
+  font-weight: bold !important;
+  font-size: 16px;
 }
 
 /* --- PAINIKKEET ALAREUNASSA --- */
@@ -250,4 +198,10 @@ ion-accordion {
     --border-radius: 8px;
     margin-top: 10px;
   }
+}
+
+.ion-margin-top {
+  --border-radius: 8px;
+  height: 60px;
+  font-weight: bold !important;
 }
