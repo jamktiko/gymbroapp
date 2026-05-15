@@ -19,7 +19,7 @@ ion-content {
 }
 
 .progress-wrapper {
-  flex: 0 0 45%; 
+  flex: 0 0 45%;
   max-width: 150px;
   display: flex;
   align-items: center;
@@ -27,30 +27,42 @@ ion-content {
   // TIUKKA REUNUS
   border: 1px solid rgba(255, 255, 255, 0.3); // Ohut mutta selkeä raja
   border-radius: 20px;
-  height: 10px;        // Kavennetaan korkeus samaksi kuin palkilla
-  padding: 0;          // Ei tyhjää tilaa sivuilla
-  overflow: hidden;    // Leikkaa palkin reunat siististi raamin sisään
+  height: 10px; // Kavennetaan korkeus samaksi kuin palkilla
+  padding: 0; // Ei tyhjää tilaa sivuilla
+  overflow: hidden; // Leikkaa palkin reunat siististi raamin sisään
 }
 
-.xpbar {
-  height: 100%;        // Täyttää kavennetun wrapperin kokonaan
-  width: 100%;
-  margin: 0;
-  
-  --progress-background: var(--ion-color-primary);
-  
-  // MUOKATTU: Lisätty !important varmistamaan värin päivitys
-  
-  
-  &::part(track) {
-    background: #605454 !important;
+.progress-wrapper {
+  flex: 0 0 45%;
+  max-width: 150px;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  height: 10px;
+  padding: 0;
+  overflow: hidden;
+  background: #333;
+
+  .xpbar {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    --background: transparent;
+    --progress-background: var(--ion-color-primary);
+
+    &::part(track) {
+      background: transparent !important;
+    }
+  }
+
+  .xp-fill {
+    height: 100%;
+    background: var(--ion-color-primary);
+    border-radius: 20px;
+    transition: width 0.3s ease;
   }
 }
-
-ion-toolbar {
-  --min-height: 56px; // Varmistaa, että toolbar on tasakokoinen
-}
-
 // --- SISÄLLÖN HALLINTA (Pidetty ennallaan) ---
 
 .content-container {
@@ -84,7 +96,7 @@ ion-accordion {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 80%;
+    max-width: 100%;
     display: block;
     margin: 0;
     font-weight: bold;
@@ -122,6 +134,82 @@ ion-accordion {
     }
   }
 }
+// Sitoumusbanneri – näkyy sivun yläosassa kun käyttäjä on sitoutunut ohjelmaan
+.commitment-banner {
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 217, 0, 0.2); // keltainen reunus teeman mukaisesti
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+
+  // Otsikkorivi: "Sitoumus" vasemmalla, "×1.5 XP" badge oikealla
+  .commitment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .commitment-label {
+    font-size: 0.65rem;
+    color: var(--ion-color-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  // Vihreä badge joka näkyy vain kun kerroin on aktiivinen
+  .commitment-multiplier {
+    background: #2dd36f;
+    color: #000;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+
+  // Ohjelman nimi
+  .commitment-program {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 4px 0 10px;
+  }
+
+  // Edistymispalkki: x/8 treeniä
+  .commitment-progress {
+    ion-progress-bar {
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+  }
+
+  .commitment-count {
+    color: #a0a0a0;
+    font-size: 0.8rem;
+  }
+
+  // "X päivää jäljellä" teksti
+  .commitment-deadline {
+    color: #666;
+    font-size: 0.7rem;
+    display: block;
+    margin-top: 4px;
+  }
+}
+
+// Vihreä badge accordionin sisällä kun käyttäjä on sitoutunut kyseiseen ohjelmaan
+.committed-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(45, 211, 111, 0.08);
+  border: 1px solid rgba(45, 211, 111, 0.2);
+  border-radius: 8px;
+  color: #2dd36f;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
 
 // --- APUTYYLIT ---
 
@@ -129,7 +217,8 @@ ion-accordion {
   color: #888;
   text-align: center;
   font-style: italic;
-  margin-top: 30px;
+  margin-top: 0;
+  margin-bottom: 30px;
 }
 
 ion-label p {

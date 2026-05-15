@@ -25,10 +25,12 @@
       </ion-button>
 
       <div class="nav-center">
-        <span class="calendar-title">{{ view === 'month' ? getMonthLabel() : getWeekLabel() }}</span>
-        <span class="view-toggle" (click)="toggleView()">
-          {{ view === 'month' ? ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
-        </span>
+        <div class="calendar-title-container" (click)="toggleView()">
+          <span class="calendar-title">{{ view === 'month' ? getMonthLabel() : getWeekLabel() }}</span>
+          <span class="view-toggle">
+            {{ view === 'month' ? ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
+          </span>
+        </div>
       </div>
 
       <ion-button fill="clear" (click)="navigate(1)">

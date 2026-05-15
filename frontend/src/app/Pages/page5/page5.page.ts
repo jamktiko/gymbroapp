@@ -2,7 +2,6 @@ import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { MenuController, AlertController } from '@ionic/angular/standalone';
 import { NavController } from '@ionic/angular';
 import {
@@ -11,15 +10,24 @@ import {
   IonContent,
   IonFooter,
   IonHeader,
-  IonMenuButton,
   IonInput,
   IonToolbar,
   IonTitle,
   IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowForward, arrowBack, checkmarkDone, timerOutline, trashOutline } from 'ionicons/icons';
-import { TrainingProgram, TrainingSession, Exercise } from '../../types/userdata';
+import {
+  arrowForward,
+  arrowBack,
+  checkmarkDone,
+  timerOutline,
+  trashOutline,
+} from 'ionicons/icons';
+import {
+  TrainingProgram,
+  TrainingSession,
+  Exercise,
+} from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
 import { DataFetchService } from '../../data-fetch-service';
 
@@ -38,9 +46,8 @@ type PerformedSet = { reps?: number; weight?: number };
     CommonModule,
     FormsModule,
     IonButtons,
-    IonMenuButton,
     IonButton,
-      IonInput,
+    IonInput,
     IonFooter,
     IonTitle,
     IonIcon,
@@ -49,7 +56,7 @@ type PerformedSet = { reps?: number; weight?: number };
 })
 export class Page5Page implements OnInit {
   private router = inject(Router);
-  private http = inject(HttpClient);
+  // private http = inject(HttpClient);
   private menu = inject(MenuController);
   private alertController = inject(AlertController);
   private navCtrl = inject(NavController);
@@ -58,17 +65,30 @@ export class Page5Page implements OnInit {
   public activeWorkoutReordered?: TrainingProgram;
   public currentIndex = 0;
   public workoutTimerDuration = 120;
-  // finish confirmation state: user must click twice within short time to confirm finish
+  // lopetusvahvistus: käyttäjän täytyy klikata kaksi kertaa lyhyessä ajassa vahvistaakseen lopetuksen
   public finishConfirm = false;
   private finishConfirmTimeoutId: number | undefined;
   // Käyttäjän syöttämät suoritetut arvot per liike
   public performedInputs: { sets?: PerformedSet[] }[] = [];
+  // Näytettävät merkkijonoarvot per-set (jos tarvitsee näyttää esim. '20 kg')
+
+  // Seuraa, mitkä per-set-kentät ovat fokuksessa, jotta placeholder voidaan piilottaa
+  private focusedMap: Record<string, boolean> = {};
   // Hallitsee, onko kyseisen liikkeen settilista avattuna
   public expandedSets: boolean[] = [];
   private dataFetchService = inject(DataFetchService);
 
+  public timerVisible = true;
+  public nextBtnVisible = true;
+
   constructor() {
-    addIcons({ arrowForward, arrowBack, checkmarkDone, timerOutline, trashOutline });
+    addIcons({
+      arrowForward,
+      arrowBack,
+      checkmarkDone,
+      timerOutline,
+      trashOutline,
+    });
 
     // Luetaan navigoinnin mukana tullut treenidata
     const navigation = this.router.currentNavigation();
@@ -88,7 +108,8 @@ export class Page5Page implements OnInit {
     if (ex.sets.length <= 1) {
       const alert = await this.alertController.create({
         header: 'Ei sallittu',
-        message: 'Liikkeellä täytyy olla vähintään yksi setti. Et voi poistaa viimeistä settiä.',
+        message:
+          'Liikkeellä täytyy olla vähintään yksi setti. Et voi poistaa viimeistä settiä.',
         buttons: ['OK'],
       });
       await alert.present();
@@ -98,7 +119,7 @@ export class Page5Page implements OnInit {
     // Varmistetaan käyttäjältä ennen lopullista poistoa
     const confirm = await this.alertController.create({
       header: 'Poistetaanko setti?',
-      message: 'Haluatko varmasti poistaa viimeisen setin?',
+      message: 'Haluatko varmasti poistaa tämän setin?',
       cssClass: 'delete-set-alert',
       buttons: [
         {
@@ -114,14 +135,26 @@ export class Page5Page implements OnInit {
 
             // Poistetaan vastaava performedInputs-rivi, jos sellainen on
             if (!this.performedInputs) this.performedInputs = [];
-            if (!this.performedInputs[exerciseIndex]) this.performedInputs[exerciseIndex] = { sets: [] };
-            if (this.performedInputs[exerciseIndex].sets && this.performedInputs[exerciseIndex].sets.length > 0) {
-              this.performedInputs[exerciseIndex].sets.splice(this.performedInputs[exerciseIndex].sets.length - 1, 1);
+            if (!this.performedInputs[exerciseIndex])
+              this.performedInputs[exerciseIndex] = { sets: [] };
+            if (
+              this.performedInputs[exerciseIndex].sets &&
+              this.performedInputs[exerciseIndex].sets.length > 0
+            ) {
+              this.performedInputs[exerciseIndex].sets.splice(
+                this.performedInputs[exerciseIndex].sets.length - 1,
+                1,
+              );
             }
 
             // Triggeröidään change-detection varmistavasti uudella taulukolla
-            if (this.activeWorkoutReordered && this.activeWorkoutReordered.exercises) {
-              this.activeWorkoutReordered.exercises = [...this.activeWorkoutReordered.exercises];
+            if (
+              this.activeWorkoutReordered &&
+              this.activeWorkoutReordered.exercises
+            ) {
+              this.activeWorkoutReordered.exercises = [
+                ...this.activeWorkoutReordered.exercises,
+              ];
             }
           },
         },
@@ -167,12 +200,16 @@ export class Page5Page implements OnInit {
     }
     // Alusta tyhjät performedInputs niin, että oletusarvot näytetään placeholderina
     // mutta käyttäjän syötöt tallentuvat performedInputs:iin ja pysyvät näkyvissä.
-    this.performedInputs = (this.activeWorkoutReordered?.exercises || []).map((ex) => ({
-      sets: (ex.sets || []).map(() => ({} as PerformedSet)),
-    }));
+    this.performedInputs = (this.activeWorkoutReordered?.exercises || []).map(
+      (ex) => ({
+        sets: (ex.sets || []).map(() => ({}) as PerformedSet),
+      }),
+    );
 
     // Alusta dropdown-tilat (oletuksena suljettu)
-    this.expandedSets = (this.activeWorkoutReordered?.exercises || []).map(() => false);
+    this.expandedSets = (this.activeWorkoutReordered?.exercises || []).map(
+      () => false,
+    );
   }
 
   private resetFinishConfirm() {
@@ -186,12 +223,12 @@ export class Page5Page implements OnInit {
   toggleSets(index: number) {
     if (!this.expandedSets) this.expandedSets = [];
     this.expandedSets[index] = !this.expandedSets[index];
-    // moving around resets any pending finish confirmation
+    // sivunvaihto nollaa mahdollisen lopetusvahvistuksen
     this.resetFinishConfirm();
   }
 
   /**
-   * Safe accessor for expanded state to avoid "possibly undefined" when indexing the array.
+   * Turvallinen apufunktio laajennetun tilan tarkistukseen, jotta ei indeksoida määrittelemätöntä arvoa.
    */
   getExpanded(index: number): boolean {
     return !!(this.expandedSets && this.expandedSets[index]);
@@ -209,16 +246,25 @@ export class Page5Page implements OnInit {
     field: 'reps' | 'weight',
   ) {
     const rawVal = event?.detail?.value;
-    const strVal = rawVal === null || rawVal === undefined ? '' : String(rawVal);
+    let strVal = rawVal === null || rawVal === undefined ? '' : String(rawVal);
+
+    // Remove ' kg' if present before processing
+    if (field === 'weight') {
+      strVal = strVal.replace(/ kg/g, '').trim();
+    }
+
     const truncated = strVal.length > 6 ? strVal.slice(0, 6) : strVal;
 
     // Päivitä näkyvä kenttä
     const target = event.target as unknown as { value?: string } | null;
     if (target && typeof target.value === 'string') target.value = truncated;
 
-    if (!this.performedInputs[index]) this.performedInputs[index] = { sets: [] };
-    if (!this.performedInputs[index].sets) this.performedInputs[index].sets = [];
-    if (!this.performedInputs[index].sets![setIndex]) this.performedInputs[index].sets![setIndex] = {};
+    if (!this.performedInputs[index])
+      this.performedInputs[index] = { sets: [] };
+    if (!this.performedInputs[index].sets)
+      this.performedInputs[index].sets = [];
+    if (!this.performedInputs[index].sets![setIndex])
+      this.performedInputs[index].sets![setIndex] = {};
 
     if (truncated === '') {
       this.performedInputs[index].sets![setIndex][field] = undefined;
@@ -226,29 +272,108 @@ export class Page5Page implements OnInit {
     }
 
     const asNumber = Number(truncated);
-    this.performedInputs[index].sets![setIndex][field] = Number.isNaN(asNumber) ? undefined : asNumber;
+    this.performedInputs[index].sets![setIndex][field] = Number.isNaN(asNumber)
+      ? undefined
+      : asNumber;
   }
 
   /**
-   * Safe getter used by the template to avoid possible 'undefined' access.
-   * Returns a string (for binding to [value]) or empty string when not present.
+   * Turvallinen getter templaatille: välttää mahdollisen 'undefined'-arvon.
+   * Palauttaa merkkijonon sidottavaksi `[value]`-attribuuttiin tai tyhjän merkkijonon, jos arvo puuttuu.
    */
-  getPerformedValue(index: number, setIndex: number, field: 'reps' | 'weight'): string | number {
+  getPerformedValue(
+    index: number,
+    setIndex: number,
+    field: 'reps' | 'weight',
+  ): string | number {
     if (!this.performedInputs) return '';
     const entry = this.performedInputs[index];
     if (!entry || !entry.sets) return '';
     const set = entry.sets[setIndex];
     if (!set) return '';
     const val = set[field];
-    return val === undefined || val === null ? '' : val;
+
+    if (val === undefined || val === null) return '';
+
+    // Append ' kg' when not focused
+    if (field === 'weight') {
+      const key = `${index}-${setIndex}-${field}`;
+      if (!this.focusedMap[key]) {
+        return `${val} kg`;
+      }
+    }
+
+    return val;
   }
+
+  // Palauttaa placeholder-tekstin tai tyhjän merkkijonon, jos kyseinen kenttä on fokuksessa
+  getPlaceholder(
+    index: number,
+    setIndex: number,
+    field: 'reps' | 'weight',
+    exercise?: Exercise,
+  ): string {
+    const key = `${index}-${setIndex}-${field}`;
+    if (this.focusedMap[key]) return '';
+
+    // Jos käyttäjä on syöttänyt arvon, älä näytä fallback-placeholderia
+    const performed = this.getPerformedValue(index, setIndex, field);
+    if (performed !== '') return '';
+
+    // Muodosta oletusteksti harjoitustiedosta
+    if (field === 'reps') {
+      return (exercise?.sets?.[setIndex]?.reps ?? 'toistot') as string;
+    }
+    // weight
+    const w = exercise?.sets?.[setIndex]?.weight;
+    return w ? `${w} kg` : 'kg';
+  }
+
+  onInputFocus(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    event: any,
+    index: number,
+    setIndex: number,
+    field: 'reps' | 'weight',
+  ) {
+    const key = `${index}-${setIndex}-${field}`;
+    this.focusedMap[key] = true;
+    this.nextBtnVisible = false;
+    this.timerVisible = false;
+
+    // Wait a brief moment for the keyboard to slide up, then scroll to center
+    setTimeout(() => {
+      const target = event.target as HTMLElement;
+      if (target && target.scrollIntoView) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 150);
+  }
+
+  onInputBlur(index: number, setIndex: number, field: 'reps' | 'weight') {
+    const key = `${index}-${setIndex}-${field}`;
+    delete this.focusedMap[key];
+
+    // Viive varmistaa, että jos käyttäjä siirtyy suoraan toiseen kenttään,
+    // uusi focus-tapahtuma ehtii asettaa uuden avaimen focusedMap-objektiin
+    // ennen kuin tarkistamme, onko mikään kenttä enää fokuksessa.
+    setTimeout(() => {
+      if (Object.keys(this.focusedMap).length === 0) {
+        this.nextBtnVisible = true;
+        this.timerVisible = true;
+      }
+    }, 50);
+  }
+
   ionViewWillEnter() {
-    this.menu.enable(false); //menu disabled
+    this.menu.enable(false); // valikko poistettu käytöstä
   }
+
   ionViewWillLeave() {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
     this.resetFinishConfirm();
   }
+
   async keskeytaTreeniVahvistus() {
     //keskeyttää treenin
     const alert = await this.alertController.create({
@@ -317,7 +442,7 @@ export class Page5Page implements OnInit {
       this.currentIndex++;
     }
   }
-  
+
   /**
    * Siirtyy edelliseen liikkeeseen.
    */
@@ -364,17 +489,17 @@ export class Page5Page implements OnInit {
   }
 
   /**
-   * Wrapper for Finish button: requires two clicks within a short time window.
+   * Kääre lopetus-painikkeelle: vaatii kaksi klikkausta lyhyessä ajassa vahvistukseksi.
    */
   confirmFinish() {
     if (this.finishConfirm) {
-      // second click: proceed
+      // toinen klikkaus: vahvista ja suorita
       this.resetFinishConfirm();
       this.lopetaTreeni();
       return;
     }
 
-    // first click: set flag and timeout to reset
+    // ensimmäinen klikkaus: asetetaan lipuke ja ajastin palautukselle
     this.finishConfirm = true;
     this.finishConfirmTimeoutId = window.setTimeout(() => {
       this.finishConfirm = false;
@@ -383,15 +508,5 @@ export class Page5Page implements OnInit {
   }
 }
 
-/**
- * Ohjaa käyttäjän treenisivulle ja välittää valitun ohjelman tiedot
- */
-// startProgram(finishedTrainingProgram: TrainingProgram) {
-//   // 3. TÄRKEÄÄ: Lähetetään syväkopio (JSON-kikka on varmin tapa poistaa vanhat viittaukset)
-//   const programToLaunch = JSON.parse(JSON.stringify(this.activeWorkoutReordered));
 
-//   this.router.navigate(['/page5'], {
-//     state: { activeWorkoutReordered: programToLaunch },
-//   })
-// }
 

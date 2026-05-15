@@ -1,5 +1,5 @@
 /**
- * Add_training näkymä
+ * Lisää treeni -näkymä
  */
 
 import { Component, inject, ViewChild } from '@angular/core';
@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { MenuController } from '@ionic/angular/standalone'; //tuodaan menucontroller jotta voidaan disable menu
+import { MenuController } from '@ionic/angular/standalone'; // tuodaan MenuController jotta voimme poistaa valikon käytöstä
 import { addOutline, trashOutline } from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
 import {
@@ -94,6 +94,7 @@ export class LisaaTreeni {
   constructor() {
     addIcons({ addOutline, trashOutline });
   }
+<<<<<<< HEAD
 preSelectExercises(existingExercises: Exercise[]) {
   existingExercises.forEach(ex => {
     this.exerciseList2.forEach(cat => {
@@ -109,39 +110,54 @@ preSelectExercises(existingExercises: Exercise[]) {
   // taulukon viite — muuten UI ei välttämättä päivity automaattisesti
   this.exerciseList2 = [...this.exerciseList2];
 }
+=======
+  preSelectExercises(existingExercises: Exercise[]) {
+    existingExercises.forEach((ex) => {
+      this.exerciseList2.forEach((cat) => {
+        cat.exercises.forEach((e) => {
+          if (e.move._id === ex.move._id) {
+            e.isSelected = true;
+            e.sets = ex.sets.map((s) => ({ ...s }));
+          }
+        });
+      });
+    });
+    this.exerciseList2 = [...this.exerciseList2];
+  }
+>>>>>>> main
   /**
    * Kun page4-sivu on tulossa näkyviin haetaan kaikki käyttäjän movet databasesta
    * Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
    */
   ionViewWillEnter() {
-    
     // Kun sivu tulee näkyviin: estä sivuvalikko ja hae kaikki liikkeet backendistä.
     // Tämän kutsun jälkeen `categorizeMoves()` rakentaa käyttöliittymään
     // tarvittavan `exerciseList2`-rakenteen.
     this.menu.enable(false);
     
-  const nav = this.router.currentNavigation() ?? history.state;
-  const state = (nav as any)?.extras?.state ?? nav;
+ const nav = this.router.currentNavigation() ?? history.state;
+// Korvattu (nav as any) tarkemmalla inline-tyypityksellä
+const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
   const existing = state?.editProgram;
 
-  if (existing) {
-    this.isEditMode = true;
-    this.editProgramId = existing._id;
-    this.programName = existing.name;
-  } else {
-    this.isEditMode = false;
-    this.editProgramId = null;
-  }
+    if (existing) {
+      this.isEditMode = true;
+      this.editProgramId = existing._id;
+      this.programName = existing.name;
+    } else {
+      this.isEditMode = false;
+      this.editProgramId = null;
+    }
 
-  this.dataFetchService.getAllMoves().subscribe({
-    next: (data) => {
-      this.usersMoves = data as Move[];
-      this.categorizeMoves();
-      // Edit-moodissa: esivalitse ohjelman liikkeet
-      if (existing) this.preSelectExercises(existing.exercises);
-    },
-    error: (err) => console.error('Failed to fetch moves', err),
-  });
+    this.dataFetchService.getAllMoves().subscribe({
+      next: (data) => {
+        this.usersMoves = data as Move[];
+        this.categorizeMoves();
+        // Edit-moodissa: esivalitse ohjelman liikkeet
+        if (existing) this.preSelectExercises(existing.exercises);
+      },
+      error: (err) => console.error('Failed to fetch moves', err),
+    });
   }
   ionViewWillLeave() {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
@@ -165,7 +181,7 @@ preSelectExercises(existingExercises: Exercise[]) {
         isSelected: false,
       };
 
-        // 1. Lisää alkuperäiseen lihasryhmään
+      // 1. Lisää alkuperäiseen lihasryhmään
       let originalCategory = this.exerciseList2.find(
         (y) => y.category === x.muscleGroup,
       );
@@ -218,6 +234,10 @@ preSelectExercises(existingExercises: Exercise[]) {
 
     // Päivitä taulukon viite, jotta Ionicin change detection huomaa kategoriamuutokset heti
     this.exerciseList2 = [...this.exerciseList2];
+  }
+
+  getSelectedCount(category: Category2): number {
+    return category.exercises.filter((e) => e.isSelected).length;
   }
 
   /**
@@ -274,7 +294,7 @@ preSelectExercises(existingExercises: Exercise[]) {
    */
   updateAllWeights(exercise: ExerciseIsSelected, newWeightsVal: string) {
     // Aseta jokaisen sarjan `weight`-kenttä samaan arvoon.
-    const newWeight = parseInt(newWeightsVal, 10);
+    const newWeight = this.parseWeightString(String(newWeightsVal));
     if (isNaN(newWeight) || newWeight < 0) return;
 
     if (exercise.sets) {
@@ -282,6 +302,34 @@ preSelectExercises(existingExercises: Exercise[]) {
         set.weight = newWeight;
       });
     }
+  }
+
+  /**
+   * Parsii painokentän merkkijonon hyväksyen sekä pilkun että pisteen
+   * desimaalierottimena. Poistaa ei-numeraaliset merkit, varmistaa korkeintaan
+   * yhden desimaalipisteen ja rajoittaa desimaalit kahteen desimaaliin.
+   */
+  private parseWeightString(raw: string): number {
+    if (!raw) return NaN;
+    let s = String(raw).trim();
+    // hyväksy pilkku ja piste — muut merkit pois
+    s = s.replace(',', '.');
+    s = s.replace(/[^0-9.]/g, '');
+    if (s === '') return NaN;
+    // Poista ylimääräiset pisteet (pidä ensimmäinen)
+    const firstDot = s.indexOf('.');
+    if (firstDot !== -1) {
+      const before = s.slice(0, firstDot + 1);
+      const after = s.slice(firstDot + 1).replace(/\./g, '');
+      s = before + after;
+      // rajoita desimaaleihin max 2
+      const dotIdx = s.indexOf('.');
+      if (dotIdx !== -1) {
+        s = s.slice(0, dotIdx + 1 + Math.min(2, s.length - dotIdx - 1));
+      }
+    }
+    const parsed = parseFloat(s);
+    return Number.isNaN(parsed) ? NaN : parsed;
   }
 
   toggleSelection(item: ExerciseIsSelected) {
@@ -428,7 +476,10 @@ preSelectExercises(existingExercises: Exercise[]) {
     if (newLength > currentLength) {
       for (let i = currentLength; i < newLength; i++) {
         const template = this.modalTempSets[0];
-        this.modalTempSets.push({ reps: template.reps, weight: template.weight });
+        this.modalTempSets.push({
+          reps: template.reps,
+          weight: template.weight,
+        });
       }
     } else if (newLength < currentLength) {
       this.modalTempSets.splice(newLength);
@@ -450,19 +501,28 @@ preSelectExercises(existingExercises: Exercise[]) {
     });
 
     if (!this.modalExercise) {
-      console.warn('saveExerciseModal: modalExercise is null — closing modal without saving');
+      console.warn(
+        'saveExerciseModal: modalExercise is null — closing modal without saving',
+      );
       this.isExerciseModalOpen = false;
       return;
     }
 
     // Parsitaan käyttäjän syöte turvallisesti (muuntaen ensin stringiksi).
     const parsedCount = parseInt(String(this.modalInputCount ?? '').trim(), 10);
-    const targetCount = !isNaN(parsedCount) && parsedCount > 0 ? parsedCount : this.modalTempSets.length;
+    const targetCount =
+      !isNaN(parsedCount) && parsedCount > 0
+        ? parsedCount
+        : this.modalTempSets.length;
 
     const parsedReps = parseInt(String(this.modalSingleReps ?? '').trim(), 10);
-    const parsedWeight = parseInt(String(this.modalSingleWeight ?? '').trim(), 10);
-    const baseReps = !isNaN(parsedReps) ? parsedReps : this.modalTempSets[0].reps;
-    const baseWeight = !isNaN(parsedWeight) ? parsedWeight : this.modalTempSets[0].weight;
+    const parsedWeight = this.parseWeightString(String(this.modalSingleWeight ?? '').trim());
+    const baseReps = !isNaN(parsedReps)
+      ? parsedReps
+      : this.modalTempSets[0].reps;
+    const baseWeight = !isNaN(parsedWeight)
+      ? parsedWeight
+      : this.modalTempSets[0].weight;
 
     const newSets = [] as { reps: number; weight: number }[];
     for (let i = 0; i < targetCount; i++) {
@@ -590,33 +650,35 @@ preSelectExercises(existingExercises: Exercise[]) {
 
       // kutsutaan dataFetchServicen metodia joka lähettää POST http-requestin backendiin
       if (this.isEditMode && this.editProgramId) {
-  this.dataFetchService.updateProgram(this.editProgramId, {
-    name: this.programName,
-    description: '',
-    exercises: selectedExercises,
-  }).subscribe({
-    next: () => {
-      this.resetSelections();
-      this.router.navigate(['/page2']);
-    },
-    error: (err) => {
-      console.error('Error updating program:', err);
-      alert('Päivitys epäonnistui. Yritä uudelleen.');
-    },
-  });
-} else {
-  this.dataFetchService.createProgram(newProgram2).subscribe({
-    next: (savedProgram) => {
-      console.log('Tallennettu!', savedProgram);
-      this.resetSelections();
-      this.router.navigate(['/page2']);
-    },
-    error: (err) => {
-      console.error('Error saving program:', err);
-      alert('Tallennus epäonnistui. Yritä uudelleen.');
-    },
-  });
-} 
+        this.dataFetchService
+          .updateProgram(this.editProgramId, {
+            name: this.programName,
+            description: '',
+            exercises: selectedExercises,
+          })
+          .subscribe({
+            next: () => {
+              this.resetSelections();
+              this.router.navigate(['/page2']);
+            },
+            error: (err) => {
+              console.error('Error updating program:', err);
+              alert('Päivitys epäonnistui. Yritä uudelleen.');
+            },
+          });
+      } else {
+        this.dataFetchService.createProgram(newProgram2).subscribe({
+          next: (savedProgram) => {
+            console.log('Tallennettu!', savedProgram);
+            this.resetSelections();
+            this.router.navigate(['/page2']);
+          },
+          error: (err) => {
+            console.error('Error saving program:', err);
+            alert('Tallennus epäonnistui. Yritä uudelleen.');
+          },
+        });
+      }
     } else {
       alert('Anna ohjelmalle nimi ja valitse vähintään yksi liike.');
     }

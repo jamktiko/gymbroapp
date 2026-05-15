@@ -1,9 +1,5 @@
 /* --- SIVUN PERUSTAUSTA --- */
 ion-content {
-  // Salli sisältörullausta — tarvitaan, jotta pitkä lista seteistä skrollautuu
-  --overflow: auto;
-  overflow: auto;
-
   // Luodaan syvyysvaikutelma: keskeltä harmaa (#222), reunoilta musta (#111)
   --background: radial-gradient(circle at center, #222 0%, #111 100%);
 }
@@ -14,10 +10,9 @@ ion-content {
   flex-direction: column; // Pinotaan elementit päällekkäin
   align-items: center; // Keskiteään elementit vaakasuunnassa
   justify-content: flex-start; // Aloitetaan sijoittelu ylhäältä
-  flex: 1 1 auto;
-  overflow-y: auto; /* Mahdollistaa sisällön pystyrullauksen */
-  padding-top: 40px; /* Jätetään tilaa yläpalkin ja kortin väliin */
+  padding-top: 0px; /* Jätetään tilaa yläpalkin ja kortin väliin */
   padding-bottom: 140px; /* Varmistaa, että footer/timer eivät peitä viimeisiä rivejä */
+  margin-top: 0px;
 }
 
 /* --- LIIKEKORTTI (KESKELLÄ RUUTUA) --- */
@@ -37,13 +32,15 @@ ion-content {
   // Ulkopuolinen varjo tuo korttia lähemmäs käyttäjää
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
 
+  z-index: 10;
+
   /* Pieni yläteksti: "NYKYINEN LIIKE" */
   .label {
     color: #ffd900;
     font-size: 11px;
     letter-spacing: 3px; // Harvennettu teksti on helpompi lukea nopeasti
     text-transform: uppercase; // Pakotetaan isot kirjaimet
-    margin-bottom: 8px;
+    margin-bottom: 11px;
     opacity: 0.9;
   }
 
@@ -52,7 +49,7 @@ ion-content {
     font-size: 30px;
     color: #ffffff;
     font-weight: 800; // Erittäin lihavoitu
-    margin: 0 0 25px 0; // Tilaa vain alapuolelle
+    margin: 25px 0 25px 0;
     // Keltainen hohde tekstin ympärillä
     text-shadow: 0 0 15px rgba(255, 217, 0, 0.3);
   }
@@ -66,7 +63,7 @@ ion-content {
   gap: 8px;
   font-weight: 600;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.24);
-  margin: 8px 0 0 0; /* pieni yläreuna, wrapper hoitaa keskityksen */
+  margin: 12px 0 0 0; /* pieni yläreuna, wrapper hoitaa keskityksen */
   padding: 8px 12px;
 }
 
@@ -78,11 +75,12 @@ ion-content {
 /* Matchataan sivun keltaista aksenttiväriä ja tummaa tekstiä */
 .toggle-btn {
   --background: #000000; /* sivun keltainen tehosteväri */
-  --color:  #ffd900; /* tumma teksti kontrastiksi */
+  --color: #ffd900; /* tumma teksti kontrastiksi */
   border: 1px solid rgba(11, 11, 11, 0.06);
   background: var(--background);
   color: var(--color);
 }
+
 .toggle-btn ion-icon {
   color: inherit; /* icon seuraa tekstin väriä */
 }
@@ -90,15 +88,14 @@ ion-content {
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
 
-/* Wrapper joka keskittää napin täsmälleen stats-ruudukon alle */
-.toggle-wrapper {
-  display: flex;
-  justify-content: center; /* keskitetään vaakasuunnassa */
-  width: 100%;
-  margin-top: 6px; /* lisää tilaa stats-ruudukon ja napin väliin */
+  /* Wrapper joka keskittää napin täsmälleen stats-ruudukon alle */
+  .toggle-wrapper {
+    display: flex;
+    justify-content: center; /* keskitetään vaakasuunnassa */
+    width: 100%;
+    margin-top: 6px; /* lisää tilaa stats-ruudukon ja napin väliin */
+  }
 }
-}
-
 
 /* --- SARJAT, TOISTOT JA PAINOT (KORTIN SISÄLLÄ) --- */
 .stats-grid {
@@ -147,7 +144,7 @@ ion-content {
       --padding-end: 8px;
       --padding-top: 6px;
       --padding-bottom: 6px;
-      --background: rgba(255,255,255,0.03);
+      --background: rgba(255, 255, 255, 0.03);
       border-radius: 8px;
       color: #fff;
       text-align: center;
@@ -161,7 +158,8 @@ ion-content {
 }
 .set-row {
   display: grid;
-  grid-template-columns: 56px 14% 30% 30%;
+  // grid-template-columns: 56px 14% 30% 30%;
+  grid-template-columns: 15% 25% 15% 30%;
   align-items: center;
   gap: 12px;
   padding: 8px 0;
@@ -170,7 +168,8 @@ ion-content {
   color: #aaa;
   text-align: left;
 }
-.set-reps, .set-weight {
+.set-reps,
+.set-weight {
   width: 100%;
 }
 .set-action {
@@ -220,10 +219,10 @@ ion-header {
 }
 
 // Yläpalkin tekstit ja valikkonappi
-ion-title,
-ion-menu-button {
+ion-title {
   color: #ffd900;
   font-weight: bold;
+  padding-right: 0;
 }
 
 /* --- FOOTERIN NEXT/FINISH-NAPPI --- */
@@ -240,3 +239,43 @@ ion-menu-button {
   margin-bottom: 60px;
 }
 
+/* Input-with-unit: shows a persistent unit (kg) inside the input field */
+.input-with-unit {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  .performed-input {
+    /* Make room for the unit on the right */
+    --padding-end: 44px;
+    box-sizing: border-box;
+  }
+
+  .unit {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffd900;
+    font-weight: 700;
+    pointer-events: none; /* clicks go to the input */
+    font-size: 14px;
+  }
+}
+
+.performed-input:focus-within input::placeholder {
+  color: transparent;
+  opacity: 0; /* Varmistetaan näkymättömyys joillakin selaimilla */
+}
+
+.ion-padding-horizontal {
+  color: var(--ion-color-primary);
+  font-weight: bold;
+}
+
+.prev-btn {
+  // margin-bottom: 20px
+  // color: #ffd900;
+  // font-weight: bold;
+  margin: 8px 4px 8px 4px;
+}
