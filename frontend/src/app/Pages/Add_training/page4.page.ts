@@ -498,10 +498,7 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
         : this.modalTempSets.length;
 
     const parsedReps = parseInt(String(this.modalSingleReps ?? '').trim(), 10);
-    const parsedWeight = parseInt(
-      String(this.modalSingleWeight ?? '').trim(),
-      10,
-    );
+    const parsedWeight = this.parseWeightString(String(this.modalSingleWeight ?? '').trim());
     const baseReps = !isNaN(parsedReps)
       ? parsedReps
       : this.modalTempSets[0].reps;
