@@ -19,7 +19,7 @@ ion-content {
 .exercise-card {
   width: 90%; // Kortti täyttää lähes koko leveyssuunnan
   background: rgba(0, 0, 0, 0.7); // Puoliläpinäkyvä musta
-  border: 1px solid rgba(255, 217, 0, 0.4); // Ohut himmeä keltainen reunus
+  border: 2px solid rgba(255, 217, 0, 0.4); // Ohut himmeä keltainen reunus
   border-radius: 20px;
   padding: 40px 20px; // Sisäpuolen tyhjä tila (pysty, vaaka)
   text-align: center;
@@ -97,7 +97,6 @@ ion-content {
     margin-top: 6px; /* lisää tilaa stats-ruudukon ja napin väliin */
   }
 }
-
 /* --- SARJAT, TOISTOT JA PAINOT (KORTIN SISÄLLÄ) --- */
 .stats-grid {
   display: flex;
@@ -198,15 +197,27 @@ ion-content {
 }
 .keskeyta {
   margin: 10px;
-  --background: transparent;
+  --background: #000000;
+  border: 2px solid rgba(255, 217, 0, 0.4); /*rgba(255, 255, 255, 0.563);*/
   display: flex;
   align-items: center;
   justify-content: center;
-  text-shadow: 0 4px 4px rgba(39, 39, 39, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  overflow: hidden;
+  border-radius: 8px;
 }
 .X {
-  color: #ff0000;
-  font-size: 22px;
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.8;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 0 4px 4px rgba(39, 39, 39, 0.2);
+}
+.keskeyta:active {
+  transform: scale(0.95); /* Painuu hieman kasaan */
 }
 /* --- YLÄPALKKI (HEADER) --- */
 ion-header {
@@ -240,7 +251,6 @@ ion-title {
   margin-bottom: 60px;
   margin-bottom: calc(env(safe-area-inset-bottom) + 17px) !important;
 }
-
 /* Input-with-unit: shows a persistent unit (kg) inside the input field */
 .input-with-unit {
   position: relative;
