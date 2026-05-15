@@ -23,16 +23,16 @@ ion-content {
 }
 .next {
   margin-bottom: calc(env(safe-area-inset-bottom) + 17px) !important;
-  margin-top: auto;
+  margin-top: 2px;
   display: inline-flex;
   align-items: center;
   --border-radius: 20px;
   justify-content: center !important;
   align-items: center !important;
-  height: 50px !important;
+  height: 60px !important;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.24);
   font-size: 25px !important;
-  font-weight: bold !important;
+  font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 1px;
   width: 100%;

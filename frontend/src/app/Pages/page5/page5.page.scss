@@ -21,7 +21,7 @@ ion-content {
   background: rgba(0, 0, 0, 0.7); // Puoliläpinäkyvä musta
   border: 2px solid rgba(255, 217, 0, 0.4); // Ohut himmeä keltainen reunus
   border-radius: 20px;
-  padding: 20px 20px 20px 20px; // Sisäpuolen tyhjä tila (pysty, vaaka)
+  padding: 30px 20px 30px 20px; // Sisäpuolen tyhjä tila (pysty, vaaka)
   text-align: center;
   // padding-bottom: 36px; /* Vähennetty alapaddingia, vähemmän tyhjää tilaa */
   // min-height: 300px; /* Pienennetty kortin min-heightiä */
@@ -286,6 +286,7 @@ ion-title {
   color: var(--ion-color-primary);
   font-weight: bold;
   margin-right: 0 !important;
+  padding-right: 0;
 }
 
 .prev-btn {
