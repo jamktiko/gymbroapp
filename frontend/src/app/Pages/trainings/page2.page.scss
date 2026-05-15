@@ -19,7 +19,7 @@ ion-content {
 }
 
 .progress-wrapper {
-  flex: 0 0 45%; 
+  flex: 0 0 45%;
   max-width: 150px;
   display: flex;
   align-items: center;
@@ -27,9 +27,9 @@ ion-content {
   // TIUKKA REUNUS
   border: 1px solid rgba(255, 255, 255, 0.3); // Ohut mutta selkeä raja
   border-radius: 20px;
-  height: 10px;        // Kavennetaan korkeus samaksi kuin palkilla
-  padding: 0;          // Ei tyhjää tilaa sivuilla
-  overflow: hidden;    // Leikkaa palkin reunat siististi raamin sisään
+  height: 10px; // Kavennetaan korkeus samaksi kuin palkilla
+  padding: 0; // Ei tyhjää tilaa sivuilla
+  overflow: hidden; // Leikkaa palkin reunat siististi raamin sisään
 }
 
 .progress-wrapper {
@@ -45,16 +45,16 @@ ion-content {
   background: #333;
 
   .xpbar {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  --background: transparent;
-  --progress-background: var(--ion-color-primary);
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    --background: transparent;
+    --progress-background: var(--ion-color-primary);
 
-  &::part(track) {
-    background: transparent !important;
+    &::part(track) {
+      background: transparent !important;
+    }
   }
-}
 
   .xp-fill {
     height: 100%;
@@ -96,7 +96,7 @@ ion-accordion {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 80%;
+    max-width: 100%;
     display: block;
     margin: 0;
     font-weight: bold;
@@ -217,7 +217,8 @@ ion-accordion {
   color: #888;
   text-align: center;
   font-style: italic;
-  margin-top: 30px;
+  margin-top: 0;
+  margin-bottom: 30px;
 }
 
 ion-label p {
