@@ -21,42 +21,31 @@
       </div>
     </div>
 
-    <!-- STREAK-KORTTI -->
-
+    <!-- Stats-kortit -->
     <div class="user-stats-grid">
       <div class="user-stat-box">
         <small>Kokonais XP</small>
-        <p>{{ userData?.xp || 0 }}</p>
+        <p>{{ totalXp }}</p>
       </div>
 
       <div class="user-stat-box">
         <small>Treenejä</small>
-        <p>{{ userData?.trainingSessions?.length || 0 }}</p>
+        <p>{{ totalSessions }}</p>
+      </div>
+
+      <div class="user-stat-box">
+        <small>Taso</small>
+        <p>{{ level }}</p>
+      </div>
+
+      <div class="user-stat-box">
+        <small>Seuraava taso</small>
+        <p>{{ xpToNextLevel }}</p>
       </div>
 
       <div class="user-stat-box full-width">
         <small>Jäsenenä alkaen</small>
         <p>{{ userData?.createdAt | date:'dd.MM.yyyy' }}</p>
-      </div>
-    </div>
-
-    <!-- Stats-kortit -->
-    <div class="stats-grid">
-      <div class="stat-box">
-        <small>XP</small>
-        <p>{{ totalXp }}</p>
-      </div>
-      <div class="stat-box">
-        <small>Taso</small>
-        <p>{{ level }}</p>
-      </div>
-      <div class="stat-box">
-        <small>Treenikerrat</small>
-        <p>{{ totalSessions }}</p>
-      </div>
-      <div class="stat-box">
-        <small>Seuraava taso</small>
-        <p>{{ xpToNextLevel }} XP</p>
       </div>
     </div>
 

@@ -1,3 +1,7 @@
+/**
+ * Tilastot-sivu
+ */
+
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +20,6 @@ import {
   IonCardHeader,
   IonCardTitle,
 } from '@ionic/angular/standalone';
-import { XpService } from '../../xp.service';
 import { addIcons } from 'ionicons'; // Tarvitaan ikonien rekisteröintiin
 import {
   flame,
@@ -30,15 +33,10 @@ import {
   trophy,
 } from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
+import { XpService } from '../../xp.service';
 import { UserData } from '../../types/userdata';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
-
-interface PersonalRecord {
-  muscleGroup: string;
-  exercise: string;
-  weight: number;
-}
 
 @Component({
   selector: 'app-page7',
@@ -74,7 +72,6 @@ export class Page7Page implements OnInit {
   level = 1;
   xpToNextLevel = 0;
   totalSessions = 0;
-  personalRecords: PersonalRecord[] = [];
 
   // Piirakkagraafi
   private cdr = inject(ChangeDetectorRef);
@@ -149,7 +146,6 @@ export class Page7Page implements OnInit {
         this.level = stats.level;
         this.xpToNextLevel = stats.xpToNextLevel;
         this.totalSessions = stats.totalSessions;
-        this.personalRecords = stats.personalRecords;
 
         // Rakennetaan piirakkagraafin data
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -166,23 +162,21 @@ export class Page7Page implements OnInit {
         };
         this.cdr.detectChanges();
 
+        this.dataFetchService.getUserDataById().subscribe({
+          next: (data) => {
+            console.log('User data fetched:', data);
+            this.userData = data;
+          },
+          error: (err) => {
+            console.error('Error fetching user data:', err);
+          },
+        });
+
         // Päivitetään saavutusten progress oikealla datalla
         // this.updateAchievements();
       },
       error: (err) => {
         console.error('Stats-haku epäonnistui:', err);
-      },
-    });
-  }
-
-  fetchUserData() {
-    this.dataFetchService.getUserDataById().subscribe({
-      next: (data) => {
-        console.log('User data fetched:', data);
-        this.userData = data;
-      },
-      error: (err) => {
-        console.error('Error fetching user data:', err);
       },
     });
   }

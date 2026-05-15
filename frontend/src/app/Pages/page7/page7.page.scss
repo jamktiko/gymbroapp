@@ -126,6 +126,34 @@
       color: white;
     }
   }
+
+  .user-stat-box {
+    background: var(--ion-item-background);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 217, 0, 0.1); // Kevyt keltainen reunus
+    text-align: center;
+
+    small {
+      display: block;
+      color: var(--ion-color-primary); // Keltainen
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    &.full-width {
+      grid-column: span 2; // Liittymispäivä vie koko leveyden
+    }
+  }
 }
 
 // Piirakkagraafi

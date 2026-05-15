@@ -1,185 +1,199 @@
-// Stats-kortit
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  padding: 15px;
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+  // margin-top: 15px;
+  padding: 10px;
 
-  .stat-box {
+  // Saavutukset
+  .achievements-card {
+    margin: 0 15px 15px;
     background: #1e1e1e;
-    padding: 15px;
-    border-radius: 12px;
+    border-radius: 15px;
     border: 1px solid #333;
-    text-align: center;
+    width: 100%;
 
-    small {
-      display: block;
-      color: var(--ion-color-primary);
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 1px;
-      margin-bottom: 5px;
-    }
-
-    p {
-      margin: 0;
-      font-size: 1.3rem;
-      font-weight: 700;
+    ion-card-title {
+      font-size: 1rem;
       color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+
+    .achievement-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #2a2a2a;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.locked {
+        opacity: 0.4;
+      }
+    }
+
+    .achievement-icon {
+      ion-icon {
+        font-size: 1.8rem;
+      }
+    }
+
+    .achievement-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .achievement-title {
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .achievement-desc {
+        color: #888;
+        font-size: 0.75rem;
+      }
+
+      ion-progress-bar {
+        margin-top: 4px;
+        border-radius: 4px;
+        width: 100%;
+        display: block;
+      }
     }
   }
-}
 
-// Piirakkagraafi
-.chart-card {
-  margin: 0 11px 11px;
-  background: #1e1e1e;
-  border-radius: 15px;
-  border: 1px solid #333;
-
-  canvas {
-  width: 100% !important;
-  height: 280px !important;
-}
-
-  ion-card-header {
-    padding-bottom: 0;
-  }
-
-  ion-card-title {
-    font-size: 1rem;
-    color: white;
-  }
-
-  ion-card-content {
+  // Stats-kortit
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
     padding: 15px;
-    display: flex;
-    justify-content: center;
+
+    .stat-box {
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      text-align: center;
+
+      small {
+        display: block;
+        color: var(--ion-color-primary);
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: white;
+      }
+    }
+  }
+
+  // Piirakkagraafi
+  .chart-card {
+    margin: 0 11px 11px;
+    background: #1e1e1e;
+    border-radius: 15px;
+    border: 1px solid #333;
 
     canvas {
-      max-height: 280px;
+      width: 100% !important;
+      height: 280px !important;
     }
-  }
-}
 
-// Personal Records
-.records-card {
-  margin: 0 15px 15px;
-  background: #1e1e1e;
-  border-radius: 15px;
-  border: 1px solid #333;
-
-  ion-card-title {
-    font-size: 1rem;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    ion-icon {
-      color: var(--ion-color-primary);
+    ion-card-header {
+      padding-bottom: 0;
     }
-  }
 
-  .record-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #2a2a2a;
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-  .record-info {
-    display: flex;
-    flex-direction: column;
-
-    .record-exercise {
+    ion-card-title {
+      font-size: 1rem;
       color: white;
-      font-weight: 600;
-      font-size: 0.95rem;
     }
 
-    .record-group {
-      color: #666;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-  }
+    ion-card-content {
+      padding: 15px;
+      display: flex;
+      justify-content: center;
 
-  .record-weight {
-    color: #2dd36f;
-    font-weight: 700;
-    font-size: 1.1rem;
-    filter: drop-shadow(0 0 4px rgba(45, 211, 111, 0.4));
-  }
-}
-
-// Saavutukset
-.achievements-card {
-  margin: 0 15px 15px;
-  background: #1e1e1e;
-  border-radius: 15px;
-  border: 1px solid #333;
-
-  ion-card-title {
-    font-size: 1rem;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    ion-icon {
-      color: var(--ion-color-primary);
+      canvas {
+        max-height: 280px;
+      }
     }
   }
 
-  .achievement-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid #2a2a2a;
+  // Personal Records
+  .records-card {
+    margin: 0 15px 15px;
+    background: #1e1e1e;
+    border-radius: 15px;
+    border: 1px solid #333;
+    width: 100%;
 
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &.locked {
-      opacity: 0.4;
-    }
-  }
-
-  .achievement-icon {
-    ion-icon {
-      font-size: 1.8rem;
-    }
-  }
-
-  .achievement-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    .achievement-title {
+    ion-card-title {
+      font-size: 1rem;
       color: white;
-      font-weight: 600;
-      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
     }
 
-    .achievement-desc {
-      color: #888;
-      font-size: 0.75rem;
+    .record-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #2a2a2a;
+
+      &:last-child {
+        border-bottom: none;
+      }
     }
 
-    ion-progress-bar {
-      margin-top: 4px;
-      border-radius: 4px;
+    .record-info {
+      display: flex;
+      flex-direction: column;
+
+      .record-exercise {
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .record-group {
+        color: #666;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .record-weight {
+      color: #2dd36f;
+      font-weight: 700;
+      font-size: 1.1rem;
+      filter: drop-shadow(0 0 4px rgba(45, 211, 111, 0.4));
     }
   }
 }
