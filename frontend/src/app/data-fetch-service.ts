@@ -178,6 +178,7 @@ export class DataFetchService {
     //
   }
 
+
   /**
    * [POST] Creates a new trainingsession and adds it to the database.
    */
@@ -189,6 +190,22 @@ export class DataFetchService {
   ): Observable<TrainingSession> {
     return this.http.post<TrainingSession>(this.apiurlSessions, sessionData);
   }
+// -----------------------GET STATS METHODS: -----------------------
+
+getStats(): Observable<any> {
+  let googleId = null;
+  try {
+    const sessionDataString = sessionStorage.getItem('accesstoken');
+    if (sessionDataString) {
+      const sessionData = JSON.parse(sessionDataString);
+      googleId = sessionData.googleId;
+    }
+  } catch (error) {
+    console.error('Error parsing session data for googleId:', error);
+  }
+  if (!googleId) return throwError(() => new Error('No access token found.'));
+  return this.http.get(`${this.apiurlUsers}/${googleId}/stats`);
+}
 
   // ----------------------- CALENDAR METHODS: -----------------------
  

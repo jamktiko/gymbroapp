@@ -18,6 +18,7 @@ import {
 } from 'ionicons/icons';
 import { TrainingProgram, UserData } from '../../types/userdata';
 import { DataFetchService } from '../../data-fetch-service';
+import { IonList } from '@ionic/angular/standalone';
 import {
   IonContent,
   IonHeader,
@@ -55,6 +56,7 @@ import {
     IonFabButton,
     IonIcon,
     IonItem,
+    IonList,
     IonLabel,
     IonAccordionGroup,
     IonAccordion,
@@ -70,7 +72,6 @@ export class Page2Page implements OnInit {
   private alertCtrl = inject(AlertController);
   public xpService = inject(XpService);
   private dataFetchService = inject(DataFetchService);
-
   public usersTrainingPrograms: TrainingProgram[] = [];
   public userData!: UserData;
   public isAccordionOpen = false;
@@ -144,6 +145,13 @@ export class Page2Page implements OnInit {
       this.usersTrainingPrograms = data;
     }
   }
+
+  get levelProgress(): number {
+  if (!this.userData) return 0;
+  const currentLevelXp = (this.userData.level - 1) ** 2 * 50;
+  const nextLevelXp = this.userData.level ** 2 * 50;
+  return (this.userData.xp - currentLevelXp) / (nextLevelXp - currentLevelXp);
+}
 
   /**
    * Poistaa treeniohjelman modal-ikkunan varmistuksen jälkeen
