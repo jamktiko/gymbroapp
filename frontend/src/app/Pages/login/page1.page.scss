@@ -10,9 +10,9 @@ ion-content {
   flex-direction: column;
   justify-content: flex-start;
   height: 100%;
-  padding: 30px 20px;
+  padding: 40px 20px;
   text-align: center;
-  gap: 2vh;
+  gap: 3vh;
   height: 100%;
   /*background-color: #202020; /* Varmistetaan musta tausta */
 }
@@ -64,7 +64,7 @@ p {
   --background: #ffd900; /* Keltainen tausta */
   --color: #0f0f0f; /* Musta teksti */
   font-weight: 700;
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
   letter-spacing: -1px;
 
@@ -87,7 +87,6 @@ p {
 
 /* Alareunan tekstiosio */
 .footer-text {
-  margin-bottom: 20px;
   p {
     font-size: clamp(9px, 3vw, 13px);
     color: #ffffff;
