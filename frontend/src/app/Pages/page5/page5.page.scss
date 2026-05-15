@@ -21,10 +21,10 @@ ion-content {
   background: rgba(0, 0, 0, 0.7); // Puoliläpinäkyvä musta
   border: 2px solid rgba(255, 217, 0, 0.4); // Ohut himmeä keltainen reunus
   border-radius: 20px;
-  padding: 40px 20px; // Sisäpuolen tyhjä tila (pysty, vaaka)
+  padding: 20px 20px 20px 20px; // Sisäpuolen tyhjä tila (pysty, vaaka)
   text-align: center;
-  padding-bottom: 36px; /* Vähennetty alapaddingia, vähemmän tyhjää tilaa */
-  min-height: 300px; /* Pienennetty kortin min-heightiä */
+  // padding-bottom: 36px; /* Vähennetty alapaddingia, vähemmän tyhjää tilaa */
+  // min-height: 300px; /* Pienennetty kortin min-heightiä */
 
   // "Frosted glass" -efekti: sumentaa kortin takana olevan taustan
   backdrop-filter: blur(15px);
@@ -46,7 +46,7 @@ ion-content {
 
   /* Liikkeen nimi: esim. "Penkkipunnerrus" */
   .exercise-title {
-    font-size: 30px;
+    font-size: 28px;
     color: #ffffff;
     font-weight: 800; // Erittäin lihavoitu
     margin: 25px 0 25px 0;
@@ -80,6 +80,8 @@ ion-content {
   border: 1px solid rgba(11, 11, 11, 0.06);
   background: var(--background);
   color: var(--color);
+  // margin-top: 0px;
+  margin-bottom: 0px !important;
 }
 
 .toggle-btn ion-icon {
@@ -283,6 +285,7 @@ ion-title {
 .ion-padding-horizontal {
   color: var(--ion-color-primary);
   font-weight: bold;
+  margin-right: 0 !important;
 }
 
 .prev-btn {
