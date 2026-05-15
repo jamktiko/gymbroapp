@@ -22,11 +22,15 @@ import { LoadingInterceptor } from './app/interceptors/loading.interceptor';
 import { AuthInterceptor } from './app/interceptors/auth.interceptor';
 // import { environment } from './environments/environment';
 
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+
+
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideHttpClient(withInterceptors([AuthInterceptor, LoadingInterceptor])),
+    provideCharts(withDefaultRegisterables()),
 
     provideRouter(routes, withPreloading(PreloadAllModules)),
     {
