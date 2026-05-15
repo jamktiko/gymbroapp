@@ -1,5 +1,5 @@
 /**
- * Add_training näkymä
+ * Lisää treeni -näkymä
  */
 
 import { Component, inject, ViewChild } from '@angular/core';
@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { MenuController } from '@ionic/angular/standalone'; //tuodaan menucontroller jotta voidaan disable menu
+import { MenuController } from '@ionic/angular/standalone'; // tuodaan MenuController jotta voimme poistaa valikon käytöstä
 import { addOutline, trashOutline } from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
 import {
@@ -118,8 +118,9 @@ export class LisaaTreeni {
     // tarvittavan `exerciseList2`-rakenteen.
     this.menu.enable(false);
     
-  const nav = this.router.currentNavigation() ?? history.state;
-  const state = (nav as any)?.extras?.state ?? nav;
+ const nav = this.router.currentNavigation() ?? history.state;
+// Korvattu (nav as any) tarkemmalla inline-tyypityksellä
+const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
   const existing = state?.editProgram;
 
   if (existing) {
@@ -272,7 +273,7 @@ export class LisaaTreeni {
    */
   updateAllWeights(exercise: ExerciseIsSelected, newWeightsVal: string) {
     // Aseta jokaisen sarjan `weight`-kenttä samaan arvoon.
-    const newWeight = parseInt(newWeightsVal, 10);
+    const newWeight = this.parseWeightString(String(newWeightsVal));
     if (isNaN(newWeight) || newWeight < 0) return;
 
     if (exercise.sets) {
@@ -280,6 +281,34 @@ export class LisaaTreeni {
         set.weight = newWeight;
       });
     }
+  }
+
+  /**
+   * Parsii painokentän merkkijonon hyväksyen sekä pilkun että pisteen
+   * desimaalierottimena. Poistaa ei-numeraaliset merkit, varmistaa korkeintaan
+   * yhden desimaalipisteen ja rajoittaa desimaalit kahteen desimaaliin.
+   */
+  private parseWeightString(raw: string): number {
+    if (!raw) return NaN;
+    let s = String(raw).trim();
+    // hyväksy pilkku ja piste — muut merkit pois
+    s = s.replace(',', '.');
+    s = s.replace(/[^0-9.]/g, '');
+    if (s === '') return NaN;
+    // Poista ylimääräiset pisteet (pidä ensimmäinen)
+    const firstDot = s.indexOf('.');
+    if (firstDot !== -1) {
+      const before = s.slice(0, firstDot + 1);
+      const after = s.slice(firstDot + 1).replace(/\./g, '');
+      s = before + after;
+      // rajoita desimaaleihin max 2
+      const dotIdx = s.indexOf('.');
+      if (dotIdx !== -1) {
+        s = s.slice(0, dotIdx + 1 + Math.min(2, s.length - dotIdx - 1));
+      }
+    }
+    const parsed = parseFloat(s);
+    return Number.isNaN(parsed) ? NaN : parsed;
   }
 
   toggleSelection(item: ExerciseIsSelected) {
@@ -458,7 +487,7 @@ export class LisaaTreeni {
     const targetCount = !isNaN(parsedCount) && parsedCount > 0 ? parsedCount : this.modalTempSets.length;
 
     const parsedReps = parseInt(String(this.modalSingleReps ?? '').trim(), 10);
-    const parsedWeight = parseInt(String(this.modalSingleWeight ?? '').trim(), 10);
+    const parsedWeight = this.parseWeightString(String(this.modalSingleWeight ?? ''));
     const baseReps = !isNaN(parsedReps) ? parsedReps : this.modalTempSets[0].reps;
     const baseWeight = !isNaN(parsedWeight) ? parsedWeight : this.modalTempSets[0].weight;
 

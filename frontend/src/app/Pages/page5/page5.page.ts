@@ -58,7 +58,7 @@ export class Page5Page implements OnInit {
   public activeWorkoutReordered?: TrainingProgram;
   public currentIndex = 0;
   public workoutTimerDuration = 120;
-  // finish confirmation state: user must click twice within short time to confirm finish
+  // lopetusvahvistus: käyttäjän täytyy klikata kaksi kertaa lyhyessä ajassa vahvistaakseen lopetuksen
   public finishConfirm = false;
   private finishConfirmTimeoutId: number | undefined;
   // Käyttäjän syöttämät suoritetut arvot per liike
@@ -192,12 +192,12 @@ export class Page5Page implements OnInit {
   toggleSets(index: number) {
     if (!this.expandedSets) this.expandedSets = [];
     this.expandedSets[index] = !this.expandedSets[index];
-    // moving around resets any pending finish confirmation
+    // sivunvaihto nollaa mahdollisen lopetusvahvistuksen
     this.resetFinishConfirm();
   }
 
   /**
-   * Safe accessor for expanded state to avoid "possibly undefined" when indexing the array.
+   * Turvallinen apufunktio laajennetun tilan tarkistukseen, jotta ei indeksoida määrittelemätöntä arvoa.
    */
   getExpanded(index: number): boolean {
     return !!(this.expandedSets && this.expandedSets[index]);
@@ -236,8 +236,8 @@ export class Page5Page implements OnInit {
   }
 
   /**
-   * Safe getter used by the template to avoid possible 'undefined' access.
-   * Returns a string (for binding to [value]) or empty string when not present.
+   * Turvallinen getter templaatille: välttää mahdollisen 'undefined'-arvon.
+   * Palauttaa merkkijonon sidottavaksi `[value]`-attribuuttiin tai tyhjän merkkijonon, jos arvo puuttuu.
    */
   getPerformedValue(index: number, setIndex: number, field: 'reps' | 'weight'): string | number {
     if (!this.performedInputs) return '';
@@ -277,7 +277,7 @@ export class Page5Page implements OnInit {
     delete this.focusedMap[key];
   }
   ionViewWillEnter() {
-    this.menu.enable(false); //menu disabled
+    this.menu.enable(false); // valikko poistettu käytöstä
   }
   ionViewWillLeave() {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
@@ -398,17 +398,17 @@ export class Page5Page implements OnInit {
   }
 
   /**
-   * Wrapper for Finish button: requires two clicks within a short time window.
+   * Kääre lopetus-painikkeelle: vaatii kaksi klikkausta lyhyessä ajassa vahvistukseksi.
    */
   confirmFinish() {
     if (this.finishConfirm) {
-      // second click: proceed
+      // toinen klikkaus: vahvista ja suorita
       this.resetFinishConfirm();
       this.lopetaTreeni();
       return;
     }
 
-    // first click: set flag and timeout to reset
+    // ensimmäinen klikkaus: asetetaan lipuke ja ajastin palautukselle
     this.finishConfirm = true;
     this.finishConfirmTimeoutId = window.setTimeout(() => {
       this.finishConfirm = false;
@@ -417,15 +417,5 @@ export class Page5Page implements OnInit {
   }
 }
 
-/**
- * Ohjaa käyttäjän treenisivulle ja välittää valitun ohjelman tiedot
- */
-// startProgram(finishedTrainingProgram: TrainingProgram) {
-//   // 3. TÄRKEÄÄ: Lähetetään syväkopio (JSON-kikka on varmin tapa poistaa vanhat viittaukset)
-//   const programToLaunch = JSON.parse(JSON.stringify(this.activeWorkoutReordered));
 
-//   this.router.navigate(['/page5'], {
-//     state: { activeWorkoutReordered: programToLaunch },
-//   })
-// }
 
