@@ -1,10 +1,11 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="login-container">
     <div class="logo-section">
-
       <!-- <h1 class="orig-title">GymBro</h1> -->
 
-      <h1 class="alt-title"><span class="logo-gym">GYM</span><span class="logo-bro">BRO</span></h1>
+      <h1 class="alt-title">
+        <span class="logo-gym">GYM</span><span class="logo-bro">BRO</span>
+      </h1>
 
       <p>Kirjaudu sisään jatkaaksesi</p>
     </div>
@@ -25,15 +26,22 @@
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Kirjaudu Google-tunnuksilla
       </ion-button>
-      }
-      @if (!isNative) {
-      <asl-google-signin-button type="standard" size="large"></asl-google-signin-button>
+      } @if (!isNative) {
+      <asl-google-signin-button
+        type="standard"
+        size="large"
+      ></asl-google-signin-button>
       }
     </div>
 
     <div class="footer-text">
       <p>Ainoa kirjautumisvaihtoehto turvallisuutesi takaamiseksi.</p>
-      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://policies.google.com/privacy"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="tieto"
+      >
         Tietosuojaseloste
       </a>
     </div>

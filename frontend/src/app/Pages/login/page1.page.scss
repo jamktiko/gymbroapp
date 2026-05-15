@@ -8,25 +8,32 @@ ion-content {
 .login-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Jakaa osiot ylös, keskelle ja alas */
+  justify-content: flex-start;
   height: 100%;
   padding: 40px 20px;
   text-align: center;
+  gap: 3vh;
+  height: 100%;
   /*background-color: #202020; /* Varmistetaan musta tausta */
 }
 .logo-wrapper {
   display: flex;
+  max-height: 35vh;
+  width: auto;
   justify-content: center;
-  width: 100%;
-  padding: 20px 0;
+  object-fit: contain;
 }
-
+.logo-section {
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+}
 .orig-title {
   font-family: "Archivo Black", sans-serif;
   text-transform: uppercase;
   letter-spacing: -2px;
   padding: 15px;
-  font-size: 45px;
+  font-size: 40px;
   font-weight: 700;
   color: #ffd900; /* Keltainen otsikko */
   margin-bottom: 8px;
@@ -34,9 +41,10 @@ ion-content {
 }
 
 p {
-  font-size: 20px;
+  font-size: clamp(16px, 5vw, 20px);
   color: #ffdf3ef5;
   opacity: 0.8; /* Hieman himmeämpi keltainen */
+  letter-spacing: -1px;
 }
 
 /* Nappiosio (Keskellä) */
@@ -44,19 +52,21 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1; /* Ottaa kaiken vapaan tilan keskeltä */
+  flex-grow: 0; /* Ottaa kaiken vapaan tilan keskeltä */
 }
 
 /* Itse Google-nappi */
 .google-btn {
   width: 100%;
   max-width: 300px;
-  height: 80px;
+  height: 60px;
   --border-radius: 15px; /* Pyöristetyt kulmat */
   --background: #ffd900; /* Keltainen tausta */
   --color: #0f0f0f; /* Musta teksti */
   font-weight: 700;
-  font-size: 20px;
+  font-size: 13px;
+  white-space: nowrap;
+  letter-spacing: -1px;
 
   /* Keltainen hohde napin ympärille */
   --box-shadow: 0 4px 10px rgba(255, 255, 0, 0.2);
@@ -77,22 +87,20 @@ p {
 
 /* Alareunan tekstiosio */
 .footer-text {
-  margin-bottom: 20px;
-
   p {
-    font-size: 13px;
+    font-size: clamp(9px, 3vw, 13px);
     color: #ffffff;
     opacity: 0.7;
+    white-space: nowrap;
   }
 
-  a {
-    font-size: 16px;
+  .tieto {
+    font-size: clamp(11px, 3.5vw, 15px);
     color: #ffffff;
     text-decoration: underline; /* Alleviivaus linkille */
-    opacity: 0, 7;
+    opacity: 0.7;
   }
 }
-
 .alt-title {
   font-family: "Bebas Neue", sans-serif;
   font-size: 70px;
@@ -108,6 +116,7 @@ p {
 
 .logo-gym {
   color: var(--ion-color-primary);
+  flex-wrap: nowrap;
   background-color: #111111;
   padding: 0.15em 0.2em 0.05em 0.26em;
   /* Adjusted padding to compensate for letter-spacing and Bebas font baseline */
@@ -116,6 +125,7 @@ p {
 
 .logo-bro {
   color: #111111;
+  flex-wrap: nowrap;
   background-color: var(--ion-color-primary);
   padding: 0.15em 0.2em 0.05em 0.26em;
   display: inline-block;
