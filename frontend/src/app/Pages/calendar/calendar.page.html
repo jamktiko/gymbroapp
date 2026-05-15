@@ -8,73 +8,67 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-buttons slot="end">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-      <ion-title size="large">Kalenteri</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="content-container">
+    <div class="calendar-card">
+      <!-- Navigointi -->
+      <div class="calendar-nav">
+        <ion-button fill="clear" (click)="navigate(-1)">
+          <ion-icon class="calendar-arrow-backward" slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
 
-  <div class="calendar-card">
-    <!-- Navigointi -->
-    <div class="calendar-nav">
-      <ion-button fill="clear" (click)="navigate(-1)">
-        <ion-icon class="calendar-arrow-backward" slot="icon-only" name="chevron-back-outline"></ion-icon>
-      </ion-button>
-
-      <div class="nav-center">
-        <div class="calendar-title-container" (click)="toggleView()">
-          <span class="calendar-title">{{ view === 'month' ? getMonthLabel() : getWeekLabel() }}</span>
-          <span class="view-toggle">
-            {{ view === 'month' ? ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
-          </span>
+        <div class="nav-center">
+          <div class="calendar-title-container" (click)="toggleView()">
+            <span class="calendar-title">{{ view === 'month' ? getMonthLabel() : getWeekLabel() }}</span>
+            <span class="view-toggle">
+              {{ view === 'month' ? ' Kuukausinäkymä ' : ' Viikkonäkymä '}}
+            </span>
+          </div>
         </div>
+
+        <ion-button fill="clear" (click)="navigate(1)">
+          <ion-icon class="calendar-arrow-forward" slot="icon-only" name="chevron-forward-outline"></ion-icon>
+        </ion-button>
       </div>
 
-      <ion-button fill="clear" (click)="navigate(1)">
-        <ion-icon class="calendar-arrow-forward" slot="icon-only" name="chevron-forward-outline"></ion-icon>
-      </ion-button>
-    </div>
+      <!-- Viikonpäivien otsikot -->
+      <div class="weekday-header">
+        @for (d of ['Ma','Ti','Ke','To','Pe','La','Su']; track $index) {
+        <span>{{ d }}</span>
+        }
+      </div>
 
-    <!-- Viikonpäivien otsikot -->
-    <div class="weekday-header">
-      @for (d of ['Ma','Ti','Ke','To','Pe','La','Su']; track $index) {
-      <span>{{ d }}</span>
-      }
-    </div>
-
-    <!-- Kuukausinäkymä -->
-    @if (view === 'month') {
-    @for (week of weeks; track $index) {
-    <div class="week-row">
-      @for (day of week; track $index) {
-      <div class="day-cell" [class.other-month]="!isCurrentMonth(day)" [class.today]="isToday(day)"
-        [class.has-workout]="hasWorkout(day)">
-        <span class="day-number">{{ day.getDate() }}</span>
-        @if (hasWorkout(day)) {
-        <ion-icon name="checkmark-circle"></ion-icon>
+      <!-- Kuukausinäkymä -->
+      @if (view === 'month') {
+      @for (week of weeks; track $index) {
+      <div class="week-row">
+        @for (day of week; track $index) {
+        <div class="day-cell" [class.other-month]="!isCurrentMonth(day)" [class.today]="isToday(day)"
+          [class.has-workout]="hasWorkout(day)">
+          <span class="day-number">{{ day.getDate() }}</span>
+          @if (hasWorkout(day)) {
+          <ion-icon name="checkmark-circle"></ion-icon>
+          }
+        </div>
         }
       </div>
       }
-    </div>
-    }
-    }
+      }
 
-    <!-- Viikkonäkymä -->
-    @if (view === 'week') {
-    <div class="week-row">
-      @for (day of weekDays; track $index) {
-      <div class="day-cell" [class.today]="isToday(day)" [class.has-workout]="hasWorkout(day)">
-        <span class="day-number">{{ day.getDate() }}</span>
-        @if (hasWorkout(day)) {
-        <ion-icon name="checkmark-circle"></ion-icon>
+      <!-- Viikkonäkymä -->
+      @if (view === 'week') {
+      <div class="week-row">
+        @for (day of weekDays; track $index) {
+        <div class="day-cell" [class.today]="isToday(day)" [class.has-workout]="hasWorkout(day)">
+          <span class="day-number">{{ day.getDate() }}</span>
+          @if (hasWorkout(day)) {
+          <ion-icon name="checkmark-circle"></ion-icon>
+          }
+        </div>
         }
       </div>
       }
+
     </div>
-    }
 
   </div>
 </ion-content>

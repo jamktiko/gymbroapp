@@ -1,189 +1,207 @@
-.streak-card {
-  margin: 0;
-  margin-bottom: 20px;
-  background: #1e1e1e;
-  border-radius: 15px;
-  border: 1px solid #333;
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+  // margin-top: 15px;
+  padding: 10px;
 
-  .streak-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  .streak-card {
+    margin: 0;
     margin-bottom: 20px;
+    background: #1e1e1e;
+    border-radius: 15px;
+    border: 1px solid #333;
 
-    .streak-flame {
-      font-size: 3rem;
-      color: #ff9100; // Oranssi liekki
-      filter: drop-shadow(0 0 8px rgba(255, 145, 0, 0.6));
+    .streak-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+
+      .streak-flame {
+        font-size: 3rem;
+        color: #ff9100; // Oranssi liekki
+        filter: drop-shadow(0 0 8px rgba(255, 145, 0, 0.6));
+      }
+
+      .streak-info {
+        h2 {
+          margin: 0;
+          font-size: 1.4rem;
+          color: white;
+          font-weight: bold;
+        }
+        p {
+          margin: 0;
+          color: #a0a0a0;
+        }
+      }
     }
 
-    .streak-info {
-      h2 {
-        margin: 0;
-        font-size: 1.4rem;
-        color: white;
-        font-weight: bold;
+    .days-grid {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+
+      .day-dot {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+
+        ion-icon {
+          font-size: 1.5rem;
+        }
+
+        span {
+          font-size: 0.75rem;
+          color: #666;
+        }
+
+        .active-text {
+          color: #2dd36f;
+          font-weight: bold;
+        }
       }
+    }
+  }
+  .user-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; // Kaksi rinnakkain
+    gap: 12px;
+    width: 100%;
+    // padding: 0 5%;
+    // margin-top: 15px;
+    margin-bottom: 10px;
+
+    .user-stat-box {
+      background: var(--ion-item-background);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 217, 0, 0.1); // Kevyt keltainen reunus
+      text-align: center;
+
+      small {
+        display: block;
+        color: var(--ion-color-primary); // Keltainen
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+
       p {
         margin: 0;
-        color: #a0a0a0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: white;
+      }
+
+      &.full-width {
+        grid-column: span 2; // Liittymispäivä vie koko leveyden
       }
     }
   }
 
-  .days-grid {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-
-    .day-dot {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-
-      ion-icon {
-        font-size: 1.5rem;
-      }
-
-      span {
-        font-size: 0.75rem;
-        color: #666;
-      }
-
-      .active-text {
-        color: #2dd36f;
-        font-weight: bold;
-      }
-    }
-  }
-}
-.user-stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; // Kaksi rinnakkain
-  gap: 12px;
-  width: 100%;
-  padding: 0 5%;
-  margin-top: 15px;
-  margin-bottom: 30px;
-
-  .user-stat-box {
-    background: var(--ion-item-background);
+  // Stats-kortit
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
     padding: 15px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 217, 0, 0.1); // Kevyt keltainen reunus
-    text-align: center;
 
-    small {
-      display: block;
-      color: var(--ion-color-primary); // Keltainen
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 1px;
-      margin-bottom: 5px;
+    .stat-box {
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      text-align: center;
+
+      small {
+        display: block;
+        color: var(--ion-color-primary);
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: white;
+      }
     }
 
-    p {
-      margin: 0;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: white;
-    }
+    .user-stat-box {
+      background: var(--ion-item-background);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 217, 0, 0.1); // Kevyt keltainen reunus
+      text-align: center;
 
-    &.full-width {
-      grid-column: span 2; // Liittymispäivä vie koko leveyden
+      small {
+        display: block;
+        color: var(--ion-color-primary); // Keltainen
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: white;
+      }
+
+      &.full-width {
+        grid-column: span 2; // Liittymispäivä vie koko leveyden
+      }
     }
   }
-}
 
-// Stats-kortit
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  padding: 15px;
-
-  .stat-box {
+  // Piirakkagraafi
+  .chart-card {
+    margin: 0 11px 11px;
     background: #1e1e1e;
-    padding: 15px;
-    border-radius: 12px;
+    border-radius: 15px;
     border: 1px solid #333;
-    text-align: center;
-
-    small {
-      display: block;
-      color: var(--ion-color-primary);
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 1px;
-      margin-bottom: 5px;
-    }
-
-    p {
-      margin: 0;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: white;
-    }
-  }
-
-  .user-stat-box {
-    background: var(--ion-item-background);
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 217, 0, 0.1); // Kevyt keltainen reunus
-    text-align: center;
-
-    small {
-      display: block;
-      color: var(--ion-color-primary); // Keltainen
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 1px;
-      margin-bottom: 5px;
-    }
-
-    p {
-      margin: 0;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: white;
-    }
-
-    &.full-width {
-      grid-column: span 2; // Liittymispäivä vie koko leveyden
-    }
-  }
-}
-
-// Piirakkagraafi
-.chart-card {
-  margin: 0 11px 11px;
-  background: #1e1e1e;
-  border-radius: 15px;
-  border: 1px solid #333;
-
-  canvas {
-    width: 100% !important;
-    height: 280px !important;
-  }
-
-  ion-card-header {
-    padding-bottom: 0;
-  }
-
-  ion-card-title {
-    font-size: 1rem;
-    color: white;
-  }
-
-  ion-card-content {
-    padding: 15px;
-    display: flex;
-    justify-content: center;
+    width: 100%;
+    overflow: visible;
 
     canvas {
+      width: 100% !important;
+      height: auto !important;
       max-height: 280px;
+    }
+
+    ion-card-header {
+      padding-bottom: 0;
+    }
+
+    ion-card-title {
+      // font-size: 1rem;
+      // color: white;
+      display: block;
+      color: var(--ion-color-primary); // Keltainen
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    ion-card-content {
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
     }
   }
 }
