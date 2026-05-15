@@ -190,6 +190,10 @@ ion-accordion {
 
 .exercise-modal-card .modal-actions ion-button {
   margin-top: 6px;
+  height: 60px;
+  --border-radius: 8px;
+  font-weight: bold !important;
+  font-size: 16px;
 }
 
 /* --- SETS, REPS, KG YKSIKKÖ --- */
@@ -250,4 +254,10 @@ ion-accordion {
     --border-radius: 8px;
     margin-top: 10px;
   }
+}
+
+.ion-margin-top {
+  --border-radius: 8px;
+  height: 60px;
+  font-weight: bold !important;
 }

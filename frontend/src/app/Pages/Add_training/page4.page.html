@@ -11,7 +11,8 @@
   <div class="content-container ion-padding">
     <ion-item lines="full" class="name-input-item">
       <ion-label position="stacked">OHJELMAN NIMI</ion-label>
-      <ion-input [(ngModel)]="programName" type="text" maxlength="30" placeholder="esim. Jalkapäivä">
+      <ion-input class="warning-focus-input" [(ngModel)]="programName" type="text" maxlength="30"
+        placeholder="esim. Jalkapäivä">
       </ion-input>
     </ion-item>
 
@@ -88,18 +89,18 @@
         <ion-toolbar>
           <ion-title>Luo uusi liike</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="cancelCreateCustomMove()">Sulje</ion-button>
+            <ion-button (click)="cancelCreateCustomMove()">Peruuta</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
         <ion-item>
-          <ion-input label="Liikkeen nimi" labelPlacement="stacked" placeholder="Nimi" [(ngModel)]="newMoveName"
-            maxlength="30"></ion-input>
+          <ion-input class="warning-focus-input" label="Liikkeen nimi" labelPlacement="stacked" placeholder="Nimi"
+            [(ngModel)]="newMoveName" maxlength="30"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Lihasryhmä" labelPlacement="stacked" placeholder="Esim. Rinta" [(ngModel)]="newMoveMuscle"
-            maxlength="30" autocapitalize="on"></ion-input>
+          <ion-input class="warning-focus-input" label="Lihasryhmä" labelPlacement="stacked" placeholder="Esim. Rinta"
+            [(ngModel)]="newMoveMuscle" maxlength="30" autocapitalize="on"></ion-input>
         </ion-item>
 
         <div class="ion-padding-top">
@@ -116,7 +117,7 @@
 
         <ion-button expand="block" class="ion-margin-top" (click)="confirmCreateCustomMove()"
           [disabled]="newMoveName.trim().length === 0">
-          Lisää
+          Lisää liike
         </ion-button>
       </ion-content>
     </ng-template>
@@ -128,7 +129,7 @@
         <ion-toolbar>
           <ion-title>Muokkaa sarjoja </ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="closeExerciseModal(true)">Sulje</ion-button>
+            <ion-button (click)="closeExerciseModal(true)">Peruuta</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -141,28 +142,30 @@
 
           <ion-item>
             <ion-label position="stacked">Sarjat</ion-label>
-            <ion-input type="text" inputmode="numeric" maxlength="6" [(ngModel)]="modalInputCount"
-              (ngModelChange)="updateModalSetsCount($event)" placeholder="{{ modalTempSets.length }}">
+            <ion-input class="warning-focus-input" type="text" inputmode="numeric" maxlength="6"
+              [(ngModel)]="modalInputCount" (ngModelChange)="updateModalSetsCount($event)"
+              placeholder="{{ modalTempSets.length }}">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Toistot</ion-label>
-            <ion-input type="text" inputmode="numeric" maxlength="6" [(ngModel)]="modalSingleReps"
-              placeholder="{{ modalTempSets[0]?.reps }}">
+            <ion-input class="warning-focus-input" type="text" inputmode="numeric" maxlength="6"
+              [(ngModel)]="modalSingleReps" placeholder="{{ modalTempSets[0]?.reps }}">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Paino kg</ion-label>
-            <ion-input type="text" inputmode="decimal" maxlength="7" [(ngModel)]="modalSingleWeight"
-              placeholder="{{ modalTempSets[0]?.weight }}">
+            <ion-input class="warning-focus-input" type="text" inputmode="decimal" maxlength="7"
+              [(ngModel)]="modalSingleWeight" placeholder="{{ modalTempSets[0]?.weight }}">
             </ion-input>
           </ion-item>
 
           <div class="ion-padding-top modal-actions">
             <ion-button expand="block" (click)="saveExerciseModal()">Tallenna</ion-button>
-            <ion-button expand="block" fill="clear" (click)="closeExerciseModal(true)">Peruuta</ion-button>
+
+            <!-- <ion-button expand="block" fill="clear" (click)="closeExerciseModal(true)">Peruuta</ion-button> -->
           </div>
         </div>
       </ion-content>
