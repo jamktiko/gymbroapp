@@ -65,6 +65,7 @@ ion-content {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.24);
   margin: 12px 0 0 0; /* pieni yläreuna, wrapper hoitaa keskityksen */
   padding: 8px 12px;
+  margin-bottom: calc(env(safe-area-inset-bottom) + 17px) !important;
 }
 
 .toggle-text {
@@ -237,6 +238,7 @@ ion-title {
   font-size: 18px;
   text-transform: uppercase; // Lisää auktoriteettia painikkeeseen
   margin-bottom: 60px;
+  margin-bottom: calc(env(safe-area-inset-bottom) + 17px) !important;
 }
 
 /* Input-with-unit: shows a persistent unit (kg) inside the input field */

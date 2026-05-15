@@ -6,16 +6,8 @@
         class="xpbar"
         [value]="xpService.progress$ | async"
       ></ion-progress-bar>
-      <div>
-        <p>You got XP!</p>
-      </div>
+      <p>You got XP!</p>
     </div>
+    <ion-button class="next" (click)="saveTrainingSession()">next</ion-button>
   </div>
 </ion-content>
-<ion-footer>
-  <ion-toolbar>
-    <ion-button class="next-style" (click)="saveTrainingSession()"
-      >next</ion-button
-    >
-  </ion-toolbar>
-</ion-footer>
