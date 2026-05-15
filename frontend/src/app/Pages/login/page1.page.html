@@ -1,17 +1,29 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="login-container">
     <div class="logo-section">
-      <h1>GymBro</h1>
+
+      <!-- <h1 class="orig-title">GymBro</h1> -->
+
+      <h1 class="alt-title"><span class="logo-gym">GYM</span><span class="logo-bro">BRO</span></h1>
+
       <p>Kirjaudu sisään jatkaaksesi</p>
     </div>
     <div class="logo-wrapper">
       <img src="assets/logoilmantaustaa.png" alt="Sovelluksen logo" />
     </div>
-    <div class="action-section" style="display: flex; justify-content: center">
+    <div class="action-section">
       @if (isNative) {
-      <ion-button expand="block" (click)="signInNative()" color="light">
+
+      <!-- newer grey google button style -->
+      <!-- <ion-button expand="block" (click)="signInNative()" color="light">
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Kirjaudu Googlella
+      </ion-button> -->
+
+      <!-- earlier yellow google button style -->
+      <ion-button class="google-btn" expand="block" (click)="signInNative()">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Kirjaudu Google-tunnuksilla
       </ion-button>
       }
       @if (!isNative) {

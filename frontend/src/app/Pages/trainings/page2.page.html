@@ -5,11 +5,7 @@
         <span>LVL {{userData?.level}}</span>
       </div>
       <div class="progress-wrapper">
-        <ion-progress-bar 
-  class="xpbar" 
-  [value]="xpService.progress$ | async" 
-  [buffer]="1"
-></ion-progress-bar>
+        <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async" [buffer]="1"></ion-progress-bar>
       </div>
     </div>
     <ion-buttons slot="end">
@@ -22,11 +18,10 @@
   <div class="content-container ion-padding">
     <h2>Tervetuloa {{userData?.name!.split(' ')[0]}}!</h2>
 
-    @if (usersTrainingPrograms.length === 0) {
+
     <p class="placeholder">
-      Täällä näkyvät omat treeniohjelmasi. Aloita luomalla uusi ohjelma!
+      Täällä näkyvät treeniohjelmasi. Aloita uusi treeni valitsemalla haluamasi ohjelma.
     </p>
-    }
 
     @if (usersTrainingPrograms.length > 0) {
     <ion-accordion-group (ionChange)="onAccordionChange($event)">
@@ -40,7 +35,8 @@
           </ion-label>
 
           <!-- Poistonappi -->
-          <ion-button *ngIf="!program.isDefault" slot="end" fill="clear" color="medium" (click)="editProgram(program, $event)" title="Muokkaa ohjelmaa">
+          <ion-button *ngIf="!program.isDefault" slot="end" fill="clear" color="medium"
+            (click)="editProgram(program, $event)" title="Muokkaa ohjelmaa">
             <ion-icon name="pencil-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"

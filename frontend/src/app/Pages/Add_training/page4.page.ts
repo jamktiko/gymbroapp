@@ -95,24 +95,23 @@ export class LisaaTreeni {
     addIcons({ addOutline, trashOutline });
   }
   preSelectExercises(existingExercises: Exercise[]) {
-  existingExercises.forEach(ex => {
-    this.exerciseList2.forEach(cat => {
-      cat.exercises.forEach(e => {
-        if (e.move._id === ex.move._id) {
-          e.isSelected = true;
-          e.sets = ex.sets.map(s => ({ ...s }));
-        }
+    existingExercises.forEach((ex) => {
+      this.exerciseList2.forEach((cat) => {
+        cat.exercises.forEach((e) => {
+          if (e.move._id === ex.move._id) {
+            e.isSelected = true;
+            e.sets = ex.sets.map((s) => ({ ...s }));
+          }
+        });
       });
     });
-  });
-  this.exerciseList2 = [...this.exerciseList2];
-}
+    this.exerciseList2 = [...this.exerciseList2];
+  }
   /**
    * Kun page4-sivu on tulossa näkyviin haetaan kaikki käyttäjän movet databasesta
    * Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
    */
   ionViewWillEnter() {
-    
     // Kun sivu tulee näkyviin: estä sivuvalikko ja hae kaikki liikkeet backendistä.
     // Tämän kutsun jälkeen `categorizeMoves()` rakentaa käyttöliittymään
     // tarvittavan `exerciseList2`-rakenteen.
@@ -123,24 +122,24 @@ export class LisaaTreeni {
 const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
   const existing = state?.editProgram;
 
-  if (existing) {
-    this.isEditMode = true;
-    this.editProgramId = existing._id;
-    this.programName = existing.name;
-  } else {
-    this.isEditMode = false;
-    this.editProgramId = null;
-  }
+    if (existing) {
+      this.isEditMode = true;
+      this.editProgramId = existing._id;
+      this.programName = existing.name;
+    } else {
+      this.isEditMode = false;
+      this.editProgramId = null;
+    }
 
-  this.dataFetchService.getAllMoves().subscribe({
-    next: (data) => {
-      this.usersMoves = data as Move[];
-      this.categorizeMoves();
-      // Edit-moodissa: esivalitse ohjelman liikkeet
-      if (existing) this.preSelectExercises(existing.exercises);
-    },
-    error: (err) => console.error('Failed to fetch moves', err),
-  });
+    this.dataFetchService.getAllMoves().subscribe({
+      next: (data) => {
+        this.usersMoves = data as Move[];
+        this.categorizeMoves();
+        // Edit-moodissa: esivalitse ohjelman liikkeet
+        if (existing) this.preSelectExercises(existing.exercises);
+      },
+      error: (err) => console.error('Failed to fetch moves', err),
+    });
   }
   ionViewWillLeave() {
     this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
@@ -164,7 +163,7 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
         isSelected: false,
       };
 
-        // 1. Lisää alkuperäiseen lihasryhmään
+      // 1. Lisää alkuperäiseen lihasryhmään
       let originalCategory = this.exerciseList2.find(
         (y) => y.category === x.muscleGroup,
       );
@@ -217,6 +216,10 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
 
     // Päivitä taulukon viite, jotta Ionicin change detection huomaa kategoriamuutokset heti
     this.exerciseList2 = [...this.exerciseList2];
+  }
+
+  getSelectedCount(category: Category2): number {
+    return category.exercises.filter((e) => e.isSelected).length;
   }
 
   /**
@@ -455,7 +458,10 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
     if (newLength > currentLength) {
       for (let i = currentLength; i < newLength; i++) {
         const template = this.modalTempSets[0];
-        this.modalTempSets.push({ reps: template.reps, weight: template.weight });
+        this.modalTempSets.push({
+          reps: template.reps,
+          weight: template.weight,
+        });
       }
     } else if (newLength < currentLength) {
       this.modalTempSets.splice(newLength);
@@ -477,19 +483,31 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
     });
 
     if (!this.modalExercise) {
-      console.warn('saveExerciseModal: modalExercise is null — closing modal without saving');
+      console.warn(
+        'saveExerciseModal: modalExercise is null — closing modal without saving',
+      );
       this.isExerciseModalOpen = false;
       return;
     }
 
     // Parsitaan käyttäjän syöte turvallisesti (muuntaen ensin stringiksi).
     const parsedCount = parseInt(String(this.modalInputCount ?? '').trim(), 10);
-    const targetCount = !isNaN(parsedCount) && parsedCount > 0 ? parsedCount : this.modalTempSets.length;
+    const targetCount =
+      !isNaN(parsedCount) && parsedCount > 0
+        ? parsedCount
+        : this.modalTempSets.length;
 
     const parsedReps = parseInt(String(this.modalSingleReps ?? '').trim(), 10);
-    const parsedWeight = this.parseWeightString(String(this.modalSingleWeight ?? ''));
-    const baseReps = !isNaN(parsedReps) ? parsedReps : this.modalTempSets[0].reps;
-    const baseWeight = !isNaN(parsedWeight) ? parsedWeight : this.modalTempSets[0].weight;
+    const parsedWeight = parseInt(
+      String(this.modalSingleWeight ?? '').trim(),
+      10,
+    );
+    const baseReps = !isNaN(parsedReps)
+      ? parsedReps
+      : this.modalTempSets[0].reps;
+    const baseWeight = !isNaN(parsedWeight)
+      ? parsedWeight
+      : this.modalTempSets[0].weight;
 
     const newSets = [] as { reps: number; weight: number }[];
     for (let i = 0; i < targetCount; i++) {
@@ -617,33 +635,35 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
 
       // kutsutaan dataFetchServicen metodia joka lähettää POST http-requestin backendiin
       if (this.isEditMode && this.editProgramId) {
-  this.dataFetchService.updateProgram(this.editProgramId, {
-    name: this.programName,
-    description: '',
-    exercises: selectedExercises,
-  }).subscribe({
-    next: () => {
-      this.resetSelections();
-      this.router.navigate(['/page2']);
-    },
-    error: (err) => {
-      console.error('Error updating program:', err);
-      alert('Päivitys epäonnistui. Yritä uudelleen.');
-    },
-  });
-} else {
-  this.dataFetchService.createProgram(newProgram2).subscribe({
-    next: (savedProgram) => {
-      console.log('Tallennettu!', savedProgram);
-      this.resetSelections();
-      this.router.navigate(['/page2']);
-    },
-    error: (err) => {
-      console.error('Error saving program:', err);
-      alert('Tallennus epäonnistui. Yritä uudelleen.');
-    },
-  });
-} 
+        this.dataFetchService
+          .updateProgram(this.editProgramId, {
+            name: this.programName,
+            description: '',
+            exercises: selectedExercises,
+          })
+          .subscribe({
+            next: () => {
+              this.resetSelections();
+              this.router.navigate(['/page2']);
+            },
+            error: (err) => {
+              console.error('Error updating program:', err);
+              alert('Päivitys epäonnistui. Yritä uudelleen.');
+            },
+          });
+      } else {
+        this.dataFetchService.createProgram(newProgram2).subscribe({
+          next: (savedProgram) => {
+            console.log('Tallennettu!', savedProgram);
+            this.resetSelections();
+            this.router.navigate(['/page2']);
+          },
+          error: (err) => {
+            console.error('Error saving program:', err);
+            alert('Tallennus epäonnistui. Yritä uudelleen.');
+          },
+        });
+      }
     } else {
       alert('Anna ohjelmalle nimi ja valitse vähintään yksi liike.');
     }
