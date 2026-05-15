@@ -8,11 +8,12 @@ ion-content {
 .login-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
   padding: 30px 20px;
   text-align: center;
   gap: 2vh;
+  height: 100%;
   /*background-color: #202020; /* Varmistetaan musta tausta */
 }
 .logo-wrapper {
@@ -24,6 +25,8 @@ ion-content {
 }
 .logo-section {
   white-space: nowrap;
+  margin: 0;
+  padding: 0;
 }
 .orig-title {
   font-family: "Archivo Black", sans-serif;
@@ -61,7 +64,9 @@ p {
   --background: #ffd900; /* Keltainen tausta */
   --color: #0f0f0f; /* Musta teksti */
   font-weight: 700;
-  font-size: 15px;
+  font-size: 12px;
+  white-space: nowrap;
+  letter-spacing: -1px;
 
   /* Keltainen hohde napin ympärille */
   --box-shadow: 0 4px 10px rgba(255, 255, 0, 0.2);
