@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -11,14 +11,34 @@ import {
   IonFooter,
   IonIcon,
   IonButton,
-  IonCard,      // Lisätty kortti-komponentteja
-  IonCardContent
+  IonCard, // Lisätty kortti-komponentteja
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
 } from '@ionic/angular/standalone';
 import { XpService } from '../../xp.service';
 import { addIcons } from 'ionicons'; // Tarvitaan ikonien rekisteröintiin
-import { flame, checkmarkCircle, ellipseOutline } from 'ionicons/icons';
+import {
+  flame,
+  barbell,
+  fitness,
+  flash,
+  lockClosed,
+  medal,
+  ribbon,
+  statsChart,
+  trophy,
+} from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
 import { UserData } from '../../types/userdata';
+import { BaseChartDirective } from 'ng2-charts';
+import { ChartData, ChartOptions } from 'chart.js';
+
+interface PersonalRecord {
+  muscleGroup: string;
+  exercise: string;
+  weight: number;
+}
 
 @Component({
   selector: 'app-page7',
@@ -26,15 +46,72 @@ import { UserData } from '../../types/userdata';
   styleUrls: ['./page7.page.scss'],
   standalone: true,
   imports: [
-    IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, 
-    FormsModule, IonButtons, IonMenuButton, IonFooter, IonIcon, 
-    IonButton, IonCard, IonCardContent
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    IonButtons,
+    IonMenuButton,
+    IonFooter,
+    IonIcon,
+    IonButton,
+    IonCard,
+    IonCardContent,
+    BaseChartDirective,
+    IonCardHeader,
+    IonCardTitle,
   ],
 })
 export class Page7Page implements OnInit {
-  public userData!: UserData;// Tähän tallennetaan backendiltä haettu data, tyyppi määriteltävä myöhemmin
+  public userData!: UserData; // Tähän tallennetaan backendiltä haettu data, tyyppi määriteltävä myöhemmin
   private dataFetchService = inject(DataFetchService);
   public xpService = inject(XpService);
+
+  // Stats
+  totalXp = 0;
+  level = 1;
+  xpToNextLevel = 0;
+  totalSessions = 0;
+  personalRecords: PersonalRecord[] = [];
+
+  // Piirakkagraafi
+  private cdr = inject(ChangeDetectorRef);
+  pieChartData: ChartData<'pie'> = {
+    labels: [],
+    datasets: [{ data: [], backgroundColor: [] }],
+  };
+
+  pieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: '#ffffff', padding: 12, font: { size: 12 } },
+      },
+    },
+  };
+
+  // Värit lihasryhmille
+  private muscleColors: Record<string, string> = {
+    // Uudet nimet
+    Rinta: '#ff6384',
+    Selkä: '#36a2eb',
+    Hartiat: '#ffce56',
+    Hauis: '#4bc0c0',
+    Ojentaja: '#9966ff',
+    Jalat: '#ff9f40',
+    Takareidet: '#c9cbcf',
+    Pohkeet: '#7bc67e',
+    Vatsa: '#f77825',
+    Pakarat: '#e056a0',
+    Olkapäät: '#ffce56',
+    Ojentajat: '#9966ff',
+    Hauikset: '#4bc0c0',
+    Takareisi: '#c9cbcf',
+    Etureidet: '#ff9f40',
+  };
 
   // PLACEHOLDER BACKENDILLE:
   // Tähän tulee myöhemmin data
@@ -47,17 +124,55 @@ export class Page7Page implements OnInit {
       { day: 'To', active: false },
       { day: 'Pe', active: false },
       { day: 'La', active: false },
-      { day: 'Su', active: false }
-    ]
+      { day: 'Su', active: false },
+    ],
   };
 
   constructor() {
-    // Rekisteröidään ikonit
-    addIcons({ flame, checkmarkCircle, ellipseOutline });
+    addIcons({
+      trophy,
+      flame,
+      barbell,
+      lockClosed,
+      flash,
+      medal,
+      statsChart,
+      fitness,
+      ribbon,
+    });
   }
 
   ngOnInit() {
-    this.fetchUserData();
+    this.dataFetchService.getStats().subscribe({
+      next: (stats) => {
+        this.totalXp = stats.totalXp;
+        this.level = stats.level;
+        this.xpToNextLevel = stats.xpToNextLevel;
+        this.totalSessions = stats.totalSessions;
+        this.personalRecords = stats.personalRecords;
+
+        // Rakennetaan piirakkagraafin data
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const labels = stats.muscleDistribution.map((d: any) => d.muscleGroup);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data = stats.muscleDistribution.map((d: any) => d.count);
+        const colors = labels.map(
+          (l: string) => this.muscleColors[l] || '#888888',
+        );
+
+        this.pieChartData = {
+          labels,
+          datasets: [{ data, backgroundColor: colors }],
+        };
+        this.cdr.detectChanges();
+
+        // Päivitetään saavutusten progress oikealla datalla
+        // this.updateAchievements();
+      },
+      error: (err) => {
+        console.error('Stats-haku epäonnistui:', err);
+      },
+    });
   }
 
   fetchUserData() {
@@ -68,6 +183,7 @@ export class Page7Page implements OnInit {
       },
       error: (err) => {
         console.error('Error fetching user data:', err);
-      }
+      },
     });
-  }}
+  }
+}
