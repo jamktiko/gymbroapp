@@ -158,7 +158,14 @@ export class Page7Page implements OnInit {
 
         this.pieChartData = {
           labels,
-          datasets: [{ data, backgroundColor: colors }],
+          datasets: [
+            {
+              data,
+              backgroundColor: colors,
+              borderWidth: 1,
+              borderColor: '#000000',
+            },
+          ],
         };
         this.cdr.detectChanges();
 

@@ -33,6 +33,7 @@
           color: white;
           font-weight: bold;
         }
+
         p {
           margin: 0;
           color: #a0a0a0;
@@ -67,6 +68,7 @@
       }
     }
   }
+
   .user-stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr; // Kaksi rinnakkain
@@ -177,7 +179,6 @@
     canvas {
       width: 100% !important;
       height: auto !important;
-      max-height: 280px;
     }
 
     ion-card-header {
