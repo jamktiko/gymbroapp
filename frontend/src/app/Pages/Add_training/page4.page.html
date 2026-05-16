@@ -11,8 +11,20 @@
   <div class="content-container ion-padding">
     <ion-item lines="full" class="name-input-item">
       <ion-label position="stacked">OHJELMAN NIMI</ion-label>
-      <ion-input class="warning-focus-input" [(ngModel)]="programName" type="text" maxlength="30"
-        placeholder="esim. Jalkapäivä">
+      <ion-input class="warning-focus-input" [(ngModel)]="programName" type="text" inputmode="text" maxlength="30"
+        [counter]="true" placeholder="esim. Jalkapäivä">
+      </ion-input>
+    </ion-item>
+    <ion-item lines="full" class="name-input-item">
+      <ion-label position="stacked">KUVAUS (VALINNAINEN)</ion-label>
+      <ion-textarea class="warning-focus-input" [(ngModel)]="programDescription" [counter]="true" [autoGrow]="true"
+        inputmode="text" maxlength="150" placeholder="">
+      </ion-textarea>
+    </ion-item>
+    <ion-item lines="full" class="name-input-item">
+      <ion-label position="stacked">TAUKOAJAN PITUUS (s)</ion-label>
+      <ion-input class="warning-focus-input" [(ngModel)]="programTimerAmount" type="number" inputmode="number"
+        maxlength="4" placeholder="120">
       </ion-input>
     </ion-item>
 
