@@ -94,6 +94,7 @@ export class LisaaTreeni {
   private usersMoves!: Move[];
   private editProgramId: string | null = null;
   public isEditMode = false;
+  public pageTitle: string = 'Luo uusi treeniohjelma';
 
   constructor() {
     addIcons({ addOutline, trashOutline });
@@ -131,8 +132,10 @@ export class LisaaTreeni {
 
     if (existing) {
       this.isEditMode = true;
+      this.pageTitle = 'Muokkaa treeniohjelmaa';
       this.editProgramId = existing._id;
       this.programName = existing.name;
+      this.programDescription = existing.description;
     } else {
       this.isEditMode = false;
       this.editProgramId = null;
