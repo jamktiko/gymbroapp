@@ -635,7 +635,7 @@ export class LisaaTreeni {
       // 3. Luodaan uusi treeniohjelma-olio
       const newProgram2 = {
         name: this.programName,
-        description: '',
+        description: this.programDescription,
         exercises: selectedExercises,
       };
 
