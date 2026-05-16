@@ -380,17 +380,16 @@ export class Page5Page implements OnInit {
     const alert = await this.alertController.create({
       header: 'Keskeytetäänkö treeni?',
       message: 'Haluatko varmasti poistua? Edistymistäsi ei tallenneta.',
-      cssClass: 'treeni-alert',
       buttons: [
         {
-          text: 'Jatka treeniä',
+          text: 'Peruuta',
           role: 'cancel',
           handler: () => {
             console.log('Palataan treeniin');
           },
         },
         {
-          text: 'Lopeta tallentamatta',
+          text: 'Keskeytä treeni',
           role: 'destructive',
           handler: () => {
             this.poistuTreenista();
