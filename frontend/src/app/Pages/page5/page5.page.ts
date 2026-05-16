@@ -30,6 +30,7 @@ import {
 } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
 import { DataFetchService } from '../../data-fetch-service';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 // Setin tyyppi suorituksille
 type PerformedSet = { reps?: number; weight?: number };
@@ -402,6 +403,12 @@ export class Page5Page implements OnInit {
   }
 
   async openTimerModal() {
+    try {
+      await Haptics.impact({ style: ImpactStyle.Light });
+    } catch (e) {
+      console.warn('Haptics ei tuettu', e);
+    }
+
     const alert = await this.alertController.create({
       header: 'Timer Duration',
       message: 'Aseta uusi ajastimen kesto (sekuntia)',
@@ -411,13 +418,13 @@ export class Page5Page implements OnInit {
           type: 'number',
           placeholder: 'Kesto sekunteina',
           value: this.workoutTimerDuration,
-          min: 1
-        }
+          min: 1,
+        },
       ],
       buttons: [
         {
           text: 'Peruuta',
-          role: 'cancel'
+          role: 'cancel',
         },
         {
           text: 'Tallenna',
@@ -428,9 +435,9 @@ export class Page5Page implements OnInit {
                 this.workoutTimerDuration = val;
               }
             }
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     await alert.present();
   }
@@ -541,6 +548,3 @@ export class Page5Page implements OnInit {
     }, 3000);
   }
 }
-
-
-
