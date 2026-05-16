@@ -1,7 +1,7 @@
 // --- YLÄPALKKI JA PROGRESS BAR ---
-ion-content {
-  --ion-safe-area-bottom: 60px !important;
-}
+/*ion-content {
+
+}*/
 .header-full-progress {
   display: flex;
   align-items: center;
@@ -76,6 +76,9 @@ ion-accordion-group {
   width: 100%;
   background: transparent;
 }
+ion-accordion:last-child {
+  margin-bottom: calc(env(safe-area-inset-bottom) + 16px) !important;
+} //vain vikaan margin bottom
 
 h2 {
   color: var(--ion-color-primary);
