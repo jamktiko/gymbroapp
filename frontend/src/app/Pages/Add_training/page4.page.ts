@@ -74,7 +74,7 @@ export class LisaaTreeni {
   // Muuttuja, johon tallennetaan käyttäjän antama treeniohjelman nimi.
   public programName: string = '';
   public programDescription: string = '';
-  public programTimerAmount: number = 120;
+  // public programTimerAmount: number = 120;
   public isCustomMoveModalOpen: boolean = false;
   public newMoveName: string = '';
   public newMoveMuscle: string = '';
@@ -383,6 +383,7 @@ export class LisaaTreeni {
     // Palauta sivun tilat oletuksiin: tyhjennä ohjelman nimi, sulje accordion
     // ja nollaa jokaisen liikkeen valinnat ja sarjat oletusarvoihin.
     this.programName = ''; // Tyhjennetään ohjelman nimi
+    this.programDescription = ''; // Tyhjennetään ohjelman kuvaus
 
     if (this.accordionGroup) {
       this.accordionGroup.value = undefined; // Suljetaan kaikki accordionit
@@ -644,7 +645,7 @@ export class LisaaTreeni {
         this.dataFetchService
           .updateProgram(this.editProgramId, {
             name: this.programName,
-            description: '',
+            description: this.programDescription,
             exercises: selectedExercises,
           })
           .subscribe({

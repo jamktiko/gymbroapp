@@ -49,8 +49,8 @@
 
           <!--  Reorder-ryhmä liikkeiden ympärille -->
 
-          <!-- Näytetään oletusohjelman esittelykuvaus ohjelman alussa -->
-          @if (program.isDefault && program.description) {
+          <!-- Näytetään ohjelman kuvaus ohjelman alussa jos se on olemassa -->
+          @if (program.description) {
           <div class="program-description ion-padding" style="background: transparent; margin-bottom: 8px;">
             <p style="color: var(--ion-color-medium); margin: 0;">{{ program.description }}</p>
           </div>
