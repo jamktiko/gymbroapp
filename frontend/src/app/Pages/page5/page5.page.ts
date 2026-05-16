@@ -415,7 +415,6 @@ export class Page5Page implements OnInit {
       inputs: [
         {
           name: 'duration',
-          id: 'timer-duration-input',
           type: 'number',
           placeholder: 'Kesto sekunteina',
           value: this.workoutTimerDuration,
@@ -442,21 +441,12 @@ export class Page5Page implements OnInit {
       ],
     });
 
+    this.nextBtnVisible = false;
     alert.onDidDismiss().then(() => {
       this.nextBtnVisible = true;
     });
 
     await alert.present();
-
-    const inputEl = document.getElementById('timer-duration-input');
-    if (inputEl) {
-      inputEl.addEventListener('focus', () => {
-        this.nextBtnVisible = false;
-      });
-      inputEl.addEventListener('blur', () => {
-        this.nextBtnVisible = true;
-      });
-    }
   }
 
   private poistuTreenista() {
