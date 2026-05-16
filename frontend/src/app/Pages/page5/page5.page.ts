@@ -401,6 +401,40 @@ export class Page5Page implements OnInit {
     await alert.present();
   }
 
+  async openTimerModal() {
+    const alert = await this.alertController.create({
+      header: 'Timer Duration',
+      message: 'Aseta uusi ajastimen kesto (sekuntia)',
+      inputs: [
+        {
+          name: 'duration',
+          type: 'number',
+          placeholder: 'Kesto sekunteina',
+          value: this.workoutTimerDuration,
+          min: 1
+        }
+      ],
+      buttons: [
+        {
+          text: 'Peruuta',
+          role: 'cancel'
+        },
+        {
+          text: 'Tallenna',
+          handler: (data) => {
+            if (data.duration) {
+              const val = parseInt(data.duration, 10);
+              if (!isNaN(val) && val > 0) {
+                this.workoutTimerDuration = val;
+              }
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   private poistuTreenista() {
     // Pysäytetään kello
     if (this.timer) {
