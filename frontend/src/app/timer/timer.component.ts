@@ -20,10 +20,13 @@ import { IonButton } from '@ionic/angular/standalone';
 export class TimerComponent implements OnDestroy, OnChanges {
   @Input() duration: number = 120;
   @Output() timerFinished = new EventEmitter<void>();
+  @Output() longPress = new EventEmitter<void>();
 
-  timerValue: string = '00:10,00';
+  timerValue: string = '';
   isRunning: boolean = false;
   private timerInterval: ReturnType<typeof setInterval> | undefined; // Käytetään any, jotta toimii ympäristöstä riippumatta
+  private pressTimeout: ReturnType<typeof setTimeout> | undefined;
+  private isLongPress: boolean = false;
 
   constructor() {}
 
@@ -44,6 +47,29 @@ export class TimerComponent implements OnDestroy, OnChanges {
     this.stopInterval();
     this.isRunning = false;
     this.timerValue = this.formatTime(this.duration * 1000);
+  }
+
+  onClick() {
+    if (this.isLongPress) {
+      this.isLongPress = false;
+      return;
+    }
+    this.toggleTimer();
+  }
+
+  onPointerDown() {
+    this.isLongPress = false;
+    this.pressTimeout = setTimeout(() => {
+      this.isLongPress = true;
+      this.longPress.emit();
+    }, 600); // 600ms hold
+  }
+
+  onPointerUp() {
+    if (this.pressTimeout) {
+      clearTimeout(this.pressTimeout);
+      this.pressTimeout = undefined;
+    }
   }
 
   toggleTimer() {

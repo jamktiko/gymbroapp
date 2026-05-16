@@ -21,6 +21,7 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
+  IonTextarea,
   IonButtons,
   IonBackButton,
   IonItem,
@@ -62,6 +63,7 @@ import {
     IonSegmentButton,
     CommonModule,
     FormsModule,
+    IonTextarea,
   ],
 })
 export class LisaaTreeni {
@@ -71,6 +73,8 @@ export class LisaaTreeni {
   private accordionGroup!: IonAccordionGroup;
   // Muuttuja, johon tallennetaan käyttäjän antama treeniohjelman nimi.
   public programName: string = '';
+  public programDescription: string = '';
+  // public programTimerAmount: number = 120;
   public isCustomMoveModalOpen: boolean = false;
   public newMoveName: string = '';
   public newMoveMuscle: string = '';
@@ -90,25 +94,26 @@ export class LisaaTreeni {
   private usersMoves!: Move[];
   private editProgramId: string | null = null;
   public isEditMode = false;
+  public pageTitle: string = 'Luo uusi treeniohjelma';
 
   constructor() {
     addIcons({ addOutline, trashOutline });
   }
-preSelectExercises(existingExercises: Exercise[]) {
-  existingExercises.forEach(ex => {
-    this.exerciseList2.forEach(cat => {
-      cat.exercises.forEach(e => {
-        if (e.move._id === ex.move._id) {
-          e.isSelected = true;
-          e.sets = ex.sets.map(s => ({ ...s }));
-        }
+  preSelectExercises(existingExercises: Exercise[]) {
+    existingExercises.forEach((ex) => {
+      this.exerciseList2.forEach((cat) => {
+        cat.exercises.forEach((e) => {
+          if (e.move._id === ex.move._id) {
+            e.isSelected = true;
+            e.sets = ex.sets.map((s) => ({ ...s }));
+          }
+        });
       });
     });
-  });
-  // Pakotetaan Ionicin change detection huomaamaan muutokset päivittämällä
-  // taulukon viite — muuten UI ei välttämättä päivity automaattisesti
-  this.exerciseList2 = [...this.exerciseList2];
-}
+    // Pakotetaan Ionicin change detection huomaamaan muutokset päivittämällä
+    // taulukon viite — muuten UI ei välttämättä päivity automaattisesti
+    this.exerciseList2 = [...this.exerciseList2];
+  }
   /**
    * Kun page4-sivu on tulossa näkyviin haetaan kaikki käyttäjän movet databasesta
    * Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
@@ -118,16 +123,19 @@ preSelectExercises(existingExercises: Exercise[]) {
     // Tämän kutsun jälkeen `categorizeMoves()` rakentaa käyttöliittymään
     // tarvittavan `exerciseList2`-rakenteen.
     this.menu.enable(false);
-    
- const nav = this.router.currentNavigation() ?? history.state;
-// Korvattu (nav as any) tarkemmalla inline-tyypityksellä
-const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
-  const existing = state?.editProgram;
+
+    const nav = this.router.currentNavigation() ?? history.state;
+    // Korvattu (nav as any) tarkemmalla inline-tyypityksellä
+    const state =
+      (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
+    const existing = state?.editProgram;
 
     if (existing) {
       this.isEditMode = true;
+      this.pageTitle = 'Muokkaa treeniohjelmaa';
       this.editProgramId = existing._id;
       this.programName = existing.name;
+      this.programDescription = existing.description;
     } else {
       this.isEditMode = false;
       this.editProgramId = null;
@@ -378,6 +386,7 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
     // Palauta sivun tilat oletuksiin: tyhjennä ohjelman nimi, sulje accordion
     // ja nollaa jokaisen liikkeen valinnat ja sarjat oletusarvoihin.
     this.programName = ''; // Tyhjennetään ohjelman nimi
+    this.programDescription = ''; // Tyhjennetään ohjelman kuvaus
 
     if (this.accordionGroup) {
       this.accordionGroup.value = undefined; // Suljetaan kaikki accordionit
@@ -500,7 +509,9 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
         : this.modalTempSets.length;
 
     const parsedReps = parseInt(String(this.modalSingleReps ?? '').trim(), 10);
-    const parsedWeight = this.parseWeightString(String(this.modalSingleWeight ?? '').trim());
+    const parsedWeight = this.parseWeightString(
+      String(this.modalSingleWeight ?? '').trim(),
+    );
     const baseReps = !isNaN(parsedReps)
       ? parsedReps
       : this.modalTempSets[0].reps;
@@ -628,7 +639,7 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
       // 3. Luodaan uusi treeniohjelma-olio
       const newProgram2 = {
         name: this.programName,
-        description: '',
+        description: this.programDescription,
         exercises: selectedExercises,
       };
 
@@ -637,7 +648,7 @@ const state = (nav as { extras?: { state?: unknown } })?.extras?.state ?? nav;
         this.dataFetchService
           .updateProgram(this.editProgramId, {
             name: this.programName,
-            description: '',
+            description: this.programDescription,
             exercises: selectedExercises,
           })
           .subscribe({

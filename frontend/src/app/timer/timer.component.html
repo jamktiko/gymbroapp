@@ -1,3 +1,5 @@
-<ion-button class="timer" fill="clear" (click)="toggleTimer()" [class.running]="isRunning">
+<ion-button class="timer" fill="clear" (click)="onClick()" (touchstart)="onPointerDown()" (touchend)="onPointerUp()"
+  (touchcancel)="onPointerUp()" (mousedown)="onPointerDown()" (mouseup)="onPointerUp()" (mouseleave)="onPointerUp()"
+  [class.running]="isRunning">
   {{ timerValue }}
 </ion-button>

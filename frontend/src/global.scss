@@ -75,7 +75,8 @@
   --background: #323232 !important;
 }
 
-ion-input.warning-focus-input {
+ion-input.warning-focus-input,
+ion-textarea.warning-focus-input {
   --highlight-color-focused: var(--ion-color-primary);
   --highlight-color-valid: var(--ion-color-primary);
   --highlight-color-invalid: var(--ion-color-primary);

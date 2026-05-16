@@ -30,6 +30,7 @@ import {
 } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
 import { DataFetchService } from '../../data-fetch-service';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 // Setin tyyppi suorituksille
 type PerformedSet = { reps?: number; weight?: number };
@@ -401,6 +402,53 @@ export class Page5Page implements OnInit {
     await alert.present();
   }
 
+  async openTimerModal() {
+    try {
+      await Haptics.impact({ style: ImpactStyle.Light });
+    } catch (e) {
+      console.warn('Haptics ei tuettu', e);
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Timer Duration',
+      message: 'Aseta uusi ajastimen kesto (sekuntia)',
+      inputs: [
+        {
+          name: 'duration',
+          type: 'number',
+          placeholder: 'Kesto sekunteina',
+          value: this.workoutTimerDuration,
+          min: 1,
+          cssClass: 'warning-focus-input',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Peruuta',
+          role: 'cancel',
+        },
+        {
+          text: 'Tallenna',
+          handler: (data) => {
+            if (data.duration) {
+              const val = parseInt(data.duration, 10);
+              if (!isNaN(val) && val > 0) {
+                this.workoutTimerDuration = val;
+              }
+            }
+          },
+        },
+      ],
+    });
+
+    this.nextBtnVisible = false;
+    alert.onDidDismiss().then(() => {
+      this.nextBtnVisible = true;
+    });
+
+    await alert.present();
+  }
+
   private poistuTreenista() {
     // Pysäytetään kello
     if (this.timer) {
@@ -507,6 +555,3 @@ export class Page5Page implements OnInit {
     }, 3000);
   }
 }
-
-
-

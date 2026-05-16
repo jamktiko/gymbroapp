@@ -103,7 +103,7 @@
     <!-- timerFinished: voit halutessasi kutsua funktiota kun aika loppuu -->
     <!-- Lisää #workoutTimer -->
     <div [style.display]="timerVisible ? 'block' : 'none'" style="width: 100%;">
-      <app-timer #workoutTimer [duration]="workoutTimerDuration"></app-timer>
+      <app-timer #workoutTimer [duration]="workoutTimerDuration" (longPress)="openTimerModal()"></app-timer>
     </div>
 
   </div>
