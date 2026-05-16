@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
 
   public appPages = [
     { title: 'Treenit', url: '/page2', icon: 'barbell' },
-    { title: 'Saavutukset', url: '/page8', icon: 'golf' },
+    { title: 'Saavutukset', url: '/page8', icon: 'trophy' },
     { title: 'Kalenteri', url: '/../calendar', icon: 'calendar' },
     { title: 'Tilastot', url: '/page7', icon: 'analytics' },
   ];
