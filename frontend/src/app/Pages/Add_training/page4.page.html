@@ -94,7 +94,7 @@
       </ion-button>
 
       <ion-button class="tallennaohjelma" expand="block" color="primary" (click)="saveProgram2()"
-        [disabled]="programName.trim().length === 0">
+        [disabled]="programName.trim().length === 0 || !hasAnyExerciseSelected()">
         Tallenna ohjelma
       </ion-button>
     </div>

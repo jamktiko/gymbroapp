@@ -98,6 +98,12 @@ export class LisaaTreeni {
     addIcons({ addOutline, trashOutline });
   }
 
+  hasAnyExerciseSelected(): boolean {
+    return this.exerciseList2.some((cat) =>
+      cat.exercises.some((ex) => ex.isSelected),
+    );
+  }
+
   preSelectExercises(existingExercises: Exercise[]) {
     existingExercises.forEach((ex) => {
       this.exerciseList2.forEach((cat) => {
@@ -615,7 +621,7 @@ export class LisaaTreeni {
   }
 
   /**
-   * Uusi saveProgram-metodi, mukautettu toimimaan back-endin ja tietokannan kanssa
+   * Uusi saveProgram-metodi, mukautettu toimimaan backendin ja tietokannan kanssa
    */
   saveProgram2() {
     // 1. Kerätään kaikki valitut liikkeet yhteen listaan
@@ -658,7 +664,7 @@ export class LisaaTreeni {
             },
             error: (err) => {
               console.error('Error updating program:', err);
-              alert('Päivitys epäonnistui. Yritä uudelleen.');
+              // alert('Päivitys epäonnistui. Yritä uudelleen.');
             },
           });
       } else {
@@ -670,12 +676,12 @@ export class LisaaTreeni {
           },
           error: (err) => {
             console.error('Error saving program:', err);
-            alert('Tallennus epäonnistui. Yritä uudelleen.');
+            // alert('Tallennus epäonnistui. Yritä uudelleen.');
           },
         });
       }
     } else {
-      alert('Anna ohjelmalle nimi ja valitse vähintään yksi liike.');
+      // alert('Anna ohjelmalle nimi ja valitse vähintään yksi liike.');
     }
   }
 }

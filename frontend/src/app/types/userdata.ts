@@ -60,7 +60,6 @@ export interface Category2 {
   exercises: ExerciseIsSelected[];
 }
 
-
 export interface UserStats {
   totalXp: number;
   level: number;
@@ -69,6 +68,3 @@ export interface UserStats {
   muscleDistribution: { muscleGroup: string; count: number }[];
   personalRecords: { muscleGroup: string; exercise: string; weight: number }[];
 }
-
-
-
