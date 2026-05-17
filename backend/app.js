@@ -1,8 +1,8 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const cors = require('cors');
 const logger = require('morgan');
-const cookieParser = require('cookie-parser');
 
 const authRouter = require('./routes/auth');
 
@@ -14,8 +14,6 @@ const trainingSessionsRouter = require('./routes/trainingSessions');
 
 // create express app
 const app = express();
-
-app.use(express.json());
 
 app.set('trust proxy', 1); // trust first proxy (tämä lisättyä + start:nodemon -> node, uri mismatch korjaantui)
 

@@ -10,7 +10,7 @@ const dbconnection = mongoose
     console.log('Database connection successful.');
   })
   .catch((error) => {
-    console.log(`Error while connecting to database: ${error}}`);
+    console.log(`Error while connecting to database: ${error}`);
   });
 
 // export module
