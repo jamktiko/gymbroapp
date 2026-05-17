@@ -10,7 +10,6 @@ exports.authenticateGoogleUser = async (req, res) => {
   try {
     // 1. Verifioi Googlen ID token
 
-    // console.log('help');
     const ticket = await client.verifyIdToken({
       idToken: req.body.gtoken,
 
@@ -22,7 +21,7 @@ exports.authenticateGoogleUser = async (req, res) => {
     // 2. Luo tai hae käyttäjä
 
     let user = await User.findOne({ googleId: googleId });
-    console.log('User found:', user);
+    // console.log('User found:', user);
     if (!user) {
       user = await User.create({
         googleId: googleId,
@@ -43,10 +42,10 @@ exports.authenticateGoogleUser = async (req, res) => {
       },
     );
 
-    console.log(token);
+    // console.log(token);
 
-    const decodedToken = jwt.decode(token);
-    console.log(decodedToken);
+    // const decodedToken = jwt.decode(token);
+    // console.log(decodedToken);
 
     console.log('sending json response to frontend');
     res.json({
