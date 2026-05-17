@@ -51,8 +51,6 @@
       </div>
     </div>
 
-    @if (pieChartData?.datasets?.[0]?.data?.length) {
-
     <!-- Piirakkagraafi -->
     <ion-card class="chart-card">
       <ion-card-header>
@@ -60,10 +58,13 @@
       </ion-card-header>
       <ion-card-content>
         <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="pie"></canvas>
+        @if (!pieChartData.datasets[0].data.length) {
+        <p class="no-data">
+          Ei vielä treenidataa
+        </p>
+        }
       </ion-card-content>
     </ion-card>
-
-    }
 
   </div>
 </ion-content>
