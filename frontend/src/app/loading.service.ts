@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 // holds logic whether application is currently "loading"
-// acts as bridge between the interceptor and the UI
 @Injectable({
   providedIn: 'root',
 })

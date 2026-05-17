@@ -6,7 +6,7 @@ import { DataFetchService } from './data-fetch-service';
   providedIn: 'root',
 })
 export class XpService {
-  private progressSubject = new BehaviorSubject<number>(0); //sivun alkuarvo
+  private progressSubject = new BehaviorSubject<number>(0);
   public progress$: Observable<number> = this.progressSubject.asObservable();
   private dataFetchService = inject(DataFetchService);
 
@@ -59,9 +59,13 @@ export class XpService {
             }
 
             let currentLevel = Math.floor(Math.sqrt(currentXp / 50)) + 1;
-            
+
             // Jos animaatio päättyy tasan uuden tason rajalle, pidetään palkki visuaalisesti täytenä
-            if (currentXp === targetXp && currentXp > 0 && Math.sqrt(currentXp / 50) % 1 === 0) {
+            if (
+              currentXp === targetXp &&
+              currentXp > 0 &&
+              Math.sqrt(currentXp / 50) % 1 === 0
+            ) {
               currentLevel -= 1;
             }
             const levelStartXp = (currentLevel - 1) ** 2 * 50;
@@ -82,23 +86,4 @@ export class XpService {
       },
     });
   }
-
-  // Backend-juttu, kannattaa varmistaa toimiiko oikeesti jossain vaiheessa, hyvin mahdollista että tehty väärin
-
-  /*
-
-  lataaBackend() {
-    this.http.get<{ progressPercentage: number }>(this.API_URL).subscribe({
-      next: (res) => {
-        // palkki pitää päivittää backend puolelta, varmistus miten oikeasti toimii
-        this.progressSubject.next(res.mikäonkaanimeltään);
-      },
-      error: (err: any) => {
-        console.error('Backend ei vastannut:', err);
-        // haku epäonnistu, error
-      },
-    });
-  } 
-
-  */
 }
