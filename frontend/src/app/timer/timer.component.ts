@@ -24,14 +24,14 @@ export class TimerComponent implements OnDestroy, OnChanges {
 
   timerValue: string = '';
   isRunning: boolean = false;
-  private timerInterval: ReturnType<typeof setInterval> | undefined; // Käytetään any, jotta toimii ympäristöstä riippumatta
+  private timerInterval: ReturnType<typeof setInterval> | undefined;
   private pressTimeout: ReturnType<typeof setTimeout> | undefined;
   private isLongPress: boolean = false;
 
   constructor() {}
 
   /**
-   * MUOKATTU: Tarkistetaan muutokset tarkemmin.
+   * Tarkistetaan muutokset tarkemmin.
    */
   ngOnChanges(changes: SimpleChanges) {
     // Jos duration-arvo muuttuu, pysäytetään ja nollataan kello välittömästi

@@ -18,10 +18,12 @@ import {
   providedIn: 'root',
 })
 export class DataFetchService {
-  private apiurlMoves =    'https://dzw1f1bfpf15d.cloudfront.net/api/moves';
-  private apiurlUsers =    'https://dzw1f1bfpf15d.cloudfront.net/api/users';
-  private apiurlPrograms = 'https://dzw1f1bfpf15d.cloudfront.net/api/training-programs';
-  private apiurlSessions = 'https://dzw1f1bfpf15d.cloudfront.net/api/training-sessions';
+  private apiurlMoves = 'https://dzw1f1bfpf15d.cloudfront.net/api/moves';
+  private apiurlUsers = 'https://dzw1f1bfpf15d.cloudfront.net/api/users';
+  private apiurlPrograms =
+    'https://dzw1f1bfpf15d.cloudfront.net/api/training-programs';
+  private apiurlSessions =
+    'https://dzw1f1bfpf15d.cloudfront.net/api/training-sessions';
 
   private http = inject(HttpClient);
 
@@ -150,14 +152,16 @@ export class DataFetchService {
   }
 
   /**
-  * [PATCH] Updates an existing trainingprogram.
-  */
+   * [PATCH] Updates an existing trainingprogram.
+   */
   updateProgram(
     id: string,
-      programData: Partial<Omit<TrainingProgram, '_id' | '__v'>>,
-    ): Observable<TrainingProgram> {
-      return this.http.patch<TrainingProgram>(
-    `${this.apiurlPrograms}/${id}`, programData);
+    programData: Omit<TrainingProgram, '_id' | '__v'>,
+  ): Observable<TrainingProgram> {
+    return this.http.patch<TrainingProgram>(
+      `${this.apiurlPrograms}/${id}`,
+      programData,
+    );
   }
 
   // ----------------------- TRAININGSESSION METHODS: -----------------------
@@ -178,7 +182,6 @@ export class DataFetchService {
     //
   }
 
-
   /**
    * [POST] Creates a new trainingsession and adds it to the database.
    */
@@ -190,26 +193,26 @@ export class DataFetchService {
   ): Observable<TrainingSession> {
     return this.http.post<TrainingSession>(this.apiurlSessions, sessionData);
   }
-// ----------------------- STATS METHODS: -----------------------
+  // ----------------------- STATS METHODS: -----------------------
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-getStats(): Observable<any> {
-  let googleId = null;
-  try {
-    const sessionDataString = sessionStorage.getItem('accesstoken');
-    if (sessionDataString) {
-      const sessionData = JSON.parse(sessionDataString);
-      googleId = sessionData.googleId;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getStats(): Observable<any> {
+    let googleId = null;
+    try {
+      const sessionDataString = sessionStorage.getItem('accesstoken');
+      if (sessionDataString) {
+        const sessionData = JSON.parse(sessionDataString);
+        googleId = sessionData.googleId;
+      }
+    } catch (error) {
+      console.error('Error parsing session data for googleId:', error);
     }
-  } catch (error) {
-    console.error('Error parsing session data for googleId:', error);
+    if (!googleId) return throwError(() => new Error('No access token found.'));
+    return this.http.get(`${this.apiurlUsers}/${googleId}/stats`);
   }
-  if (!googleId) return throwError(() => new Error('No access token found.'));
-  return this.http.get(`${this.apiurlUsers}/${googleId}/stats`);
-}
 
   // ----------------------- CALENDAR METHODS: -----------------------
- 
+
   /**
    * [GET] Fetches dates of completed training sessions for calendar view.
    * Palauttaa listan päivämääriä muodossa ['2025-05-01', '2025-05-03', ...].
@@ -228,4 +231,3 @@ getStats(): Observable<any> {
     return this.http.get<string[]>(`${this.apiurlUsers}/${googleId}/calendar`);
   }
 }
-

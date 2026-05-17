@@ -656,6 +656,7 @@ export class LisaaTreeni {
             name: this.programName,
             description: this.programDescription,
             exercises: selectedExercises,
+            isDefault: false,
           })
           .subscribe({
             next: () => {
