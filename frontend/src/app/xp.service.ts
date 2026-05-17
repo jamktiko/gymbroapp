@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, interval } from 'rxjs';
+import { BehaviorSubject, Observable, interval, Subscription } from 'rxjs';
 import { DataFetchService } from './data-fetch-service';
 
 @Injectable({
@@ -9,12 +9,17 @@ export class XpService {
   private progressSubject = new BehaviorSubject<number>(0);
   public progress$: Observable<number> = this.progressSubject.asObservable();
   private dataFetchService = inject(DataFetchService);
+  private activeAnimation?: Subscription;
 
   constructor() {
     this.lataaXpProgress();
   }
 
   paivitaXpProgress(xp: number) {
+    if (this.activeAnimation) {
+      this.activeAnimation.unsubscribe();
+      this.activeAnimation = undefined;
+    }
     // Lasketaan käyttäjän nykyinen level, sekä sen tason vaatima alku- ja loppu-xp
     const currentLevel = Math.floor(Math.sqrt(xp / 50)) + 1;
     const levelStartXp = (currentLevel - 1) ** 2 * 50;
@@ -42,6 +47,11 @@ export class XpService {
 
   // Frontend-testaus ja animaatio page6:een
   animateXpGain(xpGain: number = 50) {
+    if (this.activeAnimation) {
+      this.activeAnimation.unsubscribe();
+      this.activeAnimation = undefined;
+    }
+
     this.dataFetchService.getUserDataById().subscribe({
       next: (userData) => {
         const startXp = userData.xp;
@@ -51,13 +61,16 @@ export class XpService {
         const steps = 40;
         const stepAmount = xpGain / steps;
 
-        const sub = interval(30).subscribe({
+        this.activeAnimation = interval(30).subscribe({
           next: () => {
             currentXp += stepAmount;
 
             if (currentXp >= targetXp) {
               currentXp = targetXp; // varmistetaan että ei mennä yli
-              sub.unsubscribe();
+              if (this.activeAnimation) {
+                this.activeAnimation.unsubscribe();
+                this.activeAnimation = undefined;
+              }
             }
 
             let currentLevel = Math.floor(Math.sqrt(currentXp / 50)) + 1;

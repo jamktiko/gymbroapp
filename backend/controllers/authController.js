@@ -28,7 +28,10 @@ exports.authenticateGoogleUser = async (req, res) => {
         name: name,
         email: email,
       });
-      user = await fetchDefaultProgramsForUser(user.googleId);
+      const userWithPrograms = await fetchDefaultProgramsForUser(user.googleId);
+      if (userWithPrograms) {
+        user = userWithPrograms;
+      }
     }
 
     // 3. Palauta oma JWT
