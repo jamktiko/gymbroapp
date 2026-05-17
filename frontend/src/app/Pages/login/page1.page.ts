@@ -5,11 +5,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  MenuController,
+  MenuController, // tuodaan MenuController jotta voimme poistaa sivuvalikko käytöstä
   IonButton,
   IonIcon,
   IonContent,
-} from '@ionic/angular/standalone'; // tuodaan menucontroller jotta voidaan disable menu
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
 import {
