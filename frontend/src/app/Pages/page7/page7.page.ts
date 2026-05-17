@@ -1,6 +1,4 @@
-/**
- * Tilastot-sivu
- */
+// Tilastot-sivu
 
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,12 +10,12 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
-  IonCard, // Lisätty kortti-komponentteja
+  IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons'; // Tarvitaan ikonien rekisteröintiin
+import { addIcons } from 'ionicons';
 import {
   flame,
   barbell,
@@ -104,21 +102,6 @@ export class Page7Page implements OnInit {
     Etureidet: '#ff9f40',
   };
 
-  // PLACEHOLDER BACKENDILLE:
-  // Tähän tulee myöhemmin data
-  public streakData = {
-    current: 3,
-    weeklyActivity: [
-      { day: 'Ma', active: true },
-      { day: 'Ti', active: true },
-      { day: 'Ke', active: true },
-      { day: 'To', active: false },
-      { day: 'Pe', active: false },
-      { day: 'La', active: false },
-      { day: 'Su', active: false },
-    ],
-  };
-
   constructor() {
     addIcons({
       trophy,
@@ -161,11 +144,12 @@ export class Page7Page implements OnInit {
             },
           ],
         };
+
         this.cdr.detectChanges();
 
         this.dataFetchService.getUserDataById().subscribe({
           next: (data) => {
-            console.log('User data fetched:', data);
+            // console.log('User data fetched:', data);
             this.userData = data;
           },
           error: (err) => {

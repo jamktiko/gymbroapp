@@ -1,3 +1,5 @@
+<!-- Tilastot-sivu -->
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="end">
@@ -11,7 +13,7 @@
   <div class="content-container">
 
     <!-- XP-KORTTI -->
-    <div class="xp-wrapper">
+    <!-- <div class="xp-wrapper">
       <div class="xp-header">
         <span class="level-text"></span>
 
@@ -19,7 +21,7 @@
       <div class="progress-bar-container">
         <div class="progress-bar-fill" [style.width.%]="(xpService.progress$ | async)! * 100"></div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Stats-kortit -->
     <div class="user-stats-grid">
@@ -29,8 +31,8 @@
       </div>
 
       <div class="user-stat-box">
-        <small>Treenejä</small>
-        <p>{{ totalSessions }}</p>
+        <small>Seuraava taso</small>
+        <p>{{ xpToNextLevel }}</p>
       </div>
 
       <div class="user-stat-box">
@@ -39,8 +41,8 @@
       </div>
 
       <div class="user-stat-box">
-        <small>Seuraava taso</small>
-        <p>{{ xpToNextLevel }}</p>
+        <small>Treenejä</small>
+        <p>{{ totalSessions }}</p>
       </div>
 
       <div class="user-stat-box full-width">
@@ -49,6 +51,8 @@
       </div>
     </div>
 
+    @if (pieChartData?.datasets?.[0]?.data?.length) {
+
     <!-- Piirakkagraafi -->
     <ion-card class="chart-card">
       <ion-card-header>
@@ -56,11 +60,10 @@
       </ion-card-header>
       <ion-card-content>
         <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="pie"></canvas>
-        <p *ngIf="!pieChartData.datasets[0].data.length" class="no-data">
-          Ei vielä treenidataa
-        </p>
       </ion-card-content>
     </ion-card>
+
+    }
 
   </div>
 </ion-content>
