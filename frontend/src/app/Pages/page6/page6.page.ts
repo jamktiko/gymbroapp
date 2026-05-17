@@ -7,9 +7,7 @@ import { MenuController } from '@ionic/angular/standalone';
 import {
   IonButton,
   IonContent,
-  IonFooter,
   IonProgressBar,
-  IonToolbar,
 } from '@ionic/angular/standalone';
 import { TrainingSession } from '../../types/userdata';
 import { DataFetchService } from '../../data-fetch-service';
@@ -19,15 +17,7 @@ import { DataFetchService } from '../../data-fetch-service';
   templateUrl: './page6.page.html',
   styleUrls: ['./page6.page.scss'],
   standalone: true,
-  imports: [
-    IonContent,
-    IonToolbar,
-    CommonModule,
-    FormsModule,
-    IonFooter,
-    IonButton,
-    IonProgressBar,
-  ],
+  imports: [IonContent, CommonModule, FormsModule, IonButton, IonProgressBar],
 })
 export class Page6Page implements OnInit {
   private finishedSession: Omit<

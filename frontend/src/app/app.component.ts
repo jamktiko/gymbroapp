@@ -130,7 +130,7 @@ export class AppComponent implements OnInit {
     this.dataFetchService.getUserDataById().subscribe({
       next: (data) => {
         this.userData = data as UserData;
-        console.log('User data loaded:', this.userData);
+        // console.log('User data loaded:', this.userData);
 
         const savedName = this.userData?.name;
         const savedEmail = this.userData?.email;

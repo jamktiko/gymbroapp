@@ -1,5 +1,5 @@
-/* Pääsäiliö, joka jakaa tilan pystysuunnassa */
 @import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
+
 ion-content {
   --overflow: hidden;
   overflow: hidden;
@@ -14,8 +14,9 @@ ion-content {
   text-align: center;
   gap: 3vh;
   height: 100%;
-  /*background-color: #202020; /* Varmistetaan musta tausta */
+  // background-color: #202020;
 }
+
 .logo-wrapper {
   display: flex;
   max-height: 35vh;
@@ -23,11 +24,13 @@ ion-content {
   justify-content: center;
   object-fit: contain;
 }
+
 .logo-section {
   white-space: nowrap;
   margin: 0;
   padding: 0;
 }
+
 .orig-title {
   font-family: "Archivo Black", sans-serif;
   text-transform: uppercase;
@@ -35,7 +38,7 @@ ion-content {
   padding: 15px;
   font-size: 40px;
   font-weight: 700;
-  color: #ffd900; /* Keltainen otsikko */
+  color: #ffd900; // Keltainen otsikko
   margin-bottom: 8px;
   text-shadow: 0 0 10px rgba(233, 209, 52, 0.523);
 }
@@ -43,49 +46,49 @@ ion-content {
 p {
   font-size: clamp(16px, 5vw, 20px);
   color: #ffdf3ef5;
-  opacity: 0.8; /* Hieman himmeämpi keltainen */
+  opacity: 0.8; // Hieman himmeämpi keltainen
   letter-spacing: -1px;
 }
 
-/* Nappiosio (Keskellä) */
+// Nappiosio (Keskellä)
 .action-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 0; /* Ottaa kaiken vapaan tilan keskeltä */
+  flex-grow: 0; // Ottaa kaiken vapaan tilan keskeltä
 }
 
-/* Itse Google-nappi */
+// Itse Google-nappi
 .google-btn {
   width: 100%;
   max-width: 300px;
   height: 60px;
-  --border-radius: 15px; /* Pyöristetyt kulmat */
-  --background: #ffd900; /* Keltainen tausta */
-  --color: #0f0f0f; /* Musta teksti */
+  --border-radius: 15px; // Pyöristetyt kulmat
+  --background: #ffd900; // Keltainen tausta
+  --color: #0f0f0f; // Musta teksti
   font-weight: 700;
   font-size: 13px;
   white-space: nowrap;
   letter-spacing: -1px;
 
-  /* Keltainen hohde napin ympärille */
+  // Keltainen hohde napin ympärille
   --box-shadow: 0 4px 10px rgba(255, 255, 0, 0.2);
 
   ion-icon {
     font-size: 40px;
     margin-right: 10px;
-    color: #0f0f0f; /* Ikonikin mustaksi */
+    color: #0f0f0f; // Ikonikin mustaksi
   }
 }
 
-/* Efekti, kun hiiri on napin päällä */
+// Efekti, kun hiiri on napin päällä
 .google-btn:hover {
-  --background: #e6b400; /* Tummempi keltainen */
-  transform: translateY(-2px); /* Nousee hieman */
+  --background: #e6b400; // Tummempi keltainen
+  transform: translateY(-2px); // Nousee hieman
   transition: 0.2s ease;
 }
 
-/* Alareunan tekstiosio */
+// Alareunan tekstiosio
 .footer-text {
   p {
     font-size: clamp(9px, 3vw, 13px);
@@ -97,10 +100,11 @@ p {
   .tieto {
     font-size: clamp(11px, 3.5vw, 15px);
     color: #ffffff;
-    text-decoration: underline; /* Alleviivaus linkille */
+    text-decoration: underline; // Alleviivaus linkille
     opacity: 0.7;
   }
 }
+
 .alt-title {
   font-family: "Bebas Neue", sans-serif;
   font-size: 70px;
@@ -119,7 +123,7 @@ p {
   flex-wrap: nowrap;
   background-color: #111111;
   padding: 0.15em 0.2em 0.05em 0.26em;
-  /* Adjusted padding to compensate for letter-spacing and Bebas font baseline */
+  // Adjusted padding to compensate for letter-spacing and Bebas font baseline
   display: inline-block;
 }
 
