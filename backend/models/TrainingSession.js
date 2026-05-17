@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const { EmbeddedMoveSchema } = require('./Move');
 const ExerciseSchema = require('./Exercise');
 
 // Schema for TrainingSession data

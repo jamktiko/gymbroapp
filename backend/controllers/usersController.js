@@ -16,6 +16,7 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+// GET /api/users/:id/stats
 exports.getStats = async (req, res) => {
   try {
     if (req.user.googleId !== req.params.id) {
@@ -71,7 +72,7 @@ exports.getStats = async (req, res) => {
   }
 };
 
-// POST /api/users — luo uusi käyttäjä (myöhemmin Google Auth hoitaa tämän)
+// POST /api/users — luo uusi käyttäjä
 exports.createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
@@ -86,7 +87,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// PATCH /api/users/:id — päivitä käyttäjä (esim. weightUnit)
+// PATCH /api/users/:id — päivitä käyttäjä
 exports.updateUser = async (req, res) => {
   try {
     if (req.user.googleId !== req.params.id) {
@@ -94,7 +95,7 @@ exports.updateUser = async (req, res) => {
         .status(403)
         .json({ error: 'Ei oikeuksia muokata toista käyttäjää' });
     }
-    // Suojataan level ja exp suoralta muokkaukselta (lisätään logiikka myöhemmin)
+    // Suojataan level ja xp suoralta muokkaukselta
     const { ...safeFields } = req.body;
     const user = await User.findOneAndUpdate(
       { googleId: req.params.id },

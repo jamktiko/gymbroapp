@@ -57,7 +57,8 @@ UserSchema.virtual('xpToNextLevel').get(function () {
   const next = (this.level + 1) ** 2 * 50;
   return next - this.xp;
 });
-//Virtuaalikentät level ja xpToNextLevel lasketaan xp:n perusteella, eikä niitä 
+
+// Virtuaalikentät level ja xpToNextLevel lasketaan xp:n perusteella, eikä niitä 
 // tallenneta tietokantaan. Ne näkyvät kuitenkin JSON-muodossa, kun User-objekti muunnetaan JSONiksi.
 UserSchema.set('toJSON', { virtuals: true });
 UserSchema.set('toObject', { virtuals: true });
