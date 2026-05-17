@@ -68,3 +68,19 @@ export interface UserStats {
   muscleDistribution: { muscleGroup: string; count: number }[];
   personalRecords: { muscleGroup: string; exercise: string; weight: number }[];
 }
+
+export interface Achievement {
+  id: number;
+  title: string;
+  description: string;
+  icon: string;
+  progress: number;
+  unlocked: boolean;
+  color: string;
+}
+
+export interface PersonalRecord {
+  muscleGroup: string;
+  exercise: string;
+  weight: number;
+}

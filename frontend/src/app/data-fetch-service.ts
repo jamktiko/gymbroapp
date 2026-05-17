@@ -165,8 +165,8 @@ export class DataFetchService {
   /**
    * [GET] Fetches all trainingsession for currently logged in user.
    */
-  getAllSession() {
-    //
+  getAllSessions(): Observable<TrainingSession[]> {
+    return this.http.get<TrainingSession[]>(this.apiurlSessions);
   }
 
   /**
@@ -190,8 +190,9 @@ export class DataFetchService {
   ): Observable<TrainingSession> {
     return this.http.post<TrainingSession>(this.apiurlSessions, sessionData);
   }
-// -----------------------GET STATS METHODS: -----------------------
+// ----------------------- STATS METHODS: -----------------------
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 getStats(): Observable<any> {
   let googleId = null;
   try {
