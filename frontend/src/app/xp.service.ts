@@ -14,23 +14,25 @@ export class XpService {
     this.lataaXpProgress();
   }
 
+  paivitaXpProgress(xp: number) {
+    // Lasketaan käyttäjän nykyinen level, sekä sen tason vaatima alku- ja loppu-xp
+    const currentLevel = Math.floor(Math.sqrt(xp / 50)) + 1;
+    const levelStartXp = (currentLevel - 1) ** 2 * 50;
+    const levelEndXp = currentLevel ** 2 * 50;
+
+    // Kuinka paljon XP:tä tällä tasolla on kerätty ja kuinka paljon taso vaatii yhteensä
+    const xpEarnedInLevel = xp - levelStartXp;
+    const levelTotalXpSize = levelEndXp - levelStartXp;
+
+    const progress =
+      levelTotalXpSize > 0 ? xpEarnedInLevel / levelTotalXpSize : 0;
+    this.progressSubject.next(progress);
+  }
+
   lataaXpProgress() {
     this.dataFetchService.getUserDataById().subscribe({
       next: (userData) => {
-        const xp = userData.xp;
-
-        // Lasketaan käyttäjän nykyinen level, sekä sen tason vaatima alku- ja loppu-xp
-        const currentLevel = Math.floor(Math.sqrt(xp / 50)) + 1;
-        const levelStartXp = (currentLevel - 1) ** 2 * 50;
-        const levelEndXp = currentLevel ** 2 * 50;
-
-        // Kuinka paljon XP:tä tällä tasolla on kerätty ja kuinka paljon taso vaatii yhteensä
-        const xpEarnedInLevel = xp - levelStartXp;
-        const levelTotalXpSize = levelEndXp - levelStartXp;
-
-        const progress =
-          levelTotalXpSize > 0 ? xpEarnedInLevel / levelTotalXpSize : 0;
-        this.progressSubject.next(progress);
+        this.paivitaXpProgress(userData.xp);
       },
       error: (err: unknown) => {
         console.error('Backend ei vastannut:', err);

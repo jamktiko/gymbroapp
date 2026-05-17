@@ -124,6 +124,7 @@ export class Page2Page implements OnInit {
         this.userData = data as UserData;
         // console.log('User data loaded:', this.userData);
         this.loadPrograms();
+        this.xpService.paivitaXpProgress(this.userData.xp);
       },
       error: (err) => {
         console.error('Failed to load user data', err);
