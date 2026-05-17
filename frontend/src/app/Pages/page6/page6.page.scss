@@ -1,8 +1,9 @@
 ion-content {
   --overflow: hidden;
   overflow: hidden;
-  /*--background: radial-gradient(circle at center, #222 0%, #111 100%);*/
+  // --background: radial-gradient(circle at center, #222 0%, #111 100%);
 }
+
 .content-wrapper {
   flex: 1;
   display: flex;
@@ -12,6 +13,7 @@ ion-content {
   text-align: center;
   width: 100%;
 }
+
 .xp-container {
   display: flex;
   flex-direction: column;
@@ -21,6 +23,7 @@ ion-content {
   align-items: center;
   text-align: center;
 }
+
 .next {
   margin-bottom: calc(env(safe-area-inset-bottom) + 17px) !important;
   margin-top: 2px;
@@ -38,6 +41,7 @@ ion-content {
   width: 100%;
   max-width: 500px;
 }
+
 .headercolor {
   --background: #202020;
 }

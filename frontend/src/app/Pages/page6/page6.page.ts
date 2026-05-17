@@ -1,13 +1,15 @@
+// XP-sivu
+
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { XpService } from '../../xp.service';
-import { MenuController } from '@ionic/angular/standalone';
 import {
   IonButton,
   IonContent,
   IonProgressBar,
+  MenuController,
 } from '@ionic/angular/standalone';
 import { TrainingSession } from '../../types/userdata';
 import { DataFetchService } from '../../data-fetch-service';
