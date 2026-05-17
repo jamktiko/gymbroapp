@@ -1,45 +1,50 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700&display=swap");
+
 :root {
   color-scheme: only dark !important;
-  /** 1. Keltainen pääväri (Primary) **/
+  // 1. Keltainen pääväri (Primary)
   --ion-color-primary: #ffd900;
   --ion-color-primary-rgb: 255, 217, 0;
   --ion-color-primary-contrast: #000000;
   --ion-color-primary-contrast-rgb: 0, 0, 0;
-  --ion-color-primary-shade: #e0bf00; /* Korjattu shade tummemmaksi keltaiseksi */
-  --ion-color-primary-tint: #ffdd1a; /* Korjattu tint vaaleammaksi keltaiseksi */
+  --ion-color-primary-shade: #e0bf00; // Korjattu shade tummemmaksi keltaiseksi
+  --ion-color-primary-tint: #ffdd1a; // Korjattu tint vaaleammaksi keltaiseksi
 
-  /** 2. Yleiset taustavärit koko sovellukseen **/
-  --ion-background-color: #202020; /* Tämä vaikuttaa oletuksena ion-contentiin */
-  --ion-text-color: #ffffff; /* Valkoinen perusteksti */
-  --ion-item-background: #2a2a2a; /* Listojen (ion-item) tausta */
-  --ion-font-family: "Inter", sans-serif; /* fontti */
+  // 2. Yleiset taustavärit koko sovellukseen
+  --ion-background-color: #202020; // Tämä vaikuttaa oletuksena ion-contentiin
+  --ion-text-color: #ffffff; // Valkoinen perusteksti
+  --ion-item-background: #2a2a2a; // Listojen (ion-item) tausta
+  --ion-font-family: "Inter", sans-serif; // fontti
 }
+
 ion-content {
   --background: radial-gradient(
     circle at center,
     #222 0%,
     #111 100%
-  ) !important; /*taustan gradient */
+  ) !important; // taustan gradient
   --background: var(--ion-background-color);
   --color: var(--ion-text-color);
 }
-/* Globaalit komponenttimääritykset */
+
+// Globaalit komponenttimääritykset
 ion-toolbar {
   --background: #000000;
   --color: var(--ion-color-primary); // Käytetään muuttujaa
-  --border-style: none; //poistaa ionic omat tyylittelyt
+  --border-style: none; // poistaa ionic omat tyylittelyt
 }
+
 ion-header {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.164) !important; //erittaa hieman enemmän headeria taustasta
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.164) !important; // erottaa hieman enemmän headeria taustasta
   z-index: 100;
 }
+
 ion-progress-bar {
-  /*--background: #0f0f0f8b;
+  // --background: #0f0f0f8b;
   --progress-background: #ffd900;
   height: 25px;
-  border-radius: 12px;*/
+  border-radius: 12px;
   height: 20px;
   border-radius: 50px;
   --progress-background: #ffd900;
@@ -48,7 +53,8 @@ ion-progress-bar {
   margin: 30px auto;
   width: 85%;
 }
-//Demo Frontend puolen xp-bar
+
+// Demo Frontend puolen xp-bar
 ion-progress-bar::part(progress),
 ion-progress-bar::part(track) {
   border-radius: 12px;
@@ -71,6 +77,3 @@ ion-button.next-style {
   text-transform: uppercase !important;
   letter-spacing: 1px;
 }
-/*.xpbar::part(progress) {
-  transition: transform 1.2s ease-in-out !important;
-} */ //backend:n transition, testattava onko ok
