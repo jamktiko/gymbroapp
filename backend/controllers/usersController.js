@@ -78,7 +78,7 @@ exports.createUser = async (req, res) => {
     const user = await User.create(req.body);
     // fetch default training programs for newly created user:
     const updatedUser = await fetchDefaultProgramsForUser(user.googleId);
-    res.status(201).json(updatedUser);
+    res.status(201).json(updatedUser || user);
   } catch (err) {
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Sähköposti on jo käytössä' });
