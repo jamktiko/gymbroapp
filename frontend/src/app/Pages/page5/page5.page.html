@@ -1,3 +1,5 @@
+<!-- Treenisessio-sivu -->
+
 <ion-header class="ion-no-border">
 
   <!-- upper bar -->
@@ -24,7 +26,7 @@
       PREVIOUS
     </ion-button>
     } @else {
-    <ion-button class="prev-btn" fill="clear" style="visibility: hidden; pointer-events: none;">
+    <ion-button class="prev-btn hidden-btn" fill="clear">
       <ion-icon slot="start" name="arrow-back"></ion-icon>
       PREVIOUS
     </ion-button>
@@ -62,7 +64,7 @@
       <!-- Settirivit: jokaiselle setille oma rivi, jossa on toistot- ja paino-kentät -->
       @if (getExpanded(currentIndex)) {
       <div class="sets-list">
-        @for (_s of exercise.sets; track $index; let i = $index) {
+        @for (s of exercise.sets; track $index; let i = $index) {
         <div class="set-row">
           <div class="set-action">
             @if (i === (exercise.sets.length - 1) && exercise.sets.length > 1) {
@@ -97,20 +99,18 @@
     </div>
     }
 
-
     <!-- TIMER KOMPONENTTI -->
     <!-- duration: kuinka monta sekuntia lasketaan (nyt vakio 10) -->
     <!-- timerFinished: voit halutessasi kutsua funktiota kun aika loppuu -->
     <!-- Lisää #workoutTimer -->
-    <div [style.display]="timerVisible ? 'block' : 'none'" style="width: 100%;">
+    <div [style.display]="timerVisible ? 'block' : 'none'" class="timer-wrapper">
       <app-timer #workoutTimer [duration]="workoutTimerDuration" (longPress)="openTimerModal()"></app-timer>
     </div>
 
   </div>
 </ion-content>
 
-<ion-footer class="ion-no-border ion-padding" [style.visibility]="nextBtnVisible ? 'visible' : 'hidden'"
-  [style.opacity]="nextBtnVisible ? 1 : 0" style="transition: opacity 0.2s;">
+<ion-footer class="ion-no-border ion-padding footer-animated" [class.visible]="nextBtnVisible">
 
   @if (currentIndex < (activeWorkoutReordered?.exercises?.length || 0) - 1) { <ion-button class="next-btn"
     expand="block" shape="round" color="primary" (click)="seuraavaLiike()">

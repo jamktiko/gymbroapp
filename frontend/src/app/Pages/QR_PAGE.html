@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="fi">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GymBro</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700&display=swap"
+    rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --yellow: #FFE600;
@@ -16,7 +24,8 @@
       --gray: #1A1A1A;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
       background: var(--black);
@@ -37,13 +46,11 @@
     .bg-stripe {
       position: absolute;
       inset: 0;
-      background-image: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 60px,
-        rgba(255, 230, 0, 0.03) 60px,
-        rgba(255, 230, 0, 0.03) 61px
-      );
+      background-image: repeating-linear-gradient(-45deg,
+          transparent,
+          transparent 60px,
+          rgba(255, 230, 0, 0.03) 60px,
+          rgba(255, 230, 0, 0.03) 61px);
       pointer-events: none;
     }
 
@@ -55,10 +62,30 @@
       border-style: solid;
       opacity: 0.5;
     }
-    .corner-tl { top: 32px; left: 32px; border-width: 2px 0 0 2px; }
-    .corner-tr { top: 32px; right: 32px; border-width: 2px 2px 0 0; }
-    .corner-bl { bottom: 32px; left: 32px; border-width: 0 0 2px 2px; }
-    .corner-br { bottom: 32px; right: 32px; border-width: 0 2px 2px 0; }
+
+    .corner-tl {
+      top: 32px;
+      left: 32px;
+      border-width: 2px 0 0 2px;
+    }
+
+    .corner-tr {
+      top: 32px;
+      right: 32px;
+      border-width: 2px 2px 0 0;
+    }
+
+    .corner-bl {
+      bottom: 32px;
+      left: 32px;
+      border-width: 0 0 2px 2px;
+    }
+
+    .corner-br {
+      bottom: 32px;
+      right: 32px;
+      border-width: 0 2px 2px 0;
+    }
 
     .wrapper {
       display: flex;
@@ -102,12 +129,16 @@
       border-color: var(--yellow);
       border-style: solid;
     }
+
     .qr-container::before {
-      top: -4px; left: -4px;
+      top: -4px;
+      left: -4px;
       border-width: 3px 0 0 3px;
     }
+
     .qr-container::after {
-      bottom: -4px; right: -4px;
+      bottom: -4px;
+      right: -4px;
       border-width: 0 3px 3px 0;
     }
 
@@ -137,6 +168,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="bg-stripe"></div>
   <div class="corner corner-tl"></div>
@@ -164,4 +196,5 @@
     });
   </script>
 </body>
+
 </html>
