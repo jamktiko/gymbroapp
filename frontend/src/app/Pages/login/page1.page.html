@@ -1,3 +1,5 @@
+<!-- Login-sivu -->
+
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="login-container">
     <div class="logo-section">
@@ -14,34 +16,18 @@
     </div>
     <div class="action-section">
       @if (isNative) {
-
-      <!-- newer grey google button style -->
-      <!-- <ion-button expand="block" (click)="signInNative()" color="light">
-        <ion-icon slot="start" name="logo-google"></ion-icon>
-        Kirjaudu Googlella
-      </ion-button> -->
-
-      <!-- earlier yellow google button style -->
       <ion-button class="google-btn" expand="block" (click)="signInNative()">
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Kirjaudu Google-tunnuksilla
       </ion-button>
       } @if (!isNative) {
-      <asl-google-signin-button
-        type="standard"
-        size="large"
-      ></asl-google-signin-button>
+      <asl-google-signin-button type="standard" size="large"></asl-google-signin-button>
       }
     </div>
 
     <div class="footer-text">
       <p>Ainoa kirjautumisvaihtoehto turvallisuutesi takaamiseksi.</p>
-      <a
-        href="https://policies.google.com/privacy"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="tieto"
-      >
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="tieto">
         Tietosuojaseloste
       </a>
     </div>

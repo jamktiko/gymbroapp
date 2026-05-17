@@ -1,13 +1,10 @@
-/**
- * Lisää treeni -näkymä
- */
+// Add_training-sivu
 
 import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { MenuController } from '@ionic/angular/standalone'; // tuodaan MenuController jotta voimme poistaa valikon käytöstä
 import { addOutline, trashOutline } from 'ionicons/icons';
 import { DataFetchService } from '../../data-fetch-service';
 import {
@@ -36,6 +33,7 @@ import {
   IonSegment,
   IonSegmentButton,
   AlertController,
+  MenuController, // tuodaan MenuController jotta voimme poistaa sivuvalikko käytöstä
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -84,9 +82,9 @@ export class LisaaTreeni {
   public modalSingleReps: string = '';
   public modalSingleWeight: string = '';
   public modalInputCount: string = '';
-  private menu = inject(MenuController);
   public newMoveType: 'compound' | 'targeted' = 'compound';
   public exerciseList2: Category2[] = [];
+  private menu = inject(MenuController);
   private router = inject(Router);
   private alertCtrl = inject(AlertController);
   private dataFetchService = inject(DataFetchService);
@@ -99,6 +97,13 @@ export class LisaaTreeni {
   constructor() {
     addIcons({ addOutline, trashOutline });
   }
+
+  hasAnyExerciseSelected(): boolean {
+    return this.exerciseList2.some((cat) =>
+      cat.exercises.some((ex) => ex.isSelected),
+    );
+  }
+
   preSelectExercises(existingExercises: Exercise[]) {
     existingExercises.forEach((ex) => {
       this.exerciseList2.forEach((cat) => {
@@ -110,10 +115,12 @@ export class LisaaTreeni {
         });
       });
     });
+
     // Pakotetaan Ionicin change detection huomaamaan muutokset päivittämällä
     // taulukon viite — muuten UI ei välttämättä päivity automaattisesti
     this.exerciseList2 = [...this.exerciseList2];
   }
+
   /**
    * Kun page4-sivu on tulossa näkyviin haetaan kaikki käyttäjän movet databasesta
    * Ne näytetään kategorioittain tässä näkymässä koska ollaan luomassa uusi treeniohjelma mihin valitaan liikkeitä
@@ -357,10 +364,10 @@ export class LisaaTreeni {
                   this.dataFetchService.getAllMoves().subscribe({
                     next: (data) => {
                       this.usersMoves = data as Move[];
-                      console.log(
-                        'Moves fetched successfully:',
-                        this.usersMoves,
-                      );
+                      // console.log(
+                      //   'Moves fetched successfully:',
+                      //   this.usersMoves,
+                      // );
                       this.categorizeMoves();
                     },
                     error: (err) => {
@@ -485,13 +492,13 @@ export class LisaaTreeni {
     // Tallenna modalin syötteet: luo uusi `sets`-taulukko valitulla määrällä
     // sarjoja ja käytä modalissa annettuja toistoja/painoja. Jos kenttä on
     // tyhjä tai ei-numeraalinen, käytetään olemassa olevaa arvoa oletuksena.
-    console.log('saveExerciseModal called', {
-      modalExercise: this.modalExercise?.move?.name,
-      modalInputCount: this.modalInputCount,
-      modalSingleReps: this.modalSingleReps,
-      modalSingleWeight: this.modalSingleWeight,
-      modalTempSets: this.modalTempSets,
-    });
+    // console.log('saveExerciseModal called', {
+    //   modalExercise: this.modalExercise?.move?.name,
+    //   modalInputCount: this.modalInputCount,
+    //   modalSingleReps: this.modalSingleReps,
+    //   modalSingleWeight: this.modalSingleWeight,
+    //   modalTempSets: this.modalTempSets,
+    // });
 
     if (!this.modalExercise) {
       console.warn(
@@ -551,7 +558,7 @@ export class LisaaTreeni {
           this.dataFetchService.getAllMoves().subscribe({
             next: (data) => {
               this.usersMoves = data as Move[];
-              console.log('Moves fetched successfully:', this.usersMoves);
+              // console.log('Moves fetched successfully:', this.usersMoves);
               this.categorizeMoves();
             },
             error: (err) => {
@@ -580,8 +587,7 @@ export class LisaaTreeni {
         exercises: [],
       };
 
-      // TÄRKEÄÄ: Päivitetään koko taulukko levitysoperaattorilla,
-      // jotta Ionic huomaa uuden Accordion-elementin heti.
+      // Päivitetään koko taulukko spreadilla jotta Ionic huomaa uuden Accordion-elementin
       this.exerciseList2 = [...this.exerciseList2, newCategory];
 
       // Pakotetaan valikko auki heti luonnin jälkeen
@@ -615,7 +621,7 @@ export class LisaaTreeni {
   }
 
   /**
-   * Uusi saveProgram-metodi, mukautettu toimimaan back-endin ja tietokannan kanssa
+   * Uusi saveProgram-metodi, mukautettu toimimaan backendin ja tietokannan kanssa
    */
   saveProgram2() {
     // 1. Kerätään kaikki valitut liikkeet yhteen listaan
@@ -629,12 +635,12 @@ export class LisaaTreeni {
       .filter((e: ExerciseIsSelected) => e.isSelected)
       .map((e) => ({ move: e.move, sets: e.sets })); //
 
-    console.log('selectedExercises:', selectedExercises[0]?.move);
-    console.log('selectedExercises:', selectedExercises[0]?.sets.length);
+    // console.log('selectedExercises:', selectedExercises[0]?.move);
+    // console.log('selectedExercises:', selectedExercises[0]?.sets.length);
 
     // 2. Tarkistetaan että nimi on annettu ja liikkeitä valittu
     if (this.programName.trim().length > 0 && selectedExercises.length > 0) {
-      console.log('Tallennetaan:', this.programName, selectedExercises);
+      // console.log('Tallennetaan:', this.programName, selectedExercises);
 
       // 3. Luodaan uusi treeniohjelma-olio
       const newProgram2 = {
@@ -650,6 +656,7 @@ export class LisaaTreeni {
             name: this.programName,
             description: this.programDescription,
             exercises: selectedExercises,
+            isDefault: false,
           })
           .subscribe({
             next: () => {
@@ -658,7 +665,7 @@ export class LisaaTreeni {
             },
             error: (err) => {
               console.error('Error updating program:', err);
-              alert('Päivitys epäonnistui. Yritä uudelleen.');
+              // alert('Päivitys epäonnistui. Yritä uudelleen.');
             },
           });
       } else {
@@ -670,12 +677,12 @@ export class LisaaTreeni {
           },
           error: (err) => {
             console.error('Error saving program:', err);
-            alert('Tallennus epäonnistui. Yritä uudelleen.');
+            // alert('Tallennus epäonnistui. Yritä uudelleen.');
           },
         });
       }
     } else {
-      alert('Anna ohjelmalle nimi ja valitse vähintään yksi liike.');
+      // alert('Anna ohjelmalle nimi ja valitse vähintään yksi liike.');
     }
   }
 }

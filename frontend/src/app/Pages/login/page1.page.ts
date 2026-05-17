@@ -1,24 +1,25 @@
-/**
- * Login näkymä
- */
+// Login-sivu
 
 import { Component, inject, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MenuController, IonButton, IonIcon } from '@ionic/angular/standalone'; //tuodaan menucontroller jotta voidaan disable menu
-import { IonContent } from '@ionic/angular/standalone';
+import {
+  MenuController, // tuodaan MenuController jotta voimme poistaa sivuvalikko käytöstä
+  IonButton,
+  IonIcon,
+  IonContent,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logoGoogle, logInOutline } from 'ionicons/icons';
 import {
   SocialAuthService,
   GoogleSigninButtonModule,
-  SocialUser,
   SocialLoginModule,
 } from '@abacritt/angularx-social-login';
 import { AuthService } from '../../auth.service';
 import { LoginEventService } from '../../login-event.service';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth'; // Import Native Plugin
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Capacitor } from '@capacitor/core';
 
 @Component({
@@ -40,23 +41,24 @@ export class Page1Page implements OnInit {
   private socauthService = inject(SocialAuthService);
   private authService = inject(AuthService);
   private menu = inject(MenuController);
-  private user!: SocialUser;
   private router = inject(Router);
   private loginEventService = inject(LoginEventService);
   public loggedInEvent = output<void>();
-
-  isNative = false;
+  public isNative = false;
 
   constructor() {
     addIcons({ logoGoogle, logInOutline });
     this.isNative = Capacitor.isNativePlatform();
   }
+
   ionViewWillEnter() {
-    this.menu.enable(false); //menu disabled
+    this.menu.enable(false); // menu disabled
   }
+
   ionViewWillLeave() {
-    this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+    this.menu.enable(true); // varmistaa että menu tulee takaisin seuraavalla sivulla
   }
+
   ngOnInit() {
     // Prevent auto-login loop by clearing the session state when arriving at the login page
     try {
@@ -73,8 +75,8 @@ export class Page1Page implements OnInit {
     if (!this.isNative) {
       this.socauthService.authState.subscribe((user) => {
         if (user) {
-          console.log('Successfully logged in via Google button', user);
-          
+          // console.log('Successfully logged in via Google button', user);
+
           if (user.idToken && user.id) {
             this.authService
               .glogin(user.idToken, user.id)
@@ -91,28 +93,27 @@ export class Page1Page implements OnInit {
       });
     }
   }
+
   async signInNative() {
     try {
       // This triggers the native Android Google Account picker
       const googleUser = await GoogleAuth.signIn();
-      console.log('Successfully logged in natively', googleUser);
+      // console.log('Successfully logged in natively', googleUser);
 
       const idToken = googleUser.authentication.idToken;
       const googleId = googleUser.id;
 
       if (idToken && googleId) {
-        this.authService
-          .glogin(idToken, googleId)
-          .subscribe((result) => {
-            if (result === true) {
-              this.loginEventService.emitLoggedIn();
-              this.router.navigateByUrl('/page2', { replaceUrl: true });
-            } else {
-              console.log('Väärä tunnus tai salasana');
-            }
-          });
+        this.authService.glogin(idToken, googleId).subscribe((result) => {
+          if (result === true) {
+            this.loginEventService.emitLoggedIn();
+            this.router.navigateByUrl('/page2', { replaceUrl: true });
+          } else {
+            console.log('Väärä tunnus tai salasana');
+          }
+        });
       } else {
-         console.error('Login failed: missing idToken or googleId');
+        console.error('Login failed: missing idToken or googleId');
       }
     } catch (error) {
       console.error('Google Sign-In Failed:', error);

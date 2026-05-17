@@ -1,8 +1,6 @@
-/**
- * Saavutukset-sivu
- */
+// Saavutukset-sivu
 
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -18,7 +16,6 @@ import {
   IonCardContent,
   IonIcon,
   IonProgressBar,
-  IonFooter,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -32,25 +29,8 @@ import {
   fitness,
   ribbon,
 } from 'ionicons/icons';
-import { BaseChartDirective } from 'ng2-charts';
-import { ChartData, ChartOptions } from 'chart.js';
 import { DataFetchService } from '../../data-fetch-service';
-
-interface Achievement {
-  id: number;
-  title: string;
-  description: string;
-  icon: string;
-  progress: number;
-  unlocked: boolean;
-  color: string;
-}
-
-interface PersonalRecord {
-  muscleGroup: string;
-  exercise: string;
-  weight: number;
-}
+import { Achievement, PersonalRecord, TrainingSession } from '../../types/userdata';
 
 @Component({
   selector: 'app-page8',
@@ -72,56 +52,17 @@ interface PersonalRecord {
     IonCardContent,
     IonIcon,
     IonProgressBar,
-    IonFooter,
-    BaseChartDirective,
   ],
 })
 export class Page8Page implements OnInit {
   private dataFetchService = inject(DataFetchService);
 
   // Stats
-  totalXp = 0;
   level = 1;
-  xpToNextLevel = 0;
   totalSessions = 0;
+  sessions: TrainingSession[] = [];
+
   personalRecords: PersonalRecord[] = [];
-
-  // Piirakkagraafi
-  private cdr = inject(ChangeDetectorRef);
-  pieChartData: ChartData<'pie'> = {
-    labels: [],
-    datasets: [{ data: [], backgroundColor: [] }],
-  };
-
-  pieChartOptions: ChartOptions<'pie'> = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: { color: '#ffffff', padding: 12, font: { size: 12 } },
-      },
-    },
-  };
-
-  // Värit lihasryhmille
-  private muscleColors: Record<string, string> = {
-    // Uudet nimet
-    Rinta: '#ff6384',
-    Selkä: '#36a2eb',
-    Hartiat: '#ffce56',
-    Hauis: '#4bc0c0',
-    Ojentaja: '#9966ff',
-    Jalat: '#ff9f40',
-    Takareidet: '#c9cbcf',
-    Pohkeet: '#7bc67e',
-    Vatsa: '#f77825',
-    Pakarat: '#e056a0',
-    Olkapäät: '#ffce56',
-    Ojentajat: '#9966ff',
-    Hauikset: '#4bc0c0',
-    Takareisi: '#c9cbcf',
-    Etureidet: '#ff9f40',
-  };
 
   // Saavutukset
   achievements: Achievement[] = [
@@ -146,7 +87,7 @@ export class Page8Page implements OnInit {
     {
       id: 3,
       title: 'Voimanpesä',
-      description: 'Nosta yhteensä 1000 kg yhdessä treenissä.',
+      description: 'Nosta yhteensä 4000 kg yhdessä treenissä.',
       icon: 'barbell',
       progress: 0.2,
       unlocked: false,
@@ -175,32 +116,27 @@ export class Page8Page implements OnInit {
   ngOnInit() {
     this.dataFetchService.getStats().subscribe({
       next: (stats) => {
-        this.totalXp = stats.totalXp;
+        // this.totalXp = stats.totalXp;
         this.level = stats.level;
-        this.xpToNextLevel = stats.xpToNextLevel;
+        // this.xpToNextLevel = stats.xpToNextLevel;
         this.totalSessions = stats.totalSessions;
         this.personalRecords = stats.personalRecords;
-
-        // Rakennetaan piirakkagraafin data
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const labels = stats.muscleDistribution.map((d: any) => d.muscleGroup);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const data = stats.muscleDistribution.map((d: any) => d.count);
-        const colors = labels.map(
-          (l: string) => this.muscleColors[l] || '#888888',
-        );
-
-        this.pieChartData = {
-          labels,
-          datasets: [{ data, backgroundColor: colors }],
-        };
-        this.cdr.detectChanges();
 
         // Päivitetään saavutusten progress oikealla datalla
         this.updateAchievements();
       },
       error: (err) => {
         console.error('Stats-haku epäonnistui:', err);
+      },
+    });
+
+    this.dataFetchService.getAllSessions().subscribe({
+      next: (sessions) => {
+        this.sessions = sessions;
+        this.updateAchievements();
+      },
+      error: (err) => {
+        console.error('Sessioiden haku epäonnistui:', err);
       },
     });
   }
@@ -215,12 +151,65 @@ export class Page8Page implements OnInit {
       this.achievements[0].unlocked = false;
     }
 
-    // Teräsmies (5 treeniä – yksinkertaistettu versio)
-    this.achievements[1].progress = Math.min(this.totalSessions / 5, 1);
-    this.achievements[1].unlocked = this.totalSessions >= 5;
+    // Teräsmies – 5 treeniä saman kalenteriviikon aikana
+    const maxSessionsInAnyWeek = this.getMaxSessionsInAnyWeek();
+    this.achievements[1].progress = Math.min(maxSessionsInAnyWeek / 5, 1);
+    this.achievements[1].unlocked = maxSessionsInAnyWeek >= 5;
 
-    // Voimanpesä (tason perusteella)
-    this.achievements[2].progress = Math.min(this.level / 10, 1);
-    this.achievements[2].unlocked = this.level >= 10;
+    // Voimanpesä – 4000 kg yhdessä treenissä
+    const maxWeightInSession = this.getMaxWeightInSingleSession();
+    this.achievements[2].progress = Math.min(maxWeightInSession / 4000, 1);
+    this.achievements[2].unlocked = maxWeightInSession >= 4000;
+  }
+
+  /**
+   * Returns the highest number of training sessions the user has done
+   * within any single ISO calendar week (Mon–Sun).
+   */
+  private getMaxSessionsInAnyWeek(): number {
+    if (!this.sessions.length) return 0;
+
+    const weekCounts = new Map<string, number>();
+
+    for (const session of this.sessions) {
+      const key = this.getIsoWeekKey(new Date(session.datetime));
+      weekCounts.set(key, (weekCounts.get(key) ?? 0) + 1);
+    }
+
+    return Math.max(...weekCounts.values());
+  }
+
+  /**
+   * Returns the highest total weight (kg) lifted in any single training session.
+   * Total weight = sum of (reps * weight) for every set of every exercise.
+   */
+  private getMaxWeightInSingleSession(): number {
+    if (!this.sessions.length) return 0;
+
+    let max = 0;
+    for (const session of this.sessions) {
+      let total = 0;
+      for (const exercise of session.exercises) {
+        for (const set of exercise.sets) {
+          total += set.reps * set.weight;
+        }
+      }
+      if (total > max) max = total;
+    }
+    return max;
+  }
+
+  /** Returns a "YYYY-Www" string for the ISO week containing the given date. */
+  private getIsoWeekKey(date: Date): string {
+    // Copy date so we don't mutate the original
+    const d = new Date(date.valueOf());
+    // Set to nearest Thursday: current date + 4 - current day number
+    // (ISO weeks start on Monday; Thursday determines the year)
+    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    const weekNo = Math.ceil(
+      ((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7
+    );
+    return `${d.getFullYear()}-W${String(weekNo).padStart(2, '0')}`;
   }
 }

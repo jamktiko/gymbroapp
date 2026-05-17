@@ -1,21 +1,20 @@
-/* --- SIVUN PERUSTAUSTA --- */
+// Sivun perustausta
 ion-content {
   // Luodaan syvyysvaikutelma: keskeltä harmaa (#222), reunoilta musta (#111)
   --background: radial-gradient(circle at center, #222 0%, #111 100%);
 }
 
-/* --- SISÄLLÖN ASETTELU --- */
 .content-container {
   display: flex;
   flex-direction: column; // Pinotaan elementit päällekkäin
   align-items: center; // Keskiteään elementit vaakasuunnassa
   justify-content: flex-start; // Aloitetaan sijoittelu ylhäältä
-  padding-top: 0px; /* Jätetään tilaa yläpalkin ja kortin väliin */
-  padding-bottom: 140px; /* Varmistaa, että footer/timer eivät peitä viimeisiä rivejä */
+  padding-top: 0px; // Jätetään tilaa yläpalkin ja kortin väliin
+  padding-bottom: 140px; // Varmistaa, että footer/timer eivät peitä viimeisiä rivejä
   margin-top: 0px;
 }
 
-/* --- LIIKEKORTTI (KESKELLÄ RUUTUA) --- */
+// Liikekortti (keskellä ruutua)
 .exercise-card {
   width: 90%; // Kortti täyttää lähes koko leveyssuunnan
   background: rgba(0, 0, 0, 0.7); // Puoliläpinäkyvä musta
@@ -23,18 +22,14 @@ ion-content {
   border-radius: 20px;
   padding: 30px 20px 30px 20px; // Sisäpuolen tyhjä tila (pysty, vaaka)
   text-align: center;
-  // padding-bottom: 36px; /* Vähennetty alapaddingia, vähemmän tyhjää tilaa */
-  // min-height: 300px; /* Pienennetty kortin min-heightiä */
-
+  // padding-bottom: 36px; // Vähennetty alapaddingia, vähemmän tyhjää tilaa
+  // min-height: 300px; // Pienennetty kortin min-heightiä
   // "Frosted glass" -efekti: sumentaa kortin takana olevan taustan
   backdrop-filter: blur(15px);
-
-  // Ulkopuolinen varjo tuo korttia lähemmäs käyttäjää
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); // Ulkopuolinen varjo tuo korttia lähemmäs käyttäjää
   z-index: 10;
 
-  /* Pieni yläteksti: "NYKYINEN LIIKE" */
+  // Pieni yläteksti: "NYKYINEN LIIKE"
   .label {
     color: #ffd900;
     font-size: 11px;
@@ -44,14 +39,13 @@ ion-content {
     opacity: 0.9;
   }
 
-  /* Liikkeen nimi: esim. "Penkkipunnerrus" */
+  // Liikkeen nimi: esim. "Penkkipunnerrus"
   .exercise-title {
     font-size: 28px;
     color: #ffffff;
     font-weight: 800; // Erittäin lihavoitu
     margin: 25px 0 25px 0;
-    // Keltainen hohde tekstin ympärillä
-    text-shadow: 0 0 15px rgba(255, 217, 0, 0.3);
+    text-shadow: 0 0 15px rgba(255, 217, 0, 0.3); // Keltainen hohde tekstin ympärillä
   }
 }
 
@@ -63,20 +57,20 @@ ion-content {
   gap: 8px;
   font-weight: 600;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.24);
-  margin: 12px 0 0 0; /* pieni yläreuna, wrapper hoitaa keskityksen */
+  margin: 12px 0 0 0; // pieni yläreuna, wrapper hoitaa keskityksen
   padding: 8px 12px;
   margin-bottom: calc(env(safe-area-inset-bottom) + 17px) !important;
 }
 
 .toggle-text {
   font-size: 13px;
-  color: var(--ion-color-contrast); /* kontrastiväri napin tekstille */
+  color: var(--ion-color-contrast); // kontrastiväri napin tekstille
 }
 
-/* Matchataan sivun keltaista aksenttiväriä ja tummaa tekstiä */
+// Matchataan sivun keltaista aksenttiväriä ja tummaa tekstiä
 .toggle-btn {
-  --background: #000000; /* sivun keltainen tehosteväri */
-  --color: #ffd900; /* tumma teksti kontrastiksi */
+  --background: #000000; // sivun keltainen tehosteväri
+  --color: #ffd900; // tumma teksti kontrastiksi
   border: 1px solid rgba(11, 11, 11, 0.06);
   background: var(--background);
   color: var(--color);
@@ -85,21 +79,23 @@ ion-content {
 }
 
 .toggle-btn ion-icon {
-  color: inherit; /* icon seuraa tekstin väriä */
+  color: inherit; // icon seuraa tekstin väriä
 }
+
 .toggle-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
 
-  /* Wrapper joka keskittää napin täsmälleen stats-ruudukon alle */
+  // Wrapper joka keskittää napin täsmälleen stats-ruudukon alle
   .toggle-wrapper {
     display: flex;
-    justify-content: center; /* keskitetään vaakasuunnassa */
+    justify-content: center; // keskitetään vaakasuunnassa
     width: 100%;
-    margin-top: 6px; /* lisää tilaa stats-ruudukon ja napin väliin */
+    margin-top: 6px; // lisää tilaa stats-ruudukon ja napin väliin
   }
 }
-/* --- SARJAT, TOISTOT JA PAINOT (KORTIN SISÄLLÄ) --- */
+
+// --- SARJAT, TOISTOT JA PAINOT (KORTIN SISÄLLÄ) ---
 .stats-grid {
   display: flex;
   justify-content: space-between; // Tasaisempi jakautuminen sarakkeille
@@ -113,11 +109,11 @@ ion-content {
     display: flex;
     flex-direction: column; // Otsikko (small) ja arvo (span) päällekkäin
     align-items: center;
-    width: 30%; /* Jokainen sarake ottaa saman leveyden */
+    width: 30%; // Jokainen sarake ottaa saman leveyden
     box-sizing: border-box;
     gap: 6px;
 
-    /* Otsikot: SETS, REPS, WEIGHT */
+    // Otsikot: SETS, REPS, WEIGHT
     small {
       color: #aaa; // Hillitty harmaa väri
       font-size: 10px;
@@ -126,7 +122,7 @@ ion-content {
       margin-bottom: 0;
     }
 
-    /* Arvot */
+    // Arvot
     span {
       color: #ffd900; // Korostusväri keltainen
       font-size: 24px;
@@ -136,7 +132,7 @@ ion-content {
       margin-bottom: 4px;
     }
 
-    /* Suoritetulle syötteelle kapeampi kenttä ja keskitys */
+    // Suoritetulle syötteelle kapeampi kenttä ja keskitys
     .performed-input {
       width: 80%;
       margin-top: 0;
@@ -154,10 +150,11 @@ ion-content {
   }
 }
 
-/* Settirivit */
+// Settirivit
 .sets-list {
   margin-top: 18px;
 }
+
 .set-row {
   display: grid;
   // grid-template-columns: 56px 14% 30% 30%;
@@ -166,19 +163,23 @@ ion-content {
   gap: 12px;
   padding: 8px 0;
 }
+
 .set-label {
   color: #aaa;
   text-align: left;
 }
+
 .set-reps,
 .set-weight {
   width: 100%;
 }
+
 .set-action {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .remove-set-btn-inline {
   display: inline-flex;
   align-items: center;
@@ -188,19 +189,21 @@ ion-content {
   border-radius: 10px;
   background: rgba(255, 59, 48, 0.06);
 }
+
 .remove-set-btn-inline ion-icon {
   font-size: 22px;
   color: var(--ion-color-danger, #ff3b30);
 }
 
-/* New bottom-remove layout */
+// New bottom-remove layout
 .remove-row {
   display: none;
 }
+
 .keskeyta {
   margin: 10px;
   --background: #000000;
-  border: 2px solid rgba(255, 217, 0, 0.4); /*rgba(255, 255, 255, 0.563);*/
+  border: 2px solid rgba(255, 217, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,6 +213,7 @@ ion-content {
   overflow: hidden;
   border-radius: 8px;
 }
+
 .X {
   color: #ffffff;
   font-size: 14px;
@@ -218,10 +222,12 @@ ion-content {
   line-height: 1;
   text-shadow: 0 4px 4px rgba(39, 39, 39, 0.2);
 }
+
 .keskeyta:active {
-  transform: scale(0.95); /* Painuu hieman kasaan */
+  transform: scale(0.95); // Painuu hieman kasaan
 }
-/* --- YLÄPALKKI (HEADER) --- */
+
+// --- YLÄPALKKI (HEADER) ---
 ion-header {
   background: #000; // Varmistetaan musta tausta koko yläosalle
   ion-toolbar {
@@ -239,7 +245,7 @@ ion-title {
   padding-right: 0;
 }
 
-/* --- FOOTERIN NEXT/FINISH-NAPPI --- */
+// --- FOOTERIN NEXT/FINISH-NAPPI ---
 .next-btn {
   // Keltainen tausta mustalla tekstillä erottuu parhaiten toimintanappina
   --background: #ffd900;
@@ -253,14 +259,15 @@ ion-title {
   margin-bottom: 60px;
   margin-bottom: calc(env(safe-area-inset-bottom) + 17px) !important;
 }
-/* Input-with-unit: shows a persistent unit (kg) inside the input field */
+
+// Input-with-unit: shows a persistent unit (kg) inside the input field
 .input-with-unit {
   position: relative;
   display: inline-block;
   width: 100%;
 
   .performed-input {
-    /* Make room for the unit on the right */
+    // Make room for the unit on the right
     --padding-end: 44px;
     box-sizing: border-box;
   }
@@ -272,14 +279,14 @@ ion-title {
     transform: translateY(-50%);
     color: #ffd900;
     font-weight: 700;
-    pointer-events: none; /* clicks go to the input */
+    pointer-events: none; // clicks go to the input
     font-size: 14px;
   }
 }
 
 .performed-input:focus-within input::placeholder {
   color: transparent;
-  opacity: 0; /* Varmistetaan näkymättömyys joillakin selaimilla */
+  opacity: 0; // Varmistetaan näkymättömyys joillakin selaimilla
 }
 
 .ion-padding-horizontal {
@@ -294,4 +301,25 @@ ion-title {
   // color: #ffd900;
   // font-weight: bold;
   margin: 8px 4px 8px 4px;
+}
+
+// Moved from inline HTML
+.prev-btn.hidden-btn {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.timer-wrapper {
+  width: 100%;
+}
+
+.footer-animated {
+  transition: opacity 0.2s;
+  visibility: hidden;
+  opacity: 0;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+  }
 }

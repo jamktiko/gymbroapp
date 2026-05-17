@@ -1,3 +1,5 @@
+<!-- Add_training-sivu -->
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -21,6 +23,9 @@
         inputmode="text" maxlength="150" placeholder="">
       </ion-textarea>
     </ion-item>
+
+    <!-- Custom taukoaika on täällä valmiina sitten kun se halutaan lisätä: -->
+
     <!-- <ion-item lines="full" class="name-input-item">
       <ion-label position="stacked">TAUKOAJAN PITUUS (s)</ion-label>
       <ion-input class="warning-focus-input" [(ngModel)]="programTimerAmount" type="number" inputmode="number"
@@ -45,7 +50,7 @@
           </ion-label>
         </ion-item>
 
-        <div class="ion-padding" slot="content" style="background: #252525">
+        <div class="accordion-content-bg ion-padding" slot="content">
           @for (exercise of category.exercises; track $index) {
 
           <ion-item (click)="toggleSelection(exercise)" lines="full" button="true" class="exercise-item-shared">
@@ -89,7 +94,7 @@
       </ion-button>
 
       <ion-button class="tallennaohjelma" expand="block" color="primary" (click)="saveProgram2()"
-        [disabled]="programName.trim().length === 0">
+        [disabled]="programName.trim().length === 0 || !hasAnyExerciseSelected()">
         Tallenna ohjelma
       </ion-button>
     </div>

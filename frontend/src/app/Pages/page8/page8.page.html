@@ -1,3 +1,5 @@
+<!-- Saavutukset-sivu -->
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="end">
@@ -19,7 +21,9 @@
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <div class="achievement-row" *ngFor="let a of achievements" [class.locked]="!a.unlocked">
+
+        @for (a of achievements; track $index) {
+        <div class="achievement-row" [class.locked]="!a.unlocked">
           <div class="achievement-icon">
             <ion-icon [name]="a.unlocked ? a.icon : 'lock-closed'" [color]="a.unlocked ? a.color : 'medium'"></ion-icon>
           </div>
@@ -29,11 +33,14 @@
             <ion-progress-bar [value]="a.progress" [color]="a.color"></ion-progress-bar>
           </div>
         </div>
+        }
+
       </ion-card-content>
     </ion-card>
 
     <!-- Personal Records -->
-    <ion-card class="records-card" *ngIf="personalRecords.length > 0">
+    @if (personalRecords.length > 0) {
+    <ion-card class="records-card">
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="ribbon"></ion-icon>
@@ -41,15 +48,20 @@
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <div class="record-row" *ngFor="let record of personalRecords">
+
+        @for (record of personalRecords; track $index) {
+        <div class="record-row">
           <div class="record-info">
             <span class="record-exercise">{{ record.exercise }}</span>
             <span class="record-group">{{ record.muscleGroup }}</span>
           </div>
           <span class="record-weight">{{ record.weight }} kg</span>
         </div>
+        }
+
       </ion-card-content>
     </ion-card>
+    }
 
   </div>
 </ion-content>

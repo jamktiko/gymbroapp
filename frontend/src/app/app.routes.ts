@@ -17,11 +17,6 @@ export const routes: Routes = [
       import('./Pages/trainings/page2.page').then((m) => m.Page2Page),
   },
   {
-    path: 'page3',
-    loadComponent: () =>
-      import('./Pages/page3/page3.page').then((m) => m.Page3Page),
-  },
-  {
     path: 'page4',
     loadComponent: () =>
       import('./Pages/Add_training/page4.page').then((m) => m.LisaaTreeni),
@@ -48,7 +43,7 @@ export const routes: Routes = [
   },
   {
     path: 'calendar',
-    loadComponent: () => import('./Pages/calendar/calendar.page').then( m => m.CalendarPage)
+    loadComponent: () =>
+      import('./Pages/calendar/calendar.page').then((m) => m.CalendarPage),
   },
-
 ];

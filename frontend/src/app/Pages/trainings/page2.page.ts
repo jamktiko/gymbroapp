@@ -1,6 +1,4 @@
-/**
- * Trainings näkymä
- */
+// Trainings sivu (etusivu)
 
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
@@ -18,7 +16,6 @@ import {
 } from 'ionicons/icons';
 import { TrainingProgram, UserData } from '../../types/userdata';
 import { DataFetchService } from '../../data-fetch-service';
-import { IonList } from '@ionic/angular/standalone';
 import {
   IonContent,
   IonHeader,
@@ -56,7 +53,6 @@ import {
     IonFabButton,
     IonIcon,
     IonItem,
-    IonList,
     IonLabel,
     IonAccordionGroup,
     IonAccordion,
@@ -77,7 +73,6 @@ export class Page2Page implements OnInit {
   public isAccordionOpen = false;
 
   constructor() {
-    // Alustetaan ikonit käyttöliittymää varten
     addIcons({ add, trashOutline, play, reorderTwoOutline, pencilOutline });
   }
 
@@ -112,7 +107,7 @@ export class Page2Page implements OnInit {
    * Ohjaa käyttäjän treenisivulle ja välittää valitun ohjelman tiedot
    */
   startProgram(program: TrainingProgram) {
-    // 3. TÄRKEÄÄ: Lähetetään syväkopio (JSON-kikka on varmin tapa poistaa vanhat viittaukset)
+    // Lähetetään syväkopio - poistaa vanhat viittaukset
     const programToLaunch = JSON.parse(JSON.stringify(program));
 
     this.router.navigate(['/page5'], {
@@ -127,7 +122,7 @@ export class Page2Page implements OnInit {
     this.dataFetchService.getUserDataById().subscribe({
       next: (data) => {
         this.userData = data as UserData;
-        console.log('User data loaded:', this.userData);
+        // console.log('User data loaded:', this.userData);
         this.loadPrograms();
       },
       error: (err) => {
@@ -147,11 +142,11 @@ export class Page2Page implements OnInit {
   }
 
   get levelProgress(): number {
-  if (!this.userData) return 0;
-  const currentLevelXp = (this.userData.level - 1) ** 2 * 50;
-  const nextLevelXp = this.userData.level ** 2 * 50;
-  return (this.userData.xp - currentLevelXp) / (nextLevelXp - currentLevelXp);
-}
+    if (!this.userData) return 0;
+    const currentLevelXp = (this.userData.level - 1) ** 2 * 50;
+    const nextLevelXp = this.userData.level ** 2 * 50;
+    return (this.userData.xp - currentLevelXp) / (nextLevelXp - currentLevelXp);
+  }
 
   /**
    * Poistaa treeniohjelman modal-ikkunan varmistuksen jälkeen

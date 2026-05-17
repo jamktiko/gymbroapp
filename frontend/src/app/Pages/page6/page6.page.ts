@@ -1,15 +1,15 @@
+// XP-sivu
+
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { XpService } from '../../xp.service';
-import { MenuController } from '@ionic/angular/standalone';
 import {
   IonButton,
   IonContent,
-  IonFooter,
   IonProgressBar,
-  IonToolbar,
+  MenuController,
 } from '@ionic/angular/standalone';
 import { TrainingSession } from '../../types/userdata';
 import { DataFetchService } from '../../data-fetch-service';
@@ -19,15 +19,7 @@ import { DataFetchService } from '../../data-fetch-service';
   templateUrl: './page6.page.html',
   styleUrls: ['./page6.page.scss'],
   standalone: true,
-  imports: [
-    IonContent,
-    IonToolbar,
-    CommonModule,
-    FormsModule,
-    IonFooter,
-    IonButton,
-    IonProgressBar,
-  ],
+  imports: [IonContent, CommonModule, FormsModule, IonButton, IonProgressBar],
 })
 export class Page6Page implements OnInit {
   private finishedSession: Omit<

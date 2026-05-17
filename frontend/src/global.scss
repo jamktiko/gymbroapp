@@ -35,9 +35,11 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
 :root {
   color-scheme: only dark !important;
 }
+
 .content-container {
   display: flex;
   // align-content: normal;
@@ -50,7 +52,6 @@
 }
 
 /* global.scss */
-
 .custom-delete-alert {
   .alert-button-group {
     padding: 10px 20px !important; // Lisää tilaa nappien ympärille
@@ -71,6 +72,7 @@
     margin-left: 20px !important;
   }
 }
+
 .treeni-alert {
   --background: #323232 !important;
 }

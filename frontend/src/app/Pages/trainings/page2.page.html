@@ -1,3 +1,5 @@
+<!-- Trainings-sivu (etusivu) -->
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <div class="header-full-progress">
@@ -18,7 +20,6 @@
   <div class="content-container ion-padding">
     <h2>Tervetuloa {{userData?.name!.split(' ')[0]}}!</h2>
 
-
     <p class="placeholder">
       Täällä näkyvät treeniohjelmasi. Aloita uusi treeni valitsemalla haluamasi ohjelma.
     </p>
@@ -29,41 +30,44 @@
       <ion-accordion [value]="program._id">
         <ion-item slot="header">
           <ion-label>
-            <h3 style="font-weight: bold; color: var(--ion-color-primary)">
+            <h3>
               {{ program?.name }}
             </h3>
           </ion-label>
 
           <!-- Poistonappi -->
-          <ion-button *ngIf="!program.isDefault" slot="end" fill="clear" color="medium"
-            (click)="editProgram(program, $event)" title="Muokkaa ohjelmaa">
+          @if (!program.isDefault) {
+          <ion-button slot="end" fill="clear" color="medium" (click)="editProgram(program, $event)"
+            title="Muokkaa ohjelmaa">
             <ion-icon name="pencil-outline"></ion-icon>
           </ion-button>
+          }
           <ion-button slot="end" fill="clear" color="danger" (click)="deleteProgram(program._id, $event)"
             [disabled]="program.isDefault">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
+
         </ion-item>
 
-        <div class="ion-padding" slot="content" style="background: transparent;">
+        <div class="accordion-content-bg ion-padding" slot="content">
 
-          <!--  Reorder-ryhmä liikkeiden ympärille -->
 
           <!-- Näytetään ohjelman kuvaus ohjelman alussa jos se on olemassa -->
           @if (program.description) {
-          <div class="program-description ion-padding" style="background: transparent; margin-bottom: 8px;">
-            <p style="color: var(--ion-color-medium); margin: 0;">{{ program.description }}</p>
+          <div class="program-description ion-padding">
+            <p>{{ program.description }}</p>
           </div>
           }
 
+          <!--  Reorder-ryhmä liikkeiden ympärille -->
           <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($event, program)">
 
             @for (ex of program.exercises; track ex.move.name + $index) {
-            <ion-item style="--background: transparent;">
+            <ion-item class="exercise-item">
 
-              <!-- LISÄTTY: Raahauskahva liikkeen alkuun -->
+              <!-- Raahauskahva liikkeen alkuun -->
               <ion-reorder slot="start">
-                <ion-icon name="reorder-two-outline" style="color: var(--ion-color-medium)"></ion-icon>
+                <ion-icon class="reorder-icon" name="reorder-two-outline"></ion-icon>
               </ion-reorder>
 
               <ion-label>
@@ -79,7 +83,7 @@
 
           </ion-reorder-group>
 
-          <div style="padding: 10px 0">
+          <div class="start-button-wrapper">
             <ion-button color="primary" expand="block" shape="round" (click)="startProgram(program)">
               <ion-icon slot="start" name="play"></ion-icon>
               ALOITA TREENI

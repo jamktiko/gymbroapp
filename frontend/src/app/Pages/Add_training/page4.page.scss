@@ -1,24 +1,22 @@
-/* --- SIVUN YLEINEN RAKENNE --- */
 ion-content {
   --ion-safe-area-bottom: 60px !important;
 }
+
 .content-container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* SÄÄDÄ TÄSTÄ LEVEYTTÄ: 
-     - 400px = kapea
-     - 600px = leveämpi 
-     - 95% = melkein koko ruutu */
   max-width: 500px;
   margin: 0 auto;
   margin-top: 10px;
-  padding: 0 10px; /* Estää reunoihin osumisen mobiilissa */
+  padding: 0 10px; // Estää reunoihin osumisen mobiilissa
 }
+
 .tallennaohjelma {
   margin-bottom: calc(env(safe-area-inset-bottom) + 16px);
 }
-/* --- OHJELMAN NIMEÄMINEN --- */
+
+// Ohjelman nimeäminen
 .name-input-item {
   width: 100%;
   margin-bottom: 3vh !important;
@@ -47,7 +45,7 @@ ion-content {
   text-transform: uppercase;
 }
 
-/* --- KATEGORIAT (Kopioitu Page2 tyyli) --- */
+// Kategoriat
 ion-accordion-group {
   width: 100%;
   background: transparent;
@@ -56,14 +54,14 @@ ion-accordion-group {
 ion-accordion {
   width: 100%;
   margin-bottom: 12px;
-  border: 1px solid #333 !important; /* Page2:n tumma reunus */
+  border: 1px solid #333 !important;
   border-radius: 8px !important;
   overflow: hidden;
   background: transparent;
 
-  /* Kategorian nimi-palkki */
+  // Kategorian nimi-palkki
   ion-item[slot="header"] {
-    --background: #1a1a1a !important; /* Page2:n tumma header */
+    --background: #1a1a1a !important;
     --color: var(--ion-color-primary) !important;
     --padding-start: 16px;
     min-height: 56px;
@@ -77,9 +75,9 @@ ion-accordion {
     }
   }
 
-  /* Sisältöalue (Liikkeet) */
-  div[slot="content"] {
-    background: #252525 !important; /* Page2:n tummempi tausta */
+  // Sisältöalue (Liikkeet)
+  div[slot="content"].accordion-content-bg {
+    background: #252525 !important;
 
     .exercise-item-shared {
       --background: transparent;
@@ -99,7 +97,7 @@ ion-accordion {
   }
 }
 
-/* --- OPEN SETS MODAL - PAINIKE --- */
+// open-sets-modal -painike
 .open-sets-modal {
   display: flex;
   align-items: center;
@@ -147,7 +145,7 @@ ion-accordion {
   margin-left: 6px;
 }
 
-/* Modal card styles */
+// Modal card styles
 .exercise-modal-card {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.55));
   border-radius: 12px;
@@ -179,7 +177,7 @@ ion-accordion {
   font-size: 16px;
 }
 
-/* --- PAINIKKEET ALAREUNASSA --- */
+// Painikkeet alareunassa
 .action-buttons {
   display: flex;
   flex-direction: column;

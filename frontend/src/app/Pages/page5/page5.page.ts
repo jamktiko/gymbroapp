@@ -1,8 +1,9 @@
+// Treenisessio-sivu
+
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MenuController, AlertController } from '@ionic/angular/standalone';
 import { NavController } from '@ionic/angular';
 import {
   IonButton,
@@ -14,6 +15,8 @@ import {
   IonToolbar,
   IonTitle,
   IonIcon,
+  MenuController,
+  AlertController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -29,7 +32,6 @@ import {
   Exercise,
 } from '../../types/userdata';
 import { TimerComponent } from '../../timer/timer.component';
-import { DataFetchService } from '../../data-fetch-service';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 // Setin tyyppi suorituksille
@@ -52,7 +54,7 @@ type PerformedSet = { reps?: number; weight?: number };
     IonFooter,
     IonTitle,
     IonIcon,
-    TimerComponent, // Lisätty importteihin
+    TimerComponent,
   ],
 })
 export class Page5Page implements OnInit {
@@ -72,13 +74,10 @@ export class Page5Page implements OnInit {
   // Käyttäjän syöttämät suoritetut arvot per liike
   public performedInputs: { sets?: PerformedSet[] }[] = [];
   // Näytettävät merkkijonoarvot per-set (jos tarvitsee näyttää esim. '20 kg')
-
   // Seuraa, mitkä per-set-kentät ovat fokuksessa, jotta placeholder voidaan piilottaa
   private focusedMap: Record<string, boolean> = {};
   // Hallitsee, onko kyseisen liikkeen settilista avattuna
   public expandedSets: boolean[] = [];
-  private dataFetchService = inject(DataFetchService);
-
   public timerVisible = true;
   public nextBtnVisible = true;
 
@@ -235,8 +234,6 @@ export class Page5Page implements OnInit {
     return !!(this.expandedSets && this.expandedSets[index]);
   }
 
-  // Poistettu globaalin `limitInput`-funktion käyttö; käytetään per-set-funktiota `limitPerSetInput`.
-
   /**
    * Rajaa per-set syötteen pituuden enintään 6 merkkiin ja päivittää `performedInputs[index].sets[i]`.
    */
@@ -371,12 +368,12 @@ export class Page5Page implements OnInit {
   }
 
   ionViewWillLeave() {
-    this.menu.enable(true); //varmistaa että menu tulee takaisin seuraavalla sivulla
+    this.menu.enable(true); // varmistaa että menu tulee takaisin seuraavalla sivulla
     this.resetFinishConfirm();
   }
 
   async keskeytaTreeniVahvistus() {
-    //keskeyttää treenin
+    // keskeyttää treenin
     const alert = await this.alertController.create({
       header: 'Keskeytetäänkö treeni?',
       message: 'Haluatko varmasti poistua? Edistymistäsi ei tallenneta.',
@@ -385,7 +382,7 @@ export class Page5Page implements OnInit {
           text: 'Peruuta',
           role: 'cancel',
           handler: () => {
-            console.log('Palataan treeniin');
+            // console.log('Palataan treeniin');
           },
         },
         {
@@ -457,11 +454,11 @@ export class Page5Page implements OnInit {
     // Tyhjennetään indeksi
     this.currentIndex = 0;
 
-    // takasin etusivulle
+    // takaisin etusivulle
     this.router.navigate(['/page2'], { replaceUrl: true });
   }
   /**
-   * Palauttaa  liikkeen datan.
+   * Palauttaa liikkeen datan.
    */
   get currentExercise(): Exercise | undefined {
     return this.activeWorkoutReordered?.exercises?.[this.currentIndex];

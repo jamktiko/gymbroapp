@@ -1,7 +1,4 @@
-// --- YLÄPALKKI JA PROGRESS BAR ---
-/*ion-content {
-
-}*/
+// Yläpalkki ja progress bar
 .header-full-progress {
   display: flex;
   align-items: center;
@@ -23,8 +20,6 @@
   max-width: 150px;
   display: flex;
   align-items: center;
-
-  // TIUKKA REUNUS
   border: 1px solid rgba(255, 255, 255, 0.3); // Ohut mutta selkeä raja
   border-radius: 20px;
   height: 10px; // Kavennetaan korkeus samaksi kuin palkilla
@@ -63,7 +58,6 @@
     transition: width 0.3s ease;
   }
 }
-// --- SISÄLLÖN HALLINTA (Pidetty ennallaan) ---
 
 .content-container {
   display: flex;
@@ -76,9 +70,10 @@ ion-accordion-group {
   width: 100%;
   background: transparent;
 }
+
 ion-accordion:last-child {
   margin-bottom: calc(env(safe-area-inset-bottom) + 16px) !important;
-} //vain vikaan margin bottom
+} // vain vikaan margin bottom
 
 h2 {
   color: var(--ion-color-primary);
@@ -86,8 +81,7 @@ h2 {
   margin-bottom: 20px;
 }
 
-// --- HAITARIT JA LISTAT ---
-
+// Haitarit ja listat
 ion-accordion {
   width: 100%;
   margin-bottom: 12px;
@@ -125,6 +119,32 @@ ion-accordion {
     background: #252525;
     color: #ffffff;
 
+    &.accordion-content-bg {
+      background: transparent;
+    }
+
+    .program-description {
+      background: transparent;
+      margin-bottom: 8px;
+
+      p {
+        color: var(--ion-color-medium);
+        margin: 0;
+      }
+    }
+
+    .exercise-item {
+      --background: transparent;
+    }
+
+    .reorder-icon {
+      color: var(--ion-color-medium);
+    }
+
+    .start-button-wrapper {
+      padding: 10px 0;
+    }
+
     ion-item {
       --background: transparent;
       --color: #dddddd;
@@ -137,6 +157,7 @@ ion-accordion {
     }
   }
 }
+
 // Sitoumusbanneri – näkyy sivun yläosassa kun käyttäjä on sitoutunut ohjelmaan
 .commitment-banner {
   background: #1e1e1e;
@@ -214,8 +235,6 @@ ion-accordion {
   font-weight: 600;
 }
 
-// --- APUTYYLIT ---
-
 .placeholder {
   color: #888;
   text-align: center;
@@ -233,6 +252,7 @@ ion-list {
   --ion-item-border-color: #333333;
   background: transparent;
 }
+
 ion-fab {
   margin-bottom: calc(env(safe-area-inset-bottom) + 16px);
 }

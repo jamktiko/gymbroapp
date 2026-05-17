@@ -33,8 +33,8 @@ export class AuthService {
           try {
             // dekoodataan token
             const decodedToken = this.jwtHelp.decodeToken(token);
-            console.log(`decodedToken: ${decodedToken}`);
-            console.log(JSON.stringify(decodedToken));
+            // console.log(`decodedToken: ${decodedToken}`);
+            // console.log(JSON.stringify(decodedToken));
             // Tässä voidaan tarkistaa tokenin oikeellisuus
             if (googleId === decodedToken.googleId) {
               // token sessionStorageen
@@ -43,9 +43,9 @@ export class AuthService {
                 JSON.stringify({ googleId: googleId, token: token }),
               );
 
-              console.log('test1');
-              console.log(token);
-              console.log(this.jwtHelp.decodeToken(token));
+              // console.log('test1');
+              // console.log(token);
+              // console.log(this.jwtHelp.decodeToken(token));
               // this.loginTrue(); // lähetetään viesti navbariin että vaihdetaan login:true -tilaan
               console.log('login onnistui');
               return true; // saatiin token

@@ -1,11 +1,10 @@
+<!-- XP-sivu -->
+
 <ion-content [fullscreen]="true">
   <div class="xp-container">
     <div class="content-wrapper">
       <h1>Treeni valmis!</h1>
-      <ion-progress-bar
-        class="xpbar"
-        [value]="xpService.progress$ | async"
-      ></ion-progress-bar>
+      <ion-progress-bar class="xpbar" [value]="xpService.progress$ | async"></ion-progress-bar>
       <p>You got XP!</p>
     </div>
     <ion-button class="next" (click)="saveTrainingSession()">next</ion-button>

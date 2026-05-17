@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { DataFetchService } from '../../data-fetch-service';
@@ -23,8 +23,9 @@ export class CalendarPage implements OnInit {
   workoutDates = new Set<string>();
   weeks: Date[][] = [];
   weekDays: Date[] = [];
+  private dataFetchService = inject(DataFetchService);
 
-  constructor(private dataFetchService: DataFetchService) {
+  constructor() {
     addIcons({ checkmarkCircle, chevronBackOutline, chevronForwardOutline });
   }
 
