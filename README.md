@@ -9,11 +9,11 @@ GymBro is an application that combines fun gamified functionalities
 ## Tech Stack
 
 - **Frontend:** Ionic 8, Angular 20, Capacitor (Cross-platform mobile)
-- **Backend:** Node.js 24, Express, Vitest, Supertest (Automated Testing)
+- **Backend:** Node.js 24, Express, Vitest + Supertest + mongodb-memory-server (Automated Testing)
 - **Database** MongoDB Atlas
 - **Infrastructure (AWS):** Elastic Beanstalk, S3, CloudFront
-- **Identity & Security:** Amazon Cognito, AWS Secrets Manager
-- **CI/CD:** GitHub Actions (Automated testing and Beanstalk deployment)
+- **Identity & Security:** Google OAuth, AWS Secrets Manager
+- **CI/CD:** GitHub Actions (Automated testing and Beanstalk deployment via OIDC pipeline)
 
 ## Getting Started
 
@@ -34,8 +34,8 @@ ionic serve           # Serves the Angular frontend on localhost:8100
 
 ## Authors
 
-- **Tavi Netta** - Frontend Developer & UI/UX
-- **Joona Järvi** - Backend Developer
+- **Tavi Netta** - Frontend Developer, Scrum Master
+- **Joona Järvi** - Backend Developer, Product Owner
 - **Matias Vairama** - AWS Integration & CI/CD Pipeline
 - **Jarius Korpisaari** - Frontend Developer
 - **Lauri Makkonen** - Full Stack Developer
