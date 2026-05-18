@@ -2,9 +2,7 @@
 
 ## Description
 
-The application creates an easy way for the user to track the best-before dates of their own pantry groceries easily with a single app. The user can enter the best-before dates of their food items into the application, and the application will notify them of the approaching date. The purpose of the application is to reduce potential food waste and it is convenient with long-dated items, such as rice or canned goods. The application is intended for ordinary consumers who want to reduce food waste.
-
-GymBro is an application that combines fun gamified functionalities
+GymBro is an application that combines fun gamified functionalities with gym training to help users stay motivated and achieve their fitness goals. By transforming regular workouts into an engaging experience—featuring workout sessions, XP progression, and unlockable achievements—the app provides an easy and rewarding way to track training sessions. Designed for fitness enthusiasts of all levels, GymBro encourages consistency and continuous progress through a unique blend of practical fitness tracking and game-like elements!
 
 ## Tech Stack
 
@@ -42,8 +40,8 @@ ionic serve           # Serves the Angular frontend on localhost:8100
 
 ## Version History
 
-- **1.0.** - First version
+- **1.0.0.** - First stable version
 
 ## License
 
-This project is licensed under the CC BY-SA 4.0 License - see the [license.md](license.md) file for details.
+This project is licensed under the CC-BY-SA 4.0 license - see the [LICENSE.md](LICENSE.md) file for details.
