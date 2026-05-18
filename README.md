@@ -1,62 +1,47 @@
---START
-This is a example template, which you can use. Version 1.0.
---END
-# Project Title
-
-Simple overview of use/purpose.
+# GymBro App
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+GymBro is an application that combines fun gamified features with gym training to help users stay motivated and achieve their fitness goals. By transforming regular workouts into engaging experiences—featuring workout sessions, XP progression, and unlockable achievements—the app provides an easy and rewarding way to track your progress. Designed for fitness enthusiasts of all levels, GymBro encourages consistency and continuous progress through a unique blend of practical fitness tracking and game-like elements.
+
+## Tech Stack
+
+- **Frontend:** Ionic 8, Angular 20, Capacitor (Cross-platform mobile)
+- **Backend:** Node.js 24, Express, Vitest + Supertest + mongodb-memory-server (Automated Testing)
+- **Database** MongoDB Atlas
+- **Infrastructure (AWS):** Elastic Beanstalk, S3, CloudFront
+- **Identity & Security:** Google OAuth, AWS Secrets Manager
+- **CI/CD:** GitHub Actions (Automated testing and Beanstalk deployment via OIDC pipeline)
 
 ## Getting Started
 
-### Dependencies
+### Prerequisites
 
-- Describe any prerequisites, libraries, frameworks, etc., the sofware uses.
+- Node.js (v24 recommended)
+- Angular CLI & Ionic CLI
 
-### Installing
+### Local Development
 
-- How/where to download your program
-- Any modifications needed to be made to files/folders
+**Frontend:**
 
-### Executing program
-
-- How to run the program
-- Step-by-step bullets
-
-```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-
-```
-command to run if program contains helper info
+```bash
+cd frontend
+npm install
+ionic serve           # Serves the Angular frontend on localhost:8100
 ```
 
 ## Authors
 
-Contributors names
+- **Tavi Netta** - Frontend Developer, Scrum Master
+- **Joona Järvi** - Backend Developer, Product Owner
+- **Matias Vairama** - AWS Integration & CI/CD Pipeline
+- **Jarius Korpisaari** - Frontend Developer
+- **Lauri Makkonen** - Full Stack Developer
 
 ## Version History
 
-- 0.2
-  - Various bug fixes and optimizations
-- 0.1
-  - Initial Release
+- **1.0.0.** - First stable version
 
 ## License
 
-This project is licensed under the CC BY-SA 4.0 License - see the LICENSE.md file for details
-
-[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa]
-
-[cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/
-[cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
-
-## Acknowledgments
-
-Inspiration, code snippets, etc.
+This project is licensed under the CC-BY-SA 4.0 license - see the [LICENSE.md](LICENSE.md) file for details.
