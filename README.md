@@ -2,7 +2,7 @@
 
 ## Description
 
-GymBro is an application that combines fun gamified functionalities with gym training to help users stay motivated and achieve their fitness goals. By transforming regular workouts into an engaging experience—featuring workout sessions, XP progression, and unlockable achievements—the app provides an easy and rewarding way to track training sessions. Designed for fitness enthusiasts of all levels, GymBro encourages consistency and continuous progress through a unique blend of practical fitness tracking and game-like elements!
+GymBro is an application that combines fun gamified functionalities with gym training to help users stay motivated and achieve their fitness goals. By transforming regular workouts into an engaging experience—featuring workout sessions, XP progression, and unlockable achievements—the app provides an easy and rewarding way to track training sessions. Designed for fitness enthusiasts of all levels, GymBro encourages consistency and continuous progress through a unique blend of practical fitness tracking and game-like elements.
 
 ## Tech Stack
 
