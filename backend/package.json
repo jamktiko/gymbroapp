@@ -1,6 +1,6 @@
 {
-  "name": "backend",
-  "version": "0.2.0",
+  "name": "gymbro-backend",
+  "version": "1.0.0",
   "author": "team-gymbro",
   "private": true,
   "scripts": {

@@ -2,9 +2,7 @@
 
 require('dotenv').config();
 require('../dbconnection');
-/**
- * Module dependencies.
- */
+
 /**
  * Module dependencies.
  */

@@ -37,11 +37,7 @@ export class Page6Page implements OnInit {
     this.finishedSession = navigation?.extras.state?.['finishedSession'];
   }
 
-  ngOnInit() {
-    // Haetaan nykyinen XP ja animoidaan siihen 50 XP lisää,
-    // koska treenin suorittaminen antaa oletuksena 50 XP.
-    this.xpService.animateXpGain(50);
-  }
+  ngOnInit() {}
 
   /**
    * Tallennetaan sessio tietokantaan → XP +50
@@ -64,6 +60,7 @@ export class Page6Page implements OnInit {
 
   ionViewWillEnter() {
     this.menu.enable(false); // menu disabled tällä sivulla
+    this.xpService.animateXpGain(50);
   }
 
   ionViewWillLeave() {
