@@ -30,6 +30,10 @@ npm install
 ionic serve           # Serves the Angular frontend on localhost:8100
 ```
 
+### APK application
+
+https://staticwebsiteforgymbroapp.s3.eu-north-1.amazonaws.com/index.html
+
 ## Authors
 
 - **Tavi Netta** - Frontend Developer, Scrum Master
